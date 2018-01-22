@@ -1,0 +1,29 @@
+{
+  "manifest_version": 2,
+  "name": "upStart",
+  "short_name": "upStart",
+  "description": "A simple start page.",
+  "version": "1.2",
+  "background": {
+    "scripts": ["js/background.js"],
+    "persistent": false
+      },
+  "browser_action": {
+      "default_title": "upStart",
+      "default_icon": "img/icon128.png",
+      "default_popup": "popup.html"
+   },
+  "content_security_policy": "script-src 'self'; object-src 'self'",
+  "homepage_url": "https://chrome.google.com/webstore/detail/upstart/ddalpldcidoajbgohbdlelfmfmjiccga",  
+  "icons": {
+    "16": "img/icon16.png",
+    "64": "img/icon64.png",
+    "128": "img/icon128.png"
+   },
+  "options_page": "options.html",
+  "permissions": [ "bookmarks", "topSites", "tabs", "history", "management", "storage", "unlimitedStorage", "chrome://favicon/", "contextMenus", "notifications", "alarms", "<all_urls>" ],
+  "chrome_url_overrides": {
+    "newtab": "main.html"
+    },
+  "web_accessible_resources": [ "newtab.html" ]
+}

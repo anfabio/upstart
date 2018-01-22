@@ -1,0 +1,359 @@
+{
+"pages":
+    [     
+        {
+        "pageLabel" : "Main",
+        "pageDescription" : "A simple main page",
+        "pageColumns" : "0",
+        "pageBackground" : "",
+        "pageColor" : "",
+        "groups":
+            [ 
+                {
+                "groupLabel": "My Bookmarks",
+                "groupDescription" : "",
+                "groupIcon": "bookmark.png",
+                "groupColor": "FFFFFF",
+                "groupSort": "auto",
+                "itens":
+                    [ 
+                        { "label": "Google", "url": "https://www.google.com", "alt": "", "icon" : "google.com.png", "date": "1513595345240" },
+                        { "label": "Gmail", "url": "https://mail.google.com", "alt": "The Google Mail", "icon" : "gmail.com.png", "date": "1513595345240" },
+                        { "label": "Agenda", "url": "https://calendar.google.com", "alt": "", "icon" : "calendar.google.com.png", "date": "1513594871018" },
+                        { "label": "Youtube", "url": "http://www.youtube.com", "alt": "", "icon" : "youtube.com.png", "date": "1513594871024" },
+                        { "label": "Netflix", "url": "http://www.netflix.com", "alt": "", "icon" : "netflix.com.png", "date": "1513594871025" },
+                        { "label": "Facebook", "url": "https://www.facebook.com", "alt": "", "icon" : "facebook.com.png", "date": "1513594871114" },
+                        { "label": "Spotify", "url": "https://play.spotify.com", "alt": "", "icon" : "spotify.com.png", "date": "1513594871614" }
+                    ]
+                },
+                {
+                "groupLabel": "Social Network",
+                "groupDescription" : "Let's socialize!",
+                "groupIcon": "bookmark.png",
+                "groupColor": "FFFFFF",
+                "groupSort": "auto",
+                "itens":
+                    [ 
+                        { "label": "Facebook", "url": "https://www.facebook.com", "alt": "", "icon" : "facebook.com.png", "date": "1513594871114" },
+                        { "label": "Twitter", "url": "https://www.twitter.com", "alt": "", "icon" : "twitter.com.png", "date": "1513594871214" },
+                        { "label": "Google Plus", "url": "https://plus.google.com", "alt": "", "icon" : "plus.google.com.png", "date": "1513594871234" },
+                        { "label": "Instagram", "url": "https://www.instagram.com", "alt": "", "icon" : "instagram.com.png", "date": "1513594871434" },
+                        { "label": "Linkedin", "url": "https://www.linkedin.com", "alt": "", "icon" : "linkedin.com.png", "date": "1513594871434" },
+                        { "label": "Pinterest", "url": "https://www.pinterest.com", "alt": "", "icon" : "pinterest.com.png", "date": "1513594871534" },
+                        { "label": "Tumblr", "url": "https://www.tumblr.com", "alt": "", "icon" : "tumblr.com.png", "date": "1513594871634" },
+                        { "label": "SoundCloud", "url": "https://www.soundcloud.com", "alt": "", "icon" : "soundcloud.com.png", "date": "1513594871734" },
+                        { "label": "Reddit", "url": "https://www.reddit.com", "alt": "", "icon" : "reddit.com.png", "date": "1513594871834" }
+                    ]
+                },
+                {
+                "groupLabel": "Others",
+                "groupDescription" : "Other sites",
+                "groupIcon": "bookmark.png",
+                "groupColor": "FFFFFF",
+                "groupSort": "auto",
+                "itens":
+                    [ 
+                        { "label": "Google News", "url": "https://news.google.com", "alt": "", "icon" : "news.google.com.png", "date": "1513595345232" }
+                    ]
+                }                
+            ]
+        },
+        {
+        "pageLabel" : "Work",
+        "pageDescription" : "My links to work related matters",
+        "pageColumns" : "0",
+        "pageBackground" : "",
+        "pageColor" : "",
+        "groups":
+            [ 
+                {
+                "groupLabel": "My work",
+                "groupDescription" : "",
+                "groupIcon": "bookmark.png",
+                "groupColor": "FFFFFF",
+                "groupSort": "auto",
+                "itens":
+                    [ 
+                        { "label": "Outlook 365", "url": "https://outlook.office.com/owa", "alt": "", "icon" : "outlook.com.png", "date": "1513595345239" },
+                        { "label": "Office 365", "url": "https://www.office.com/", "alt": "", "icon" : "office.com.png", "date": "1513595345240" }
+                    ]
+                },
+                {
+                "groupLabel": "Documents",
+                "groupDescription" : "Local and Remote documents",
+                "groupIcon": "bookmark.png",
+                "groupColor": "FFFFFF",
+                "groupSort": "auto",
+                "itens":
+                    [ 
+                        { "label": "Reports", "url": "file:///home/user/tmp/reports.doc", "alt": "", "icon" : "docs.google.com.png", "date": "1513595345240" },
+                        { "label": "Project Sheet", "url": "https://docs.google.com/spreadsheets/d/1bkbxtgJfDb2Rk923b3B6Mrb_kwwWCBFc5-8uu7x9V3w/template/preview?usp=drive_web", "alt": "", "icon" : "sheets.google.com.png", "date": "1513595345240" }
+                    ]
+                },
+                {
+                "groupLabel": "Network",
+                "groupDescription" : "My networks",
+                "groupIcon": "bookmark.png",
+                "groupColor": "FFFFFF",
+                "groupSort": "auto",
+                "itens":
+                    [ 
+                        { "label": "Slack", "url": "https://www.slack.com", "alt": "", "icon" : "slack.com.png", "date": "1513595345256" },
+                        { "label": "Linkedin", "url": "https://www.linkedin.com", "alt": "", "icon" : "linkedin.com.png", "date": "1513594871434" }
+                    ]
+                }               
+            ]
+        },
+        {
+        "pageLabel" : "Entertainment",
+        "pageDescription" : "",
+        "pageColumns" : "0",
+        "pageBackground" : "",
+        "pageColor" : "",
+        "groups":
+            [ 
+                {
+                "groupLabel": "Video Services",
+                "groupDescription" : "",
+                "groupIcon": "bookmark.png",
+                "groupColor": "FFFFFF",
+                "groupSort": "auto",
+                "itens":
+                    [ 
+                        { "label": "Netflix", "url": "http://www.netflix.com", "alt": "", "icon" : "netflix.com.png", "date": "1513594871025" },
+                        { "label": "HBO Go", "url": "http://hbo.go.com", "alt": "", "icon" : "hbo.go.com.png", "date": "1513594871425" },
+                        { "label": "Amazon Prime Video", "url": "http://www.primevideo.com", "alt": "", "icon" : "primevideo.com.png", "date": "1513594881425" }
+                    ]
+                },
+                {
+                "groupLabel": "Games",
+                "groupDescription" : "",
+                "groupIcon": "bookmark.png",
+                "groupColor": "FFFFFF",
+                "groupSort": "auto",
+                "itens":
+                    [ 
+                        { "label": "Steam", "url": "http://store.steampowered.com/", "alt": "", "icon" : "steampowered.com.png", "date": "1513595345250" },       
+                        { "label": "Giant Bomb", "url": "http://www.giantbomb.com/", "alt": "", "icon" : "giantbomb.com.png", "date": "1513595345240" },
+                        { "label": "IGN", "url": "http://www.ign.com", "alt": "", "icon" : "ign.com.png", "date": "1513595345240" }
+                    ]
+                }   
+            ]
+        }, 
+        {
+        "pageLabel" : "Shopping",
+        "pageDescription" : "",
+        "pageColumns" : "0",
+        "pageBackground" : "",
+        "pageColor" : "",
+        "groups":
+            [ 
+                {
+                "groupLabel": "Buy and Sell",
+                "groupDescription" : "",
+                "groupIcon": "bookmark.png",
+                "groupColor": "FFFFFF",
+                "groupSort": "auto",
+                "itens":
+                    [ 
+                        { "label": "Amazon", "url": "http://www.amazon.com", "alt": "", "icon" : "amazon.com.png", "date": "1513594883425" },
+                        { "label": "eBay", "url": "http://www.ebay.com", "alt": "", "icon" : "ebay.com.png", "date": "1513594883435" },
+                        { "label": "Ali Express", "url": "http://www.aliexpress.com", "alt": "", "icon" : "aliexpress.com.png", "date": "1513594889435" }
+                    ]
+                }
+            ]
+        },
+        {
+        "pageLabel" : "Rain",
+        "pageDescription" : "This is an empty page with a background image",
+        "pageColumns" : "0",
+        "pageBackground" : "Rain.jpg",
+        "pageColor" : "",
+        "groups":
+            [ 
+                {
+                "groupLabel": "Empty Group",
+                "groupDescription" : "This is an empty group with another icon",
+                "groupIcon": "bookmark.png",
+                "groupColor": "FFFFFF",
+                "groupSort": "auto",
+                "itens":
+                    [                            
+                    ]
+                },
+                {
+                "groupLabel": "Colored Group",
+                "groupDescription" : "This is a colored group",
+                "groupIcon": "bookmark.png",
+                "groupColor": "DDFFDD",
+                "groupSort": "auto",
+                "itens":
+                    [                            
+                    ]
+                }                
+            ]
+        }        
+    ],
+"settings":     
+    {
+    "firstTime": "false",        
+    "defaultOptions": "true",
+    "appearanceTheme": "default",
+    "colorsTopnavBackgroundColor": "2D2D5F",
+    "colorsTopnavColor": "FFFFFF",
+    "defaultPageBackground": "",
+    "defaultBackgroundColor": "F6F6F9",
+    "defaultItensSort": "manual",
+    "showBrowserContextMenu": "true",
+    "defaultPageColumns": "0",
+    "remeberLastPage": "true",
+    "openLinksNewTab": "false",    
+    "noItemLabels": "false",
+    "itemIconSize": "64",
+    "itemIconMargin": "0",
+    "itemIconRadius": "0",
+    "itemLabelFontSize": "13",
+    "itemLabelShowLines": "1",
+    "itemIconLabelTextAlign": "center",
+    "itemIconLabelFontFamily": "'Helvetica', 'Helvetica Nueue', sans-serif",
+    "itemIconLabelFontStyle": "normal",
+    "itemIconLabelFontWeight": "normal"
+    },
+"icons":  
+    [ 
+        { "label": "default.png", "value": "", "file": "icons/default.png" },
+        { "label": "9gag.com.png", "value": "9gag.com.png", "file": "icons/9gag.com.png" },
+        { "label": "aliexpress.com.png", "value": "aliexpress.com.png", "file": "icons/aliexpress.com.png" },
+        { "label": "amazon.com.png", "value": "amazon.com.png", "file": "icons/amazon.com.png" },
+        { "label": "artstation.com.png", "value": "artstation.com.png", "file": "icons/artstation.com.png" },
+        { "label": "apple.com.png", "value": "apple.com.png", "file": "icons/apple.com.png" },
+        { "label": "bing.com.png", "value": "bing.com.png", "file": "icons/bing.com.png" },
+        { "label": "booking.com.png", "value": "booking.com.png", "file": "icons/booking.com.png" },
+        { "label": "calendar.google.com.png", "value": "calendar.google.com.png", "file": "icons/calendar.google.com.png" },
+        { "label": "code.google.com.png", "value": "code.google.com.png", "file": "icons/code.google.com.png" },
+        { "label": "deezer.com.png", "value": "deezer.com.png", "file": "icons/deezer.com.png" },
+        { "label": "deviantart.com.png", "value": "deviantart.com.png", "file": "icons/deviantart.com.png" },
+        { "label": "docs.google.com.png", "value": "docs.google.com.png", "file": "icons/docs.google.com.png" },
+        { "label": "drive.google.com.png", "value": "drive.google.com.png", "file": "icons/drive.google.com.png" },
+        { "label": "dropbox.com.png", "value": "dropbox.com.png", "file": "icons/dropbox.com.png" },
+        { "label": "earth.google.com.png", "value": "earth.google.com.png", "file": "icons/earth.google.com.png" },
+        { "label": "ebay.com.png", "value": "ebay.com.png", "file": "icons/ebay.com.png" },
+        { "label": "facebook.com.png", "value": "facebook.com.png", "file": "icons/facebook.com.png" },
+        { "label": "feedly.com.png", "value": "feedly.com.png", "file": "icons/feedly.com.png" },
+        { "label": "gmail.com.png", "value": "gmail.com.png", "file": "icons/gmail.com.png" },
+        { "label": "google.com.png", "value": "google.com.png", "file": "icons/google.com.png" },
+        { "label": "groups.google.com.png", "value": "groups.google.com.png", "file": "icons/groups.google.com.png" },
+        { "label": "hangouts.google.com.png", "value": "hangouts.google.com.png", "file": "icons/hangouts.google.com.png" },
+        { "label": "hbo.go.com.png", "value": "hbo.go.com.png", "file": "icons/hbo.go.com.png" },
+        { "label": "ign.com.png", "value": "ign.com.png", "file": "icons/ign.com.png" },
+        { "label": "imdb.com.png", "value": "imdb.com.png", "file": "icons/imdb.com.png" },
+        { "label": "instagram.com.png", "value": "instagram.com.png", "file": "icons/instagram.com.png" },
+        { "label": "keep.google.com.png", "value": "keep.google.com.png", "file": "icons/keep.google.com.png" },
+        { "label": "linkedin.com.png", "value": "linkedin.com.png", "file": "icons/linkedin.com.png" },
+        { "label": "mail.yahoo.com.png", "value": "mail.yahoo.com.png", "file": "icons/mail.yahoo.com.png" },
+        { "label": "maps.google.com.png", "value": "maps.google.com.png", "file": "icons/maps.google.com.png" },
+        { "label": "mediawiki.org.png", "value": "mediawiki.org.png", "file": "icons/mediawiki.org.png" },
+        { "label": "netflix.com.png", "value": "netflix.com.png", "file": "icons/netflix.com.png" },
+        { "label": "news.google.com.png", "value": "news.google.com.png", "file": "icons/news.google.com.png" },
+        { "label": "office.com.png", "value": "office.com.png", "file": "icons/office.com.png" },
+        { "label": "outlook.com.png", "value": "outlook.com.png", "file": "icons/outlook.com.png" },
+        { "label": "paypal.com.png", "value": "paypal.com.png", "file": "icons/paypal.com.png" },
+        { "label": "photos.google.com.png", "value": "photos.google.com.png", "file": "icons/photos.google.com.png" },
+        { "label": "pinterest.com.png", "value": "pinterest.com.png", "file": "icons/pinterest.com.png" },
+        { "label": "play.google.com-music.png", "value": "play.google.com-music.png", "file": "icons/play.google.com-music.png" },
+        { "label": "play.google.com.png", "value": "play.google.com.png", "file": "icons/play.google.com.png" },
+        { "label": "plus.google.com.png", "value": "plus.google.com.png", "file": "icons/plus.google.com.png" },
+        { "label": "pocket.com.png", "value": "pocket.com.png", "file": "icons/pocket.com.png" },
+        { "label": "primevideo.com.png", "value": "primevideo.com.png", "file": "icons/primevideo.com.png" },        
+        { "label": "reddit.com.png", "value": "reddit.com.png", "file": "icons/reddit.com.png" },
+        { "label": "sheets.google.com.png", "value": "sheets.google.com.png", "file": "icons/sheets.google.com.png" },
+        { "label": "skype.com.png", "value": "skype.com.png", "file": "icons/skype.com.png" },
+        { "label": "slack.com.png", "value": "slack.com.png", "file": "icons/slack.com.png" },
+        { "label": "soundcloud.com.png", "value": "soundcloud.com.png", "file": "icons/soundcloud.com.png" },
+        { "label": "spotify.com.png", "value": "spotify.com.png", "file": "icons/spotify.com.png" },
+        { "label": "stackoverflow.com.png", "value": "stackoverflow.com.png", "file": "icons/stackoverflow.com.png" },
+        { "label": "steampowered.com.png", "value": "steampowered.com.png", "file": "icons/steampowered.com.png" },
+        { "label": "telegram.org.png", "value": "telegram.org.png", "file": "icons/telegram.org.png" },
+        { "label": "translate.google.com.png", "value": "translate.google.com.png", "file": "icons/translate.google.com.png" },
+        { "label": "tumblr.com.png", "value": "tumblr.com.png", "file": "icons/tumblr.com.png" },
+        { "label": "twitch.com.png", "value": "twitch.com.png", "file": "icons/twitch.com.png" },
+        { "label": "twitter.com.png", "value": "twitter.com.png", "file": "icons/twitter.com.png" },
+        { "label": "vimeo.com.png", "value": "vimeo.com.png", "file": "icons/vimeo.com.png" },
+        { "label": "whatsapp.com.png", "value": "whatsapp.com.png", "file": "icons/whatsapp.com.png" },
+        { "label": "wikipedia.org.png", "value": "wikipedia.org.png", "file": "icons/wikipedia.org.png" },
+        { "label": "wordpress.com.png", "value": "wordpress.com.png", "file": "icons/wordpress.com.png" },
+        { "label": "yahoo.com.png", "value": "yahoo.com.png", "file": "icons/yahoo.com.png" },
+        { "label": "youtube.com.png", "value": "youtube.com.png", "file": "icons/youtube.com.png" }
+    ],
+"groupicons":
+    [ 
+        { "label": "bookmark.png", "value": "bookmark.png", "file": "gicons/bookmark.png" },
+        { "label": "backpack-2.png", "value": "backpack-2.png", "file": "gicons/backpack-2.png" },
+        { "label": "bill.png", "value": "bill.png", "file": "gicons/bill.png" },        
+        { "label": "bookshelf.png", "value": "bookshelf.png", "file": "gicons/bookshelf.png" },
+        { "label": "briefcase.png", "value": "briefcase.png", "file": "gicons/briefcase.png" },
+        { "label": "bus.png", "value": "bus.png", "file": "gicons/bus.png" },
+        { "label": "calc.png", "value": "calc.png", "file": "gicons/calc.png" },
+        { "label": "candy.png", "value": "candy.png", "file": "gicons/candy.png" },
+        { "label": "car.png", "value": "car.png", "file": "gicons/car.png" },
+        { "label": "chalkboard.png", "value": "chalkboard.png", "file": "gicons/chalkboard.png" },
+        { "label": "clock.png", "value": "clock.png", "file": "gicons/clock.png" },
+        { "label": "cloud-check.png", "value": "cloud-check.png", "file": "gicons/cloud-check.png" },
+        { "label": "cloud-down.png", "value": "cloud-down.png", "file": "gicons/cloud-down.png" },
+        { "label": "cloud-error.png", "value": "cloud-error.png", "file": "gicons/cloud-error.png" },
+        { "label": "cloud-refresh.png", "value": "cloud-refresh.png", "file": "gicons/cloud-refresh.png" },
+        { "label": "cloud-up.png", "value": "cloud-up.png", "file": "gicons/cloud-up.png" },
+        { "label": "bookmark.png", "value": "bookmark.png", "file": "gicons/bookmark.png" },
+        { "label": "donut.png", "value": "donut.png", "file": "gicons/donut.png" },
+        { "label": "drop.png", "value": "drop.png", "file": "gicons/drop.png" },
+        { "label": "eye.png", "value": "eye.png", "file": "gicons/eye.png" },
+        { "label": "flag.png", "value": "flag.png", "file": "gicons/flag.png" },
+        { "label": "glasses.png", "value": "glasses.png", "file": "gicons/glasses.png" },
+        { "label": "glove.png", "value": "glove.png", "file": "gicons/glove.png" },
+        { "label": "hamburger.png", "value": "hamburger.png", "file": "gicons/hamburger.png" },
+        { "label": "hand.png", "value": "hand.png", "file": "gicons/hand.png" },
+        { "label": "hotdog.png", "value": "hotdog.png", "file": "gicons/hotdog.png" },
+        { "label": "knife.png", "value": "knife.png", "file": "gicons/knife.png" },
+        { "label": "label.png", "value": "label.png", "file": "gicons/label.png" },
+        { "label": "map2.png", "value": "map2.png", "file": "gicons/map2.png" },
+        { "label": "map.png", "value": "map.png", "file": "gicons/map.png" },
+        { "label": "marker.png", "value": "marker.png", "file": "gicons/marker.png" },
+        { "label": "mcfly.png", "value": "mcfly.png", "file": "gicons/mcfly.png" },
+        { "label": "medicine.png", "value": "medicine.png", "file": "gicons/medicine.png" },
+        { "label": "mountain.png", "value": "mountain.png", "file": "gicons/mountain.png" },
+        { "label": "muffin.png", "value": "muffin.png", "file": "gicons/muffin.png" },
+        { "label": "open-letter.png", "value": "open-letter.png", "file": "gicons/open-letter.png" },
+        { "label": "packman.png", "value": "packman.png", "file": "gicons/packman.png" },
+        { "label": "paper-plane.png", "value": "paper-plane.png", "file": "gicons/paper-plane.png" },
+        { "label": "photo.png", "value": "photo.png", "file": "gicons/photo.png" },
+        { "label": "piggy.png", "value": "piggy.png", "file": "gicons/piggy.png" },
+        { "label": "pin.png", "value": "pin.png", "file": "gicons/pin.png" },
+        { "label": "pizza.png", "value": "pizza.png", "file": "gicons/pizza.png" },
+        { "label": "price.png", "value": "price.png", "file": "gicons/price.png" },
+        { "label": "r2d2.png", "value": "r2d2.png", "file": "gicons/r2d2.png" },
+        { "label": "rocket.png", "value": "rocket.png", "file": "gicons/rocket.png" },
+        { "label": "skull.png", "value": "skull.png", "file": "gicons/skull.png" },
+        { "label": "speakers.png", "value": "speakers.png", "file": "gicons/speakers.png" },
+        { "label": "store.png", "value": "store.png", "file": "gicons/store.png" },
+        { "label": "tactics.png", "value": "tactics.png", "file": "gicons/tactics.png" },
+        { "label": "toaster.png", "value": "toaster.png", "file": "gicons/toaster.png" },
+        { "label": "train.png", "value": "train.png", "file": "gicons/train.png" },
+        { "label": "umbrella.png", "value": "umbrella.png", "file": "gicons/umbrella.png" },
+        { "label": "watch.png", "value": "watch.png", "file": "gicons/watch.png" },
+        { "label": "www.png", "value": "www.png", "file": "gicons/www.png" }
+    ],
+"backgrounds":
+    [ 
+        { "label": "Paradise", "value": "Paradise.jpg", "file": "bg/Paradise.jpg" },
+        { "label": "Wood", "value": "Wood.jpg", "file": "bg/Wood.jpg" },
+        { "label": "Flower", "value": "Flower.jpg", "file": "bg/Flower.jpg" },
+        { "label": "Art", "value": "Art.jpg", "file": "bg/Art.jpg" },
+        { "label": "Bricks", "value": "Bricks.jpg", "file": "bg/Bricks.jpg" },
+        { "label": "Sky", "value": "Sky.jpg", "file": "bg/Sky.jpg" },
+        { "label": "Crops", "value": "Crops.jpg", "file": "bg/Crops.jpg" },
+        { "label": "Time", "value": "Time.jpg", "file": "bg/Time.jpg" },
+        { "label": "Night Sky", "value": "Night Sky.jpg", "file": "bg/Night Sky.jpg" },
+        { "label": "Cactus", "value": "Cactus.jpg", "file": "bg/Cactus.jpg" },
+        { "label": "Rain", "value": "Rain.jpg", "file": "bg/Rain.jpg" }        
+    ]
+}

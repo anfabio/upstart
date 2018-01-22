@@ -1,0 +1,542 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+
+<link rel="stylesheet" type="text/css" href="css/image-picker.css">
+<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="css/sweetalert2.css">
+<link rel="stylesheet" type="text/css" href="css/jquery.colorpicker.bygiro.min.css">
+<link rel="stylesheet" type="text/css" href="css/jquery-ui.min.css">
+<link rel="stylesheet" type="text/css" href="css/bootstrap-toggle.min.css">
+<link rel="stylesheet" type="text/css" href="css/options.css">
+
+<script type="text/javascript" src="js/functions.js"></script>
+<script type="text/javascript" src="js/FileSaver.js"></script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="js/sweetalert2.js"></script>
+<script type="text/javascript" src="js/image-picker.min.js"></script>
+<script type="text/javascript" src="js/jquery.balloon.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/bootstrap-toggle.min.js"></script>
+<script type="text/javascript" src="js/bootstrap-filestyle.min.js"></script>
+<script type="text/javascript" src="js/jquery.colorpicker.bygiro.min.js"></script>
+<script type="text/javascript" src="js/fontawesome-all.min.js"></script>
+
+
+</head>
+<body>
+
+
+<div class="container">
+  <h1 style="font-weight: bold;">Options</h1>
+  <button type="button" class="btn btn-success" id="saveOptions" style="float: right; width:160px; height: 50px; font-size: 20px;">Save Options</button>
+  <p>Make sure you hit "Save Options" before you close this page.</p>
+
+  <ul class="nav nav-tabs">
+    <li class="nav-item active"><a style="font-size: 1.3em;" data-toggle="tab" href="#options">Options</a></li>
+    <li class="nav-item"><a style="font-size: 1.3em;" data-toggle="tab" href="#bookmarks">Bookmarks</a></li>
+    <li class="nav-item"><a style="font-size: 1.3em;" data-toggle="tab" href="#appearance">Appearance</a></li>
+    <li class="nav-item"><a style="font-size: 1.3em;" data-toggle="tab" href="#import-export">Import/Export</a></li>
+    <li class="nav-item"><a style="font-size: 1.3em;" data-toggle="tab" href="#donate">Donate</a></li>
+  </ul>
+
+
+            <!-- ************************ OPTIONS ************************* -->
+
+  <div class="tab-content">
+
+    <div id="options" class="tab-pane active">
+
+      <div class="optionsTabContent" style="margin-top: 30px;">  
+
+        <table class="optionsTableContent">
+          <tr>        
+            <td>
+              <p>Number of page columns</p>
+              <p style="font-size: 12px"></p>
+            </td>
+            <td>
+              <div id="defaultPageColumnsSlider">          
+                <div id="slider-handle-default-page-columns" class="ui-slider-handle"></div>
+              </div>            
+            </td>
+            <td>          
+            <div class="optBalloon" alt="Number of columns in each row. This is calculated automatically according to the numbers of groups you have on the page.<br>Note that you can still set the number of columns for each page individually.">
+              <i class="fas fa-question-circle"></i>
+            </div>
+            </td>
+          </tr> 
+
+          <tr>
+            <td>
+              <p>Itens sorting</p>
+            </td>
+            <td>
+              <select class="form-control" id="defaultItensSortSelect">                            
+                <option value="manual">Manual</option>             
+                <option value="az">A-Z</option>
+                <option value="za">Z-A</option>
+                <option value="newst">Newst</option>
+                <option value="oldest">Oldest</option>
+              </select>  
+            </td>
+            <td>
+            <div class="optBalloon" alt="The default order itens will be placed in each group. Manual means that each group will respect the order set for it. Any other option will sort all groups with the 'auto' (default) option set. You can still set a sort order for each group individually.<br>Note that, if you select an option other than manual, the sorted groups will be <b>saved</b> in the selected order and return the option back to manual <b>will not bring back</b> the previous order. So use with caution.">
+              <i class="fas fa-question-circle"></i>
+            </div>
+            </td>          
+          </tr>  
+
+          <tr>
+            <td>
+              <p>Remeber active page</p>
+            </td>          
+            <td>
+              <!--<input type="checkbox" id ="remeberLastPageToggle" data-toggle="toggle" data-onstyle="success" data-offstyle="danger"> -->
+              <input type="checkbox" id ="remeberLastPageToggle" data-toggle="toggle" data-onstyle="success" data-offstyle="danger">
+            </td>
+            <td>
+            <div  class="optBalloon" alt="Always remember and open the last used page on new launch. If this is set to off the first page will be opened on each launch.">
+              <i class="fas fa-question-circle"></i>
+            </div>
+            </td>          
+          </tr> 
+
+          <tr>
+            <td>
+              <p>Open links in new tab</p>
+            </td>
+            <td>
+              <input type="checkbox" id ="openLinksNewTabToggle" data-toggle="toggle" data-onstyle="success" data-offstyle="danger">
+            </td>
+            <td>
+            <div class="optBalloon" alt="If this is on, links will be opened in a new tab.">
+              <i class="fas fa-question-circle"></i>
+            </div>
+            </td>          
+          </tr> 
+
+          <tr>
+            <td>
+              <p>Show option in browser context menu</p>
+            </td>
+            <td>
+              <input type="checkbox" id ="showBrowserContextMenuToggle" data-toggle="toggle" data-onstyle="success" data-offstyle="danger"> 
+            </td>
+            <td>
+            <div class="optBalloon" alt="Show upStart in the list of right click menu options.">
+              <i class="fas fa-question-circle"></i>
+            </div>
+            </td>          
+          </tr>
+
+        </table>
+
+
+        <button type="button" class="btn btn-danger btn-md" id="resetDefaultValuesGeneralOptions" alt="Reset above values to default. Remeber to save these settings in order to enable them" style="width:220px; height:50px; float:right; margin: 30px;">Reset to Default Values <div class="optBalloonButton" alt="Reset above values to default. Remeber to save these settings in order to enable them."><i class="fas fa-question-circle"></i></div></button>
+      </div>
+    </div>
+
+            <!-- ************************ BOOKMARKS ************************* -->
+
+    <div id="bookmarks" class="tab-pane">
+
+      <div class="optionsTabContent" style="margin-top: 30px;">  
+
+        <div class="itemContentExample">
+          <li class="itemListExample" id="itemListExample">
+              <div class="contentItemExample" id="contentItemExample">
+                <a class="itemLinkExample" id="itemLinkExample" alt="Just an example" href="http://upstart"><img class="iconImgExample" id="iconImgExample" title="http://upstart" src="img/icon128.png">
+                </a>
+                <div class="iconLabelExample" id="iconLabelExample">upStart Label
+                </div>
+              </div>
+          </li>
+        </div>
+
+          <table class="optionsTableContent">
+            <tr>        
+              <td>
+                <p>Hide bookmark labels</p>        
+              </td>
+              <td>
+                <input type="checkbox" id="noItemLabelsToggle" data-toggle="toggle" data-onstyle="success" data-offstyle="danger">
+              </td>
+              <td>
+                <div  class="optBalloon" alt="Hide all bookmark labels.">
+                  <i class="fas fa-question-circle"></i>
+                </div>
+              </td>              
+            </tr>   
+
+            <tr>        
+              <td>
+                <p>Bookmark size</p>        
+              </td>
+              <td>
+                <div id="iconSizeSlider">          
+                  <div id="slider-handle-icon-size" class="ui-slider-handle"></div>
+                </div>            
+              </td>
+              <td>
+                <div  class="optBalloon" alt="The size of bookmark icons in pixels.">
+                  <i class="fas fa-question-circle"></i>
+                </div>
+              </td>              
+            </tr>       
+
+            <tr>
+              <td>
+                <p>Bookmarks margin</p>
+              </td>
+              <td>
+                <div id="iconMarginSlider">          
+                  <div id="slider-handle-icon-margin" class="ui-slider-handle"></div>
+                </div>            
+              </td>
+              <td>
+                <div  class="optBalloon" alt="The distance between bookmarks in pixels.">
+                  <i class="fas fa-question-circle"></i>
+                </div>
+              </td>              
+            </tr>   
+
+            <tr>
+              <td>
+                <p>Rounded corners</p>
+              </td>
+              <td>
+                <div id="iconRadiusSlider">          
+                  <div id="slider-handle-icon-radius" class="ui-slider-handle"></div>
+                </div>            
+              </td>
+              <td>
+                <div  class="optBalloon" alt="The radius of the bookmarks background.">
+                  <i class="fas fa-question-circle"></i>
+                </div>
+              </td>              
+            </tr>   
+
+            <tr>
+              <td>
+                <p>Font size</p>
+              </td>
+              <td>
+                <div id="itemLabelFontSizeSlider">          
+                  <div id="slider-handle-icon-label-font-size" class="ui-slider-handle"></div>
+                </div>            
+              </td>
+              <td>
+                <div  class="optBalloon" alt="The font size in pixels.">
+                  <i class="fas fa-question-circle"></i>
+                </div>
+              </td>              
+            </tr> 
+
+            <tr>
+              <td>
+                <p>Label lines shown</p>
+              </td>
+              <td>
+                <select class="form-control" id="itemIconLabelLinesShownSelect">              
+                  <option value="1">1 line</option>
+                  <option value="2">2 lines</option>
+                  <option value="all">Full text</option>              
+                </select>  
+              </td>
+              <td>
+                <div  class="optBalloon" alt="Numbers of lines of the bookmark labels that will be showed.">
+                  <i class="fas fa-question-circle"></i>
+                </div>
+              </td>              
+            </tr>  
+
+            <tr>
+              <td>
+                <p>Label alignment</p>
+              </td>
+              <td>
+                <select class="form-control" id="itemIconLabelTextAlignSelect">              
+                  <option value="left">Left</option>
+                  <option value="center">Center</option>
+                  <option value="right">Right</option>              
+                </select>  
+              </td>
+              <td>
+                <div  class="optBalloon" alt="Alignment of the bookmark labels.">
+                  <i class="fas fa-question-circle"></i>
+                </div>
+              </td>              
+            </tr>  
+
+            <tr>
+              <td>
+                <p>Font family</p>
+              </td>
+              <td>
+                  <select class="form-control" id="itemIconLabelFontFamilySelect">
+                  <option value="'Helvetica', 'Helvetica Nueue', sans-serif">Default</option>
+                  <option value="'Helvetica', 'Helvetica Nueue', sans-serif">Helvetica/Helvetica Nueue</option>
+                  <option value="'Arial', 'Helvetica', sans-serif">Arial, Helvetica</option>
+                  <option value="'Arial Black', 'Gadget', sans-serif">Arial Black, Gadget</option>
+                  <option value="'Bookman Old Style', serif">Bookman Old Style</option>
+                  <option value="'Comic Sans MS', cursive">Comic Sans MS</option>
+                  <option value="'Courier', monospace">Courier</option>
+                  <option value="'Courier New', 'Courier', monospace">Courier New</option>
+                  <option value="'Garamond', serif">Garamond</option>
+                  <option value="'Georgia', serif">Georgia</option>
+                  <option value="'Impact', 'Charcoal', sans-serif">Impact, Charcoal</option>
+                  <option value="'Lucida Console', 'Monaco', monospace">Lucida Console, Monaco</option>
+                  <option value="'Lucida Sans Unicode', 'Lucida Grande', sans-serif">Lucida Sans Unicode,  Lucida Grande</option>
+                  <option value="'MS Sans Serif', 'Geneva', sans-serif">MS Sans Serif, Geneva</option>
+                  <option value="'MS Serif', 'New York', sans-serif">MS Serif, New York</option>            
+                  <option value="'Tahoma', 'Geneva', sans-serif">Tahoma, Geneva</option>
+                  <option value="'Times New Roman', 'Times', serif">Times New Roman, Times</option>
+                  <option value="'Trebuchet MS', 'Helvetica', sans-serif">Trebuchet MS, Helvetica</option>
+                  <option value="'Verdana', 'Geneva', sans-serif">Verdana, Geneva</option>
+                </select>           
+              </td>
+              <td>
+                <div  class="optBalloon" alt="The font family of the bookmark labels.">
+                  <i class="fas fa-question-circle"></i>
+                </div>
+              </td>              
+            </tr>  
+
+            <tr>
+              <td>
+                <p>Font style</p>
+              </td>
+              <td>
+                <select class="form-control" id="itemIconLabelFontStyleSelect">
+                  <option value="normal">Normal</option>                
+                  <option value="italic">Italic</option>
+                </select>             
+              </td>
+              <td>
+                <div  class="optBalloon" alt="The font style. Normal or italic.">
+                  <i class="fas fa-question-circle"></i>
+                </div>
+              </td>              
+            </tr> 
+
+            <tr>
+              <td>
+                <p>Font weight</p>
+              </td>
+              <td>
+                <select class="form-control" id="itemIconLabelFontWeightSelect">
+                  <option value="normal">Normal</option>
+                  <option value="bold">Bold</option>                
+                </select>             
+              </td>
+              <td>
+                <div  class="optBalloon" alt="The font weight. Normal or bold.">
+                  <i class="fas fa-question-circle"></i>
+                </div>
+              </td>            
+            </tr> 
+          </table>
+
+      <button type="button" class="btn btn-primary btn-md btn-danger" id="resetDefaultValuesBookmarks" alt="Reset above values to default. Remeber to save these settings in order to enable them" style="width:220px; height:50px; float:right; margin: 30px;">Reset to Default Values <div class="optBalloonButton" alt="Reset above values to default. Remeber to save these settings in order to enable them."><i class="fas fa-question-circle"></i></div></button>
+
+      </div>
+    </div>
+            <!-- ************************ APPEARANCE ************************* -->
+
+  <div id="appearance" class="tab-pane">
+
+    <div class="optionsTabContent" style="margin-top: -20px;">  
+      <table class="optionsTableContent">
+        <tr>
+          <td>
+            <div style="display: inline-block;">
+            Background
+            <div  class="optBalloonRight" style="display: inline-block;" alt="Select none to disable.<br>Note that you can still set the background image for each page individually.">
+              <i class="fas fa-question-circle"></i>
+            </div>
+          </div>
+          </td>          
+        </tr>
+      </table>
+
+      <div style="display: flex; justify-content: space-around;">
+        <select class="image-picker" id="image-picker-default-backgrounds"></select>
+      </div>
+
+      <table class="optionsTableContent">
+        <tr>
+          <td>
+            <div style="display: inline-block;">
+            Custom background
+            <div  class="optBalloonRight" style="display: inline-block;" alt="Set a custom background image. A local image can be set using file:/// ex: file:///C:/Temp/background.png or file:///home/user/background.png.">
+              <i class="fas fa-question-circle"></i>
+            </div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <input type="text" class="form-control" id="customBackgroundURL" placeholder="http://" style="display: inline-block; width: 100%;">
+          </td>            
+        </tr>      
+      </table>
+
+      <table class="optionsTableContent">
+        <tr>        
+          <td>
+            <div style="display: inline-block;">
+            Customize colors
+            <div  class="optBalloonRight" style="display: inline-block;" alt="Set the default colors of the elements.">
+              <i class="fas fa-question-circle"></i>
+            </div>
+            </div>
+          </td>
+        </tr>
+        <tr style="font-size: 13px; font-weight: bold;">
+          <td>
+            Background
+          </td>
+          <td>
+            Top bar background
+          </td>
+          <td>
+            Top bar foreground
+          </td>        
+        </tr>
+        <tr>
+          <td>
+            <div class="input-group myColorPicker">
+              <span class="input-group-addon myColorPicker-preview" id="defaultBackgroundColor-preview">#</span>
+              <input type="text" class="form-control" value="27C3C3" id="defaultBackgroundColor">
+            </div>
+          </td>
+          <td>
+            <div class="input-group myColorPicker">
+              <span class="input-group-addon myColorPicker-preview" id="colorsTopnavBackgroundColor-preview">#</span>
+              <input type="text" class="form-control" value="000" id="colorsTopnavBackgroundColor">
+            </div>
+          </td>
+          <td>
+            <div class="input-group myColorPicker">
+              <span class="input-group-addon myColorPicker-preview" id="colorsTopnavColor-preview">#</span>
+              <input type="text" class="form-control" value="000" id="colorsTopnavColor">
+            </div> 
+          </td>        
+        </tr>      
+      </table>
+
+      <button type="button" class="btn btn-primary btn-md btn-danger" id="resetDefaultValuesAppearance" alt="Reset above values to default. Remeber to save these settings in order to enable them" style="width:220px; height:50px; float:right; margin: 30px;">Reset to Default Values <div class="optBalloonButton" alt="Reset above values to default. Remeber to save these settings in order to enable them."><i class="fas fa-question-circle"></i></div></button>
+    </div>
+  </div>
+
+            <!-- ************************ IMPORT/EXPORT ************************* -->
+
+  <div id="import-export" class="tab-pane">
+
+    <div class="optionsTabContent" style="margin-top: 50px;">
+      <table align="center" class="optionsTableContentIE">
+        <tr>        
+          <td align="center">
+            <button type="button" class="btn btn-primary btn-md" id="importSettingsButton" style="width:95%;">Import Settings</button>   
+          </td align="center">
+          <td>
+            <button type="button" class="btn btn-primary btn-md" id="exportSettingsButton" style="width:95%;">Export Settings</button>          
+          </td>
+        </tr>   
+
+        <tr>        
+          <td align="center">          
+            <p style="width: 95%;">To import your bookmarks and settings click on "Import Settings" button and select your file. Only text files (.txt) are accepted.</p>     
+            <input type="file" id="inputFile" class="filestyle">
+          </td>
+          <td align="center">
+            <p style="width: 95%;">To export your bookmarks and settings click on "Export Settings" button. A text file will be create and downloaded.</p>
+          </td>
+        </tr>
+      </table>
+
+      <br>
+      <br>
+      <br>
+
+      <table class="optionsTableContentIE" style="margin-top: 100px;">
+        <tr>        
+          <td style="width: 100%;">
+            <button type="button" class="btn btn-primary btn-md btn-danger" id="importDefaultSettings" style="width:100%;">Default Settings</button>          
+          </td>
+        </tr>   
+
+        <tr>        
+          <td style="width: 100%;">
+            <p style="width: 100%;">Caution! This will erase your current bookmarks and settings and load the default template. Be sure to export your data first!</p>
+          </td>
+        </tr>
+      </table>
+
+    </div>
+  </div>
+
+        <!-- ************************ DONATE ************************* -->
+
+  <div id="donate" class="tab-pane">
+
+    <div class="optionsTabContent" style="margin-top: 30px;">
+
+      <h3 style="color:red">Did you like upStart?</h3>
+      <span style="font-size: 1.2em">It takes a lot of work to develop and mantain it. Your generosity allows this to continue.
+
+      So, if you find upStart useful, please consider to make a donation helping the ongoing development and support.</span>
+      <br>
+      <br>
+      <br>
+
+      <table align="center" class="optionsTableContentIE">
+        <tr>        
+          <td align="center" style="width:50%">
+            <a href=https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=GVRY7CBBVNBJ6&lc=US&item_name=upStart%20Donation&item_number=upstartdeveloper%40gmail%2ecom&currency_code=BRL&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted">
+              <button type="button" class="btn btn-primary btn-lg" id="donatePaypal" style="width:95%;">Donate with PayPal</button></a>
+          </td>
+          <td align="center" style="width:50%">
+            <div align="center" style="text-align: justify; width:100%; display: flex; justify-content: center;">
+            <span>If the button on the left is not working, please try this one.</span>
+            
+            <form  action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+            <input type="hidden" name="cmd" value="_s-xclick">
+            <input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----
+">
+            
+            <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+            <img alt="" border="0" src="https://www.paypalobjects.com/pt_BR/i/scr/pixel.gif" width="1" height="1">
+            
+            </form> 
+            </div>
+          </td>
+        </tr>   
+      </table>
+
+      <br>
+      <br>
+      <br>
+
+     <h1 style="color:red; margin-top: 50px;" align=center>Thank you for your support!</h1>
+
+  </div>
+
+
+</div>
+
+</div>
+
+
+
+<div id="allowFileAccessMessageWarning" style="cursor: pointer; width: 100%;"></div>
+
+
+<script type="text/javascript" src="js/options.js"></script>
+
+</body>
+
+</html>
