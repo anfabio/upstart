@@ -1810,22 +1810,19 @@ function itemDelete(pageID, groupID, itemID) {
 function selectPage(curPage) {
     var topNav = document.getElementById("topNav");
     
-        chrome.storage.local.set({ "currentPage": curPage }, function(){            
-            $(".topLink").css({'backgroundColor': '', 'color': '' });
-            $(".pageSection").css( { "display":"none" }, function() {
-        });
-        
+    chrome.storage.local.set({ "currentPage": curPage }, function(){            
+        $(".topLink").css({'backgroundColor': '', 'color': '' });
+        $(".pageSection").css( { "display":"none" });        
         document.getElementById("pageSection"+curPage).prepend(topNav);    
         document.getElementById("pageSection"+curPage).style.display = "block";
-        $('#topLink'+curPage).css({'backgroundColor': '#FFF', 'color': '#2D2D5F' });        
-
+        document.getElementById("topLink"+curPage).style.backgroundColor = '#FFF';
+        document.getElementById("topLink"+curPage).style.color = '#2D2D5F'; //BUG
         $('.contentPage').masonry({
             itemSelector: '.contentGroup',
             columnWidth: '.contentGroup',
             percentPosition: true,      
             transitionDuration: 0,        
         });
-
     });
 }
 

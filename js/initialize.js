@@ -241,6 +241,7 @@ function initialize() {
 	    var pageSection = document.createElement('DIV');
 	    pageSection.className = "pageSection";
 	    pageSection.id = "pageSection"+p;
+	    pageSection.style.display = 'none';
 	    pageSection.addEventListener("click", function() {     
 	        $('#contextPageMenu').remove();
 	        $('#contextTopNavMenu').remove();

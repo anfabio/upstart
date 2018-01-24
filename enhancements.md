@@ -1,4 +1,4 @@
-1. navegação baseada em Pills
+1. navegação baseada em Pills //maybe not the best solution. nav is working fine, maybe some cached image ?
 2. separar as configurações
 3. json baseado em id
 4. mudar cor de background do aviso para #F2F2F2 ou (amarelo) #FFF299 e icone preto
