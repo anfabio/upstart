@@ -99,6 +99,7 @@ function initOptions() {
     var itemIconSize = parseInt(jsonOptions.settings.itemIconSize);  
     var itemIconRadius = jsonOptions.settings.itemIconRadius;
     var itemLabelFontSize = jsonOptions.settings.itemLabelFontSize;
+    var itemLabelFontColor = jsonOptions.settings.itemLabelFontColor;
     var itemIconLabelTextAlign = jsonOptions.settings.itemIconLabelTextAlign;
     var itemIconLabelLinesShown = jsonOptions.settings.itemLabelShowLines;
     var itemIconLabelFontFamily = jsonOptions.settings.itemIconLabelFontFamily;
@@ -348,6 +349,8 @@ $( function() {
           }  
         });
 
+    $("input#itemLabelFontColor").val(jsonOptions['settings'].itemLabelFontColor);
+    $("span#itemLabelFontColor-preview").css('background-color', '#'+jsonOptions['settings'].itemLabelFontColor);
 
 
     $("input#colorsTopnavBackgroundColor").val(jsonOptions['settings'].colorsTopnavBackgroundColor);
@@ -389,6 +392,7 @@ function saveOptions() {
     jsonOptions['settings'].itemIconLabelFontFamily = $("#itemIconLabelFontFamilySelect").val();
     jsonOptions['settings'].itemIconLabelFontStyle = $("#itemIconLabelFontStyleSelect").val();
     jsonOptions['settings'].itemIconLabelFontWeight = $("#itemIconLabelFontWeightSelect").val();
+    jsonOptions['settings'].itemLabelFontColor = $("#itemLabelFontColor").val();
 
 
     /*************** APPEARANCE *******************/
@@ -512,9 +516,10 @@ function resetDefaultValuesBookmarks() {
     $("select#itemIconLabelFontStyleSelect").val('normal');
     $(".iconLabelExample").css({'font-style': 'normal' });
 
-     $("select#itemIconLabelFontWeightSelect").val('normal');
+    $("select#itemIconLabelFontWeightSelect").val('normal');
     $(".iconLabelExample").css({'font-weight': 'normal' });
  
+    $("input#itemLabelFontColor").val('');
 }
 
 function resetDefaultValuesAppearance() {

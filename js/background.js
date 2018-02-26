@@ -72,9 +72,24 @@ chrome.storage.local.get("jsonUS", function(JsonData) {
       }
 
       chrome.contextMenus.onClicked.addListener( function (clickData) {
-
         if ( (clickData.menuItemId.startsWith('contextMenuPage')) || (clickData.menuItemId.startsWith('contextMenuLink')) ) {
         } else {
+          saveItem(clickData);
+        }
+      });
+
+
+    });
+
+  }
+})
+
+
+
+
+function saveItem(clickData) {
+
+
           chrome.storage.local.get("jsonUS", function(JsonData) {
             try {
                 JSON.parse(JsonData.jsonUS);
@@ -96,6 +111,8 @@ chrome.storage.local.get("jsonUS", function(JsonData) {
               var activeTab = arrayOfTabs[0];
               var tabURL;
               var tabTitle;
+              var tabAlt;
+              var iconValue = '';
 
               //LINKMENU EVENT
               if (contextID == 'Page') {       
@@ -103,31 +120,45 @@ chrome.storage.local.get("jsonUS", function(JsonData) {
                 tabTitle = activeTab.title;   
               } else { // Link
                 tabURL = clickData.linkUrl;
+
                 if (clickData.linkUrl.split('/')[2] == '') { tabTitle = clickData.linkUrl.split('/')[3]; } else { tabTitle = clickData.linkUrl.split('/')[2] }
+              }
+              console.log(activeTab.favIconUrl);
+              iconValue = activeTab.favIconUrl;
+
+              //GET ROOT DOMAIN
+              var domainName = tabURL.replace('http://','').replace('https://','').replace('www.','').split(/[/?#]/)[0];
+
+              //GET MATCH ICON
+              for (i = 0; i < jsonBackground['icons'].length; i++) {
+                var allString = jsonBackground.icons[i].label;
+                var regex = new RegExp(domainName, 'gi');
+
+                var strResults = allString.match(regex);
+
+                if (strResults) {
+                  iconValue = jsonBackground.icons[i].value;
+                  break;
+                }
               }
 
               var newItemObj = new Object();
               newItemObj.label = tabTitle;
               newItemObj.url = tabURL;
               newItemObj.alt = '';
-              newItemObj.icon = '';
+              newItemObj.icon = iconValue;
               newItemObj.date = Date.now().toString();
 
               jsonBackground.pages[dstPage].groups[dstGroup]['itens'].push(newItemObj);
+              
               chrome.storage.local.set({"jsonUS": JSON.stringify(jsonBackground)}, function() {
                 if (contextID == 'Page') { 
                   //alert("Page added to "+ jsonBackground.pages[dstPage].pageLabel +' - '+jsonBackground.pages[dstPage].groups[dstGroup].groupLabel)
                 } else {
                   //alert("Link added to "+ jsonBackground.pages[dstPage].pageLabel +' - '+jsonBackground.pages[dstPage].groups[dstGroup].groupLabel)
                 }          
-              });
+              });              
             });
           });
-        }
-      });
 
-
-    });
-
-  }
-})
+}

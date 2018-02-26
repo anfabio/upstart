@@ -196,6 +196,7 @@ function initialize() {
 
 	var defaultPageColumns = json['settings'].defaultPageColumns;
 	var defaultBackgroundColor = json['settings'].defaultBackgroundColor;
+	var itemLabelFontColor = json['settings'].itemLabelFontColor;
 
 	/******************** PAGE BEGIN ****************/	
 	for (p = 0; p < json['pages'].length; p++) { 
@@ -296,7 +297,12 @@ function initialize() {
 	        contentGroup.id = "contentGroup"+gid;    
 	        contentGroup.dataset.page = p;
 	        contentGroup.dataset.group = g;
-	        contentGroup.style.backgroundColor = '#'+groupColor;
+	        if ( groupColor == 'transparent' ) {
+	        	contentGroup.style.backgroundColor = 'transparent';
+	        } else {
+	        	contentGroup.style.backgroundColor = '#'+groupColor;
+	        }
+
 	        if ( pageColumns == 0 ) { //pageComuns auto
 	        	if ( defaultPageColumns != 0 ) {
 	        		contentGroup.style.width = 'calc('+100/defaultPageColumns+'% - 20px)';
@@ -425,7 +431,7 @@ function initialize() {
 	            itemIconImage.id = "itemIconImage"+iid;
 	            
 	            if ( (itemIcon.toLowerCase().startsWith('http')) || (itemIcon.toLowerCase().startsWith('file')) ) {
-	                itemIconImage.src = itemIcon;    
+	                itemIconImage.src = itemIcon;   
 	            } else if (itemIcon == '') {
 	                itemIconImage.src = 'icons/default.png'; 
 	            } else {
@@ -437,6 +443,8 @@ function initialize() {
 	            itemLabel.className = "itemLabel";   
 	            itemLabel.id = "itemLabel"+iid;         
 	            itemLabel.innerHTML = itemLabelText;
+	            itemLabel.style.color = itemLabelFontColor;
+	            
 	
 
 	 			//ITEM ASSEMBLE

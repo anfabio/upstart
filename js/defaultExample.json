@@ -15,6 +15,7 @@
                 "groupIcon": "bookmark.png",
                 "groupColor": "FFFFFF",
                 "groupSort": "auto",
+                "groupOpacity": "1",
                 "itens":
                     [ 
                         { "label": "Google", "url": "https://www.google.com", "alt": "", "icon" : "google.com.png", "date": "1513595345240" },
@@ -32,6 +33,7 @@
                 "groupIcon": "bookmark.png",
                 "groupColor": "FFFFFF",
                 "groupSort": "auto",
+                "groupOpacity": "1",
                 "itens":
                     [ 
                         { "label": "Facebook", "url": "https://www.facebook.com", "alt": "", "icon" : "facebook.com.png", "date": "1513594871114" },
@@ -51,6 +53,7 @@
                 "groupIcon": "bookmark.png",
                 "groupColor": "FFFFFF",
                 "groupSort": "auto",
+                "groupOpacity": "1",
                 "itens":
                     [ 
                         { "label": "Google News", "url": "https://news.google.com", "alt": "", "icon" : "news.google.com.png", "date": "1513595345232" }
@@ -72,6 +75,7 @@
                 "groupIcon": "bookmark.png",
                 "groupColor": "FFFFFF",
                 "groupSort": "auto",
+                "groupOpacity": "1",
                 "itens":
                     [ 
                         { "label": "Outlook 365", "url": "https://outlook.office.com/owa", "alt": "", "icon" : "outlook.com.png", "date": "1513595345239" },
@@ -84,6 +88,7 @@
                 "groupIcon": "bookmark.png",
                 "groupColor": "FFFFFF",
                 "groupSort": "auto",
+                "groupOpacity": "1",
                 "itens":
                     [ 
                         { "label": "Reports", "url": "file:///home/user/tmp/reports.doc", "alt": "", "icon" : "docs.google.com.png", "date": "1513595345240" },
@@ -96,6 +101,7 @@
                 "groupIcon": "bookmark.png",
                 "groupColor": "FFFFFF",
                 "groupSort": "auto",
+                "groupOpacity": "1",
                 "itens":
                     [ 
                         { "label": "Slack", "url": "https://www.slack.com", "alt": "", "icon" : "slack.com.png", "date": "1513595345256" },
@@ -118,6 +124,7 @@
                 "groupIcon": "bookmark.png",
                 "groupColor": "FFFFFF",
                 "groupSort": "auto",
+                "groupOpacity": "1",
                 "itens":
                     [ 
                         { "label": "Netflix", "url": "http://www.netflix.com", "alt": "", "icon" : "netflix.com.png", "date": "1513594871025" },
@@ -131,6 +138,7 @@
                 "groupIcon": "bookmark.png",
                 "groupColor": "FFFFFF",
                 "groupSort": "auto",
+                "groupOpacity": "1",
                 "itens":
                     [ 
                         { "label": "Steam", "url": "http://store.steampowered.com/", "alt": "", "icon" : "steampowered.com.png", "date": "1513595345250" },       
@@ -154,6 +162,7 @@
                 "groupIcon": "bookmark.png",
                 "groupColor": "FFFFFF",
                 "groupSort": "auto",
+                "groupOpacity": "1",
                 "itens":
                     [ 
                         { "label": "Amazon", "url": "http://www.amazon.com", "alt": "", "icon" : "amazon.com.png", "date": "1513594883425" },
@@ -177,6 +186,7 @@
                 "groupIcon": "bookmark.png",
                 "groupColor": "FFFFFF",
                 "groupSort": "auto",
+                "groupOpacity": "1",
                 "itens":
                     [                            
                     ]
@@ -187,6 +197,7 @@
                 "groupIcon": "bookmark.png",
                 "groupColor": "DDFFDD",
                 "groupSort": "auto",
+                "groupOpacity": "1",
                 "itens":
                     [                            
                     ]

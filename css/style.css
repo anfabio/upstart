@@ -219,7 +219,8 @@ li.bookmarksListItemSearch:hover {
 }
 
 
-img.itemIconImage {
+img.itemIconImage {  
+  min-height: 64px;
 	max-width: 64px;
 	max-height: 64px;
 	overflow: visible;

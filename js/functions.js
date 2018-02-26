@@ -638,7 +638,8 @@ async function groupEdit(pageID, groupID) {
     var currentGroupColor = json.pages[pageID].groups[groupID].groupColor;
     var currentGroupSort = json.pages[pageID].groups[groupID].groupSort;
     var currentGroupIcon = json.pages[pageID].groups[groupID].groupIcon;    
-
+    var currentGroupOpacity = json.pages[pageID].groups[groupID].groupOpacity;
+    var defaultBackgroundColor = json['settings'].defaultBackgroundColor;
 
     var groupIcons;
     for (i = 0; i < json['groupicons'].length; i++) {
@@ -654,6 +655,8 @@ async function groupEdit(pageID, groupID) {
     var groupColor;
     var groupSort;
     var groupIcon;   
+    var groupOpacity; 
+
     await swal({
       title: 'Edit Group',
       html:
@@ -693,6 +696,7 @@ async function groupEdit(pageID, groupID) {
                     '</div>'+
                     '<ul class="selectableColor" id="selectableColorGroup">'+
                         '<li id="groupColor_None" data-color="" title="None"><div style="color:#000000; opacity:0.5"><i class="fas fa-adjust fa-4x"></i></div></li>'+
+                        '<li id="groupColor_Transparent" data-color="transparent" title="Transparent"><div style="color:#000000; opacity:0.1"><i class="fas fa-adjust fa-4x"></i></div></li>'+
                         '<li id="groupColor_A5D2FF" data-color="A5D2FF" title="A5D2FF"><div style="color:#A5D2FF"><i class="fas fa-circle fa-4x"></i></div></li>'+
                         '<li id="groupColor_FFA5A5" data-color="FFA5A5" title="FFA5A5"><div style="color:#FFA5A5"><i class="fas fa-circle fa-4x"></i></div></li>'+
                         '<li id="groupColor_9BCD9B" data-color="9BCD9B" title="9BCD9B"><div style="color:#9BCD9B"><i class="fas fa-circle fa-4x"></i></div></li>'+
@@ -758,10 +762,14 @@ async function groupEdit(pageID, groupID) {
 
             //SELECTABLE COLOR LIST
             $( "#selectableColorGroup" ).selectable({
-                selected: function(event, ui) {
+                selected: function(event, ui) {                    
                     $("input#groupBoxColorPicker", groupColor).val($(ui.selected).attr('data-color'));
                     if ($(ui.selected).attr('data-color') != '') {
-                        $("#contentGroup"+gid).css('backgroundColor', '#'+$(ui.selected).attr('data-color'));
+                        if ($(ui.selected).attr('data-color') == 'transparent') {
+                            $("#contentGroup"+gid).css('backgroundColor', 'transparent');
+                        } else {
+                            $("#contentGroup"+gid).css('backgroundColor', '#'+$(ui.selected).attr('data-color'));
+                        }
                     } else {
                         $("#contentGroup"+gid).css('backgroundColor', '#'+defaultBackgroundColor);
                     }

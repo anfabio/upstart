@@ -66,12 +66,31 @@ function saveCurrentURL(pageID, groupID){
        	var activeTab = arrayOfTabs[0];
        	tabURL = activeTab.url;
        	tabTitle = activeTab.title;
-	
+        iconValue = '';
+
+        iconValue = activeTab.favIconUrl;
+        
+              //GET ROOT DOMAIN
+              var domainName = tabURL.replace('http://','').replace('https://','').replace('www.','').split(/[/?#]/)[0];
+
+              //GET MATCH ICON
+              for (i = 0; i < jsonPopup['icons'].length; i++) {
+                var allString = jsonPopup.icons[i].label;
+                var regex = new RegExp(domainName, 'gi');
+
+                var strResults = allString.match(regex);
+
+                if (strResults) {
+                  iconValue = jsonPopup.icons[i].value;
+                  break;
+                }
+              }
+
 		var newItemObj = new Object();
 		newItemObj.label = tabTitle;
 		newItemObj.url = tabURL;
 		newItemObj.alt = "";
-		newItemObj.icon = "";
+		newItemObj.icon = iconValue;
 		newItemObj.date = Date.now().toString();
 
 		jsonPopup.pages[pageID].groups[groupID]['itens'].push(newItemObj);
