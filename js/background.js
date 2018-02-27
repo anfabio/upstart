@@ -112,7 +112,7 @@ function saveItem(clickData) {
               var tabURL;
               var tabTitle;
               var tabAlt;
-              var iconValue = '';
+              var iconValue;
 
               //LINKMENU EVENT
               if (contextID == 'Page') {       
@@ -123,9 +123,6 @@ function saveItem(clickData) {
 
                 if (clickData.linkUrl.split('/')[2] == '') { tabTitle = clickData.linkUrl.split('/')[3]; } else { tabTitle = clickData.linkUrl.split('/')[2] }
               }
-              console.log(activeTab.favIconUrl);
-              iconValue = activeTab.favIconUrl;
-
               //GET ROOT DOMAIN
               var domainName = tabURL.replace('http://','').replace('https://','').replace('www.','').split(/[/?#]/)[0];
 
@@ -142,11 +139,25 @@ function saveItem(clickData) {
                 }
               }
 
+              if (iconValue) {                
+              } else {                
+                iconValue = activeTab.favIconUrl;
+              }
+
+              console.log(iconValue);
+
+
               var newItemObj = new Object();
               newItemObj.label = tabTitle;
               newItemObj.url = tabURL;
               newItemObj.alt = '';
-              newItemObj.icon = iconValue;
+              
+              if (iconValue) {
+                newItemObj.icon = iconValue;
+              } else {
+                newItemObj.icon = '';
+              }   
+              
               newItemObj.date = Date.now().toString();
 
               jsonBackground.pages[dstPage].groups[dstGroup]['itens'].push(newItemObj);
