@@ -112,54 +112,39 @@ function saveItem(clickData) {
               var tabURL;
               var tabTitle;
               var tabAlt;
-              var iconValue;
+              var tabIcon;
 
               //LINKMENU EVENT
               if (contextID == 'Page') {       
                 tabURL = activeTab.url;
-                tabTitle = activeTab.title;   
-              } else { // Link
+                tabTitle = activeTab.title;
+                tabIcon = activeTab.favIconUrl; 
+              } else { // Just a link, no title
                 tabURL = clickData.linkUrl;
 
-                if (clickData.linkUrl.split('/')[2] == '') { tabTitle = clickData.linkUrl.split('/')[3]; } else { tabTitle = clickData.linkUrl.split('/')[2] }
+              if (clickData.linkUrl.split('/')[2] == '') { tabTitle = clickData.linkUrl.split('/')[3]; } else { tabTitle = clickData.linkUrl.split('/')[2] }
               }
+
               //GET ROOT DOMAIN
-              var domainName = tabURL.replace('http://','').replace('https://','').replace('www.','').split(/[/?#]/)[0];
-
-              //GET MATCH ICON
-              for (i = 0; i < jsonBackground['icons'].length; i++) {
-                var allString = jsonBackground.icons[i].label;
-                var regex = new RegExp(domainName, 'gi');
-
-                var strResults = allString.match(regex);
-
-                if (strResults) {
-                  iconValue = jsonBackground.icons[i].value;
-                  break;
-                }
-              }
-
-              if (iconValue) {                
-              } else {                
-                iconValue = activeTab.favIconUrl;
-              }
-
-              console.log(iconValue);
-
+              var domainName = tabURL.replace('http://','').replace('https://','').replace('www.','').replace('web.','').split(/[/?#]/)[0];
 
               var newItemObj = new Object();
               newItemObj.label = tabTitle;
               newItemObj.url = tabURL;
               newItemObj.alt = '';
-              
-              if (iconValue) {
-                newItemObj.icon = iconValue;
-              } else {
-                newItemObj.icon = '';
-              }   
-              
               newItemObj.date = Date.now().toString();
+              newItemObj.icon = ''+tabIcon;             
 
+              //GET MATCH ICON
+              for (i = 0; i < jsonBackground['icons'].length; i++) {
+                var allString = jsonBackground.icons[i].label;
+
+                if (allString.includes(domainName)) {
+                  newItemObj.icon = jsonBackground.icons[i].value;
+                  break;
+                }
+              }
+              
               jsonBackground.pages[dstPage].groups[dstGroup]['itens'].push(newItemObj);
               
               chrome.storage.local.set({"jsonUS": JSON.stringify(jsonBackground)}, function() {

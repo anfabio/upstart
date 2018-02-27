@@ -66,32 +66,27 @@ function saveCurrentURL(pageID, groupID){
        	var activeTab = arrayOfTabs[0];
        	tabURL = activeTab.url;
        	tabTitle = activeTab.title;
-        iconValue = '';
+        tabIcon = activeTab.favIconUrl;
 
-        iconValue = activeTab.favIconUrl;
-        
-              //GET ROOT DOMAIN
-              var domainName = tabURL.replace('http://','').replace('https://','').replace('www.','').split(/[/?#]/)[0];
+        //GET ROOT DOMAIN
+        var domainName = tabURL.replace('http://','').replace('https://','').replace('www.','').replace('web.','').split(/[/?#]/)[0];
 
-              //GET MATCH ICON
-              for (i = 0; i < jsonPopup['icons'].length; i++) {
-                var allString = jsonPopup.icons[i].label;
-                var regex = new RegExp(domainName, 'gi');
+        var newItemObj = new Object();
+        newItemObj.label = tabTitle;
+        newItemObj.url = tabURL;
+        newItemObj.alt = '';
+        newItemObj.date = Date.now().toString();
+        newItemObj.icon = ''+tabIcon;             
 
-                var strResults = allString.match(regex);
+        //GET MATCH ICON
+        for (i = 0; i < jsonPopup['icons'].length; i++) {
+          var allString = jsonPopup.icons[i].label;
 
-                if (strResults) {
-                  iconValue = jsonPopup.icons[i].value;
-                  break;
-                }
-              }
-
-		var newItemObj = new Object();
-		newItemObj.label = tabTitle;
-		newItemObj.url = tabURL;
-		newItemObj.alt = "";
-		newItemObj.icon = iconValue;
-		newItemObj.date = Date.now().toString();
+          if (allString.includes(domainName)) {
+            newItemObj.icon = jsonPopup.icons[i].value;
+            break;
+          }
+        }
 
 		jsonPopup.pages[pageID].groups[groupID]['itens'].push(newItemObj);
         chrome.storage.local.set({ "jsonUS": JSON.stringify(jsonPopup) }, function(){  

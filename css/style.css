@@ -15,7 +15,7 @@ div.contentPage {
   	flex-wrap: wrap;
   	height: 100%;
   	transition: margin .5s;
-	background-color: ##F6F6F9;	
+	background-color: #F6F6F9;	
 }
 
 ul.contentPageList {
