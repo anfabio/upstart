@@ -11,3 +11,8 @@ It's available on both Chrome Extensions page and Firefox Add-ons page
 ![Upstart Screenshot 1](readme_images/upstart3.png?raw=true "Upstart Screenshot 3")
 
 ![Upstart Screenshot 1](readme_images/upstart4.png?raw=true "Upstart Screenshot 4")
+
+
+Chrome: https://chrome.google.com/webstore/detail/upstart/ddalpldcidoajbgohbdlelfmfmjiccga
+
+Firefox: https://addons.mozilla.org/en-US/firefox/addon/upstart/
