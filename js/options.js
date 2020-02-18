@@ -1,4 +1,5 @@
 var jsonOptions;
+var jsonOptionsImg;
 var jsonDefault;
 var allowFileAccessMessage = '';
 
@@ -14,6 +15,7 @@ chrome.extension.isAllowedFileSchemeAccess(function(isAllowedAccess) {
 
 //load links json
 chrome.storage.local.get("jsonUS", callbackJSONOptions);
+chrome.storage.local.get("jsonIMG", callbackJSONIMGOptions);
 
 
 function initOptions() {
@@ -93,6 +95,7 @@ function initOptions() {
     var remeberLastPage = jsonOptions.settings.remeberLastPage;
     var openLinksNewTab = jsonOptions.settings.openLinksNewTab;
     var showBrowserContextMenu = jsonOptions.settings.showBrowserContextMenu;
+    var scanBrokenIcons = jsonOptions.settings.scanBrokenIcons;
 
     //BOOKMARKS
     var itemIconMargin = parseInt(jsonOptions.settings.itemIconMargin);
@@ -152,6 +155,8 @@ $( function() {
 	if ( openLinksNewTab == 'true') { $('#openLinksNewTabToggle').bootstrapToggle('on') } else { $('#openLinksNewTabToggle').bootstrapToggle('off') }    
 
 	if ( showBrowserContextMenu == 'true') { $('#showBrowserContextMenuToggle').bootstrapToggle('on') } else { $('#showBrowserContextMenuToggle').bootstrapToggle('off') }    	
+
+  if ( scanBrokenIcons == 'true') { $('#scanBrokenIcons').bootstrapToggle('on') } else { $('#scanBrokenIcons').bootstrapToggle('off') }      
 
   //BROWSER CONTEXTMENU
   if (jsonOptions.settings.showBrowserContextMenu == 'false') {chrome.contextMenus.removeAll()} else {
@@ -304,10 +309,10 @@ $( function() {
 
     //BACKGROUNDS
     var backgroundOptions = '<option data-img-src="bg/none.png" data-img-label="None" value=""></option>';
-    for (i = 0; i < jsonOptions['backgrounds'].length; i++) {
-        var imageLabel = jsonOptions.backgrounds[i].label;
-        var imageValue = jsonOptions.backgrounds[i].value;
-        var imageFile = jsonOptions.backgrounds[i].file;
+    for (i = 0; i < jsonOptionsImg['backgrounds'].length; i++) {
+        var imageLabel = jsonOptionsImg.backgrounds[i].label;
+        var imageValue = jsonOptionsImg.backgrounds[i].value;
+        var imageFile = jsonOptionsImg.backgrounds[i].file;
         backgroundOptions += '<option data-img-src="'+imageFile+'" data-img-label="'+imageLabel+'" value="'+imageValue+'"></option>';
         }
 
@@ -378,6 +383,7 @@ function saveOptions() {
     jsonOptions['settings'].remeberLastPage = $('#remeberLastPageToggle').prop('checked').toString();
     jsonOptions['settings'].openLinksNewTab = $('#openLinksNewTabToggle').prop('checked').toString();
     jsonOptions['settings'].showBrowserContextMenu = $('#showBrowserContextMenuToggle').prop('checked').toString();
+    jsonOptions['settings'].scanBrokenIcons = $('#scanBrokenIcons').prop('checked').toString();
 
 
     /*************** ITEM THEME *******************/
@@ -464,6 +470,7 @@ function importDefaultSettings() {
     }).then((result) => {
         if (result.value) {
             $.getJSON( "js/defaultExample.json", function(JsonData) { callbackJSONDefaultSettings(JsonData) })
+            $.getJSON( "js/images.json", function(JsonData) { callbackJSONIMGDefaultSettings(JsonData) })
             .fail(function() { alert('Default data corrupted!'); })
         }
     })
@@ -482,6 +489,8 @@ function resetDefaultValuesGeneralOptions() {
     $('#openLinksNewTabToggle').bootstrapToggle('off');
 
     $('#showBrowserContextMenuToggle').bootstrapToggle('on');
+
+    $('#scanBrokenIcons').bootstrapToggle('off');
 }
 
 function resetDefaultValuesBookmarks() {
@@ -538,13 +547,24 @@ function resetDefaultValuesAppearance() {
 function callbackJSONOptions(JsonData) {
     if (IsJsonString(JsonData.jsonUS) ) {
         jsonOptions = JSON.parse(JsonData.jsonUS);
-        initOptions();
     } else {
         //alert('No data found on Chrome Storage. Loading default data!');
         $.getJSON( "js/defaultExample.json", function(JsonData) { callbackJSONDefaultOptions(JsonData) })
         .fail(function() { alert('Default data corrupted!'); })
     }
 }
+
+function callbackJSONIMGOptions(JsonData) {
+    if (IsJsonString(JsonData.jsonIMG) ) {
+        jsonOptionsImg = JSON.parse(JsonData.jsonIMG);
+        initOptions();
+    } else {
+        //alert('No data found on Chrome Storage. Loading default data!');
+        $.getJSON( "js/images.json", function(JsonData) { callbackJSONDefaultOptions(JsonData) })
+        .fail(function() { alert('Default data corrupted!'); })
+    }
+}
+
 
 function callbackJSONDefaultOptions(JsonData) {   
     jsonOptions = JsonData;
@@ -553,8 +573,13 @@ function callbackJSONDefaultOptions(JsonData) {
 
 function callbackJSONDefaultSettings(JsonData) {
     chrome.storage.local.set({ "jsonUS": JSON.stringify(JsonData) }, function(){
-        chrome.storage.local.set({ "currentPage": 0 }, function(){
-            swal('Done', 'Settings loaded successfully!','success').then(() => {location.reload()})
+        chrome.storage.local.set({ "currentPage": 0 }, function(){            
           });        
+        });
+}
+
+function callbackJSONIMGDefaultSettings(JsonData) {
+    chrome.storage.local.set({ "jsonIMG": JSON.stringify(JsonData) }, function(){
+      swal('Done', 'Settings loaded successfully!','success').then(() => {location.reload()})
         });
 }

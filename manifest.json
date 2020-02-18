@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "upStart",
   "short_name": "upStart",
-  "description": "Iconized Start Page.",
+  "description": "Iconized Start Page",
   "version": "1.5",
   "browser_action": {
       "default_title": "upStart",
@@ -16,6 +16,10 @@
     "64": "img/icon64.png",
     "128": "img/icon128.png"
    },
+  "background": {
+    "scripts": ["js/background.js"],
+    "persistent": false
+  },
   "options_page": "options.html",
   "permissions": [ "bookmarks", "topSites", "tabs", "history", "management", "storage", "unlimitedStorage", "chrome://favicon/", "contextMenus", "notifications", "alarms", "browsingData", "<all_urls>" ],
   "chrome_url_overrides": {

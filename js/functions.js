@@ -176,10 +176,10 @@ async function pageEdit(pageID) {
     var defaultPageBackground = json['settings'].defaultPageBackground;
 
     var backgroundOptions = '<option data-img-src="bg/none.png" data-img-label="None" value=""></option>';
-    for (i = 0; i < json['backgrounds'].length; i++) {
-        var imageLabel = json.backgrounds[i].label;
-        var imageValue = json.backgrounds[i].value;
-        var imageFile = json.backgrounds[i].file;
+    for (i = 0; i < jsonImg['backgrounds'].length; i++) {
+        var imageLabel = jsonImg.backgrounds[i].label;
+        var imageValue = jsonImg.backgrounds[i].value;
+        var imageFile = jsonImg.backgrounds[i].file;
         backgroundOptions += '<option data-img-src="'+imageFile+'" data-img-label="'+imageLabel+'" value="'+imageValue+'"></option>';
         }
 
@@ -648,10 +648,10 @@ async function groupEdit(pageID, groupID) {
     var defaultBackgroundColor = json['settings'].defaultBackgroundColor;
 
     var groupIcons;
-    for (i = 0; i < json['groupicons'].length; i++) {
-        var imageLabel = json.groupicons[i].label;
-        var imageValue = json.groupicons[i].value;
-        var imageFile = json.groupicons[i].file;
+    for (i = 0; i < jsonImg['groupicons'].length; i++) {
+        var imageLabel = jsonImg.groupicons[i].label;
+        var imageValue = jsonImg.groupicons[i].value;
+        var imageFile = jsonImg.groupicons[i].file;
         groupIcons += '<option data-img-src="'+imageFile+'" data-img-label="'+imageLabel+'" value="'+imageValue+'"></option>';
         }
 
@@ -1220,10 +1220,10 @@ async function bookmarkEdit(pageID, groupID, itemID) {
     var BookmarkUrl;
 
     var bookmarkIcons;
-    for (i = 0; i < json['icons'].length; i++) {
-        var imageLabel = json.icons[i].label;
-        var imageValue = json.icons[i].value;
-        var imageFile = json.icons[i].file;
+    for (i = 0; i < jsonImg['icons'].length; i++) {
+        var imageLabel = jsonImg.icons[i].label;
+        var imageValue = jsonImg.icons[i].value;
+        var imageFile = jsonImg.icons[i].file;
         bookmarkIcons += '<option data-img-src="'+imageFile+'" data-img-label="'+imageLabel+'" value="'+imageValue+'"></option>';
         }
 
@@ -1486,10 +1486,10 @@ async function itemNew(pageID, groupID) {
     var BookmarkUrl;
 
     var bookmarkIcons;
-    for (i = 0; i < json['icons'].length; i++) {
-        var imageLabel = json.icons[i].label;
-        var imageValue = json.icons[i].value;
-        var imageFile = json.icons[i].file;
+    for (i = 0; i < jsonImg['icons'].length; i++) {
+        var imageLabel = jsonImg.icons[i].label;
+        var imageValue = jsonImg.icons[i].value;
+        var imageFile = jsonImg.icons[i].file;
         bookmarkIcons += '<option data-img-src="'+imageFile+'" data-img-label="'+imageLabel+'" value="'+imageValue+'"></option>';
         }
 
@@ -1644,10 +1644,10 @@ async function itemNewNoGroupID(pageID) {
     var BookmarkUrl;
 
     var bookmarkIcons;
-    for (i = 0; i < json['icons'].length; i++) {
-        var imageLabel = json.icons[i].label;
-        var imageValue = json.icons[i].value;
-        var imageFile = json.icons[i].file;
+    for (i = 0; i < jsonImg['icons'].length; i++) {
+        var imageLabel = jsonImg.icons[i].label;
+        var imageValue = jsonImg.icons[i].value;
+        var imageFile = jsonImg.icons[i].file;
         bookmarkIcons += '<option data-img-src="'+imageFile+'" data-img-label="'+imageLabel+'" value="'+imageValue+'"></option>';
         }
 
@@ -2273,41 +2273,49 @@ function recreateBrowserContextMenus(currentJSON) {
 function firstTime() {    
     swal({
       title: 'Welcome!',
-      text: "It seems that this is your first time here. Do you want to start with some templates?",
+      text: "It looks like it\'s your first time here. Do you want to start with a example template?",
       type: 'question',
       showCancelButton: true,      
       confirmButtonColor: '#34CE57',
       cancelButtonColor: '#3085d6',
       confirmButtonText: 'Sure!',
-      cancelButtonText: 'No', 
+      cancelButtonText: 'No',
     }).then((result) => {
         if (result.value) {
-                swal({type: 'success', title: 'Sweet! Here are some examples. Enjoy!'}).then(() => { 
+                swal({type: 'success', title: 'Great! Here are some pages, groups and icons. Hope you enjoy.'}).then(() => { 
                     $.getJSON( "js/defaultExample.json", function(JsonData) { 
-                        chrome.storage.local.set({ "jsonUS": JSON.stringify(JsonData) }, function(){
-                        location.reload()
+                        chrome.storage.local.set({ "jsonUS": JSON.stringify(JsonData) }, function(){                            
                         })
+                    });
+                    $.getJSON( "js/images.json", function(JsonData) { 
+                         chrome.storage.local.set({ "jsonIMG": JSON.stringify(JsonData) }, function(){
+                         location.reload()
+                         })
                     });
                 })
             } else if (result.dismiss === 'cancel') {
-                swal({type: 'success', title: 'OK! A blank page will be created. Enjoy!'}).then(() => { 
+                swal({type: 'success', title: 'All right! Let\'s start with a empty page then. Hope you enjoy.'}).then(() => { 
                     $.getJSON( "js/blankPage.json", function(JsonData) { 
                         chrome.storage.local.set({ "jsonUS": JSON.stringify(JsonData) }, function(){
-                        location.reload()
-                        })
+                        })                        
                     });
+                    $.getJSON( "js/images.json", function(JsonData) { 
+                         chrome.storage.local.set({ "jsonIMG": JSON.stringify(JsonData) }, function(){
+                         location.reload()
+                         })
+                    });                    
                 })            
             }
 
     })
-} 
+}
 
 /******************** SUPPORT FUNCTIONS END ********************/
 
 
 /******************** JSON FUNCTIONS BEGIN ********************/
 
-
+/*
 function callbackJSON(JsonData) {    
     if (IsJsonString(JsonData.jsonUS) ) {
         json = JSON.parse(JsonData.jsonUS);
@@ -2315,6 +2323,28 @@ function callbackJSON(JsonData) {
     } else {
         firstTime();
     }
+}*/
+
+
+
+
+function callbackJSON(JsonData) {
+    if (IsJsonString(JsonData.jsonUS)) {
+        json = JSON.parse(JsonData.jsonUS);
+    } else {
+        firstTime();
+    }
+    //console.log(JSON.stringify(json));
+}
+
+function callbackJSONIMG(JsonData) {
+    if (IsJsonString(JsonData.jsonIMG)) {
+        jsonImg = JSON.parse(JsonData.jsonIMG);        
+        initialize();
+    } else {
+        firstTime();
+    }
+    //console.log(JSON.stringify(jsonImg));
 }
 
 
@@ -2322,6 +2352,8 @@ function callbackJSONDefault(JsonData) {
     if (IsJsonString(JsonData) ) {
         chrome.storage.local.set({ "jsonUS": JSON.stringify(JsonData) }, function(){
             location.reload()
+        });
+        chrome.storage.local.set({ "jsonIMG": JSON.stringify(JsonData) }, function(){            
         });
     } else {
         alert('Data corrupted!');

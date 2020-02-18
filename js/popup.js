@@ -1,4 +1,16 @@
 var jsonPopup;
+var jsonPopupImg;
+
+chrome.storage.local.get("jsonIMG", function(results){
+
+    //TEST CHROME LOCAL STORAGE
+    try {
+        JSON.parse(results.jsonIMG);
+    } catch (e) {
+        return false;
+    }
+    jsonPopupImg = JSON.parse(results.jsonIMG); 
+});
 
 chrome.storage.local.get("jsonUS", function(results){
 
@@ -79,11 +91,11 @@ function saveCurrentURL(pageID, groupID){
         newItemObj.icon = ''+tabIcon;             
 
         //GET MATCH ICON
-        for (i = 0; i < jsonPopup['icons'].length; i++) {
-          var allString = jsonPopup.icons[i].label;
+        for (i = 0; i < jsonPopupImg['icons'].length; i++) {
+          var allString = jsonPopupImg.icons[i].label;
 
           if (allString.includes(domainName)) {
-            newItemObj.icon = jsonPopup.icons[i].value;
+            newItemObj.icon = jsonPopupImg.icons[i].value;
             break;
           }
         }

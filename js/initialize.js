@@ -1,7 +1,11 @@
 var json; // main json
-var imagesJson; // images json
+var jsonImg; // images json
 var jsonSearchIndex = JSON.parse('{"itens": [] }'); //index items for search
 var allowFileAccessMessage = '';
+
+var jsonOK = false;
+var jsonImgOK = false;
+
 
 chrome.extension.isAllowedFileSchemeAccess(function(isAllowedAccess) {
 	if (isAllowedAccess) { allowFileAccessMessage = '' }
@@ -13,11 +17,38 @@ chrome.extension.isAllowedFileSchemeAccess(function(isAllowedAccess) {
 chrome.storage.local.get("jsonUS", callbackJSON);
 chrome.storage.local.get("jsonIMG", callbackJSONIMG);
 
+
 //main initialize function
 function initialize() {
+/*
+console.log("============JSON=================");
+console.log(JSON.stringify(json));
 
+console.log("============JSON IMG=================");
+console.log(JSON.stringify(jsonImg));
+*/
+
+if (!("version" in json.settings)) {	 
+    json.settings.version = "1.5";
+    json.settings.scanBrokenIcons = "false";
+    delete json['icons'];
+    delete json['groupicons'];
+    delete json['backgrounds'];
+    chrome.storage.local.set({ "jsonUS": JSON.stringify(json) }, function(){ });
+    chrome.storage.local.set({ "jsonIMG": JSON.stringify(jsonImg) }, function(){ location.reload() });  
+}
+
+/*
+//############ FUTURE USE FOR NEWER VERSION ##########################
+if (json.settings.version != "1.5") {
+	console.log("ERROJSON");
+    json.settings.version = "1.5";
+    chrome.storage.local.set({ "jsonUS": JSON.stringify(json) }, function(){});    
+    location.reload();
+}
+*/
 		/********************************** SET OPTIONS BEGIN ***************************************/
-	        	 
+
 		//DEFAULT ITEM ORDER
 		var defaultItensSort = json.settings.defaultItensSort;
 
@@ -436,16 +467,12 @@ function initialize() {
 	            //if ( (itemIcon.toLowerCase().startsWithAny('http://', 'https://', 'file:///')) || (itemIcon.toLowerCase().startsWith('file:///')) ) {
 	            if (itemIcon.toLowerCase().match(/^(http:\/\/|https:\/\/|file:\/\/\/).*/) ) {	            
 	                itemIconImage.src = itemIcon;   
-	            } else if (itemIcon == '') {
+	            } else if ( (itemIcon == '') || (itemIcon == 'undefined') ) {
 	                itemIconImage.src = 'icons/default.png'; 
 	            } else {
 	            	itemIconImage.src = 'icons/'+itemIcon;
 	            }
 
-	            //itemIconImage.onerror = 'this.src="icons/default.png"'
-	            //itemIconImage.onload = function() {  };
-	            //itemIconImage.onerror = function() { itemIconImage.src = 'icons/default.png' };
-	            
 				//ITEM LABEL
 	            var itemLabel = document.createElement('DIV');
 	            itemLabel.className = "itemLabel";   
@@ -453,8 +480,6 @@ function initialize() {
 	            itemLabel.innerHTML = itemLabelText;
 	            itemLabel.style.color = itemLabelFontColor;
 	            
-	
-
 	 			//ITEM ASSEMBLE
 	            //itemLink.appendChild(itemIconImage);
 
@@ -491,32 +516,32 @@ function initialize() {
     	document.body.appendChild(bodyContent);
 
     	// LOOP TO FIX BROKEN ICONS
-		$('.itemIconImage').each(function() {
-  			//console.log($(this).attr('src'));
- 			var element = $(this);
-			$.ajax( {
-				url:$(this).attr('src'),
-				type:'get',
-				async: false,
-				error:function(response){
- 			   		var replace_src = "icons/broken.png";
-					// Again check the default image
-		   			$.ajax({
-		    			url: replace_src,
-		    			type:'get',
-		    			async: false,
-		    			success: function(){
-		     				$(element).attr('src', replace_src);
-		    			},
-		    		error:function(response){
-		    			$(element).hide();
-		    			}
-		  			});
-		 		}
+    	if (json.settings.scanBrokenIcons == 'true') {
+			$('.itemIconImage').each(function() {
+  				//console.log($(this).attr('src'));
+ 				var element = $(this);
+				$.ajax( {
+					url:$(this).attr('src'),
+					type:'get',
+					async: false,
+					error:function(response){
+ 				   		var replace_src = "icons/broken.png";
+						// Again check the default image
+			   			$.ajax({
+			    			url: replace_src,
+			    			type:'get',
+			    			async: false,
+			    			success: function(){
+			     				$(element).attr('src', replace_src);
+			    			},
+			    		error:function(response){
+			    			$(element).hide();
+			    			}
+			  			});
+			 		}
+				});
 			});
-		});
-
-
+		}
 
     	//APPLY SORTABLE ITENS
 		$('ul.bookmarksList').sortable({
