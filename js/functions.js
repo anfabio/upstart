@@ -442,12 +442,14 @@ async function pageEdit(pageID) {
                         document.getElementById('topLink'+pageID).innerHTML = pageLabel;
                         document.getElementById('topLink'+pageID).title = pageDescription;                        
                         
-                        if ( (pageBackground.toLowerCase().startsWith('http')) || (pageBackground.toLowerCase().startsWith('file')) ) {
+                        //if ( (pageBackground.toLowerCase().startsWith('http')) || (pageBackground.toLowerCase().startsWith('file')) ) {
+                        if (pageBackground.toLowerCase().match(/^(http:\/\/|https:\/\/|file:\/\/\/).*/) ) {
                             document.getElementById("contentPage"+pageID).style.background = 'url("'+pageBackground+'") no-repeat center top #'+pageColor;
-                        }                        
-                        swal({type: 'success', title: 'Page updated'}).then(() => { 
+                        }
+                        if (pageColumns != currentPageColumns) { location.reload() } 
+                        /*swal({type: 'success', title: 'Page updated'}).then(() => { 
                             if (pageColumns != currentPageColumns) { location.reload() } 
-                        })
+                        })*/
 
                     });           
                 }
@@ -497,8 +499,9 @@ async function pageCopy(pageID) {
                     json.pages[nextPageID].pageLabel = pageLabel;
                     json.pages[nextPageID].pageDescription = pageDescription;
                     chrome.storage.local.set({ "jsonUS": JSON.stringify(json) }, function(){});
-                    chrome.storage.local.set({ "currentPage": nextPageID }, function(){});  
-                    swal({type: 'success', title: 'Page copied as "'+pageLabel+'"'}).then(() => { location.reload() })
+                    chrome.storage.local.set({ "currentPage": nextPageID }, function(){});
+                    location.reload()
+                    //swal({type: 'success', title: 'Page copied as "'+pageLabel+'"'}).then(() => { location.reload() })
                 }
             }        
     })   
@@ -550,8 +553,9 @@ async function pageNew() {
     
                     json['pages'].push(newPageObj);
                     chrome.storage.local.set({ "jsonUS": JSON.stringify(json) }, function(){});
-                    chrome.storage.local.set({ "currentPage": nextPageID }, function(){});             
-                    swal({type: 'success', title: 'Page "'+pageLabel+'" created"'}).then(() => { location.reload() })
+                    chrome.storage.local.set({ "currentPage": nextPageID }, function(){});     
+                    location.reload()        
+                    //swal({type: 'success', title: 'Page "'+pageLabel+'" created"'}).then(() => { location.reload() })
                 }
             }        
     })   
@@ -594,11 +598,12 @@ function pageDelete(pageID) {
                             
                             chrome.storage.local.set({ "currentPage": '0' }, function(){
                                 chrome.storage.local.set({ "jsonUS": JSON.stringify(json) }, function() {
-                                    swal(
+                                    location.reload()
+/*                                    swal(
                                       'Page deleted',
                                       'Page "'+currentPageLabel+ '" has been deleted.',
                                       'success'
-                                    ).then( location.reload())
+                                    ).then( location.reload())*/
                                 })
                             })
                         }
@@ -610,7 +615,8 @@ function pageDelete(pageID) {
                         if (results.currentPage === pageID) {
                             chrome.storage.local.set({ "currentPage": '0' }, function(){});
                         }
-                    swal('Page deleted', 'Page "'+currentPageLabel+ '" was deleted', 'success').then(() => { location.reload() })
+                    location.reload()
+                    //swal('Page deleted', 'Page "'+currentPageLabel+ '" was deleted', 'success').then(() => { location.reload() })
                     });
             
                 });        
@@ -884,10 +890,11 @@ async function groupEdit(pageID, groupID) {
                             document.getElementById("groupDescription"+gid).innerHTML = groupDescription;
                             document.getElementById("groupDescription"+gid).style.display = 'block';
                         }
-                    chrome.storage.local.set({ "jsonUS": JSON.stringify(json) }, function(){});                
-                    swal({type: 'success', title: 'Group updated'}).then(() => { 
+                    chrome.storage.local.set({ "jsonUS": JSON.stringify(json) }, function(){});  
+                    if (groupColor != currentGroupColor) { location.reload() }     
+/*                    swal({type: 'success', title: 'Group updated'}).then(() => { 
                             if (groupColor != currentGroupColor) { location.reload() } 
-                        })            
+                        })       */     
                 }
             }
             $("#contentGroup"+gid).css('boxShadow', '0px 2px 3px 0.5px rgba(0,0,0,0.2), 0 0 1px 1px rgba(0,0,0,0.05)');    
@@ -910,8 +917,9 @@ async function groupCopy(pageID, groupID) {
       input: 'select',
       inputOptions: inputPages,
       type: 'question',
-      text: 'Copy group "'+groupLabel+'" to which page?',
-      inputPlaceholder: 'Target page',
+      //text: 'Copy group "'+groupLabel+'" to which page?',
+      //inputPlaceholder: 'Target page',
+      inputPlaceholder: 'Select a page',
       showCancelButton: true,
       inputClass: 'form-control',
       width: '300px',
@@ -930,7 +938,8 @@ async function groupCopy(pageID, groupID) {
     })
 
     if (selectedPage) {
-        swal({type: 'success', title: 'Group copied to "'+json.pages[selectedPage].pageLabel+'"'}).then(() => { location.reload() })
+        location.reload()
+        //swal({type: 'success', title: 'Group copied to "'+json.pages[selectedPage].pageLabel+'"'}).then(() => { location.reload() })
     }
 }
 
@@ -947,8 +956,9 @@ async function groupMove(pageID, groupID) {
       input: 'select',
       inputOptions: inputPages,
       type: 'question',
-      text: 'Move group "'+groupLabel+'" to which page?',
-      inputPlaceholder: 'Target page',
+      //text: 'Move group "'+groupLabel+'" to which page?',
+      //inputPlaceholder: 'Target page',
+      inputPlaceholder: 'Select a page',
       inputClass: 'form-control',
       width: '300px',      
       showCancelButton: true,
@@ -969,7 +979,8 @@ async function groupMove(pageID, groupID) {
     })
 
     if (selectedPage) {
-        swal({type: 'success', title: 'Group moved to "'+json.pages[selectedPage].pageLabel+'"'}).then(() => { location.reload() })
+        location.reload()
+        //swal({type: 'success', title: 'Group moved to "'+json.pages[selectedPage].pageLabel+'"'}).then(() => { location.reload() })
     }
 }
 
@@ -1069,7 +1080,8 @@ async function groupSort(pageID, groupID) {
     })
 
     if (order) {
-        swal({type: 'success', title: 'Group sorted'}).then(() => { location.reload() })
+        location.reload()
+        //swal({type: 'success', title: 'Group sorted'}).then(() => { location.reload() })
     }
 
 }
@@ -1143,8 +1155,9 @@ async function groupNew(pageID) {
                     newGroupObj['itens'] = [];
     
                     json.pages[pageID]['groups'].push(newGroupObj);
-                    chrome.storage.local.set({ "jsonUS": JSON.stringify(json) }, function(){});                
-                    swal({type: 'success', title: 'Group "'+groupLabel+'" created"'}).then(() => { location.reload() })
+                    chrome.storage.local.set({ "jsonUS": JSON.stringify(json) }, function(){});    
+                    location.reload()            
+                    //swal({type: 'success', title: 'Group "'+groupLabel+'" created"'}).then(() => { location.reload() })
                 }
             }        
     })   
@@ -1165,7 +1178,9 @@ function groupDelete(pageID, groupID) {
     }).then((result) => {
       if (result.value) {
         json.pages[pageID].groups.splice(groupID,1);
-        chrome.storage.local.set({ "jsonUS": JSON.stringify(json) }, function() {                     swal('Group deleted', 'Group "'+currentGroupLabel+ '" was deleted', 'success').then(() => { location.reload() })
+        chrome.storage.local.set({ "jsonUS": JSON.stringify(json) }, function() {
+            location.reload()
+            //swal('Group deleted', 'Group "'+currentGroupLabel+ '" was deleted', 'success').then(() => { location.reload() })
         });
       }
     })
@@ -1348,11 +1363,12 @@ async function bookmarkEdit(pageID, groupID, itemID) {
 					json.pages[pageID].groups[groupID].itens[itemID].url = bookmarkUrl;
 					json.pages[pageID].groups[groupID].itens[itemID].icon = bookmarkIcon;
 
-                    chrome.storage.local.set({ "jsonUS": JSON.stringify(json) }, function(){});                
-                    swal({type: 'success', title: 'Bookmark updated'}).then(() => { 
+                    chrome.storage.local.set({ "jsonUS": JSON.stringify(json) }, function(){});
+                    location.reload()             
+/*                    swal({type: 'success', title: 'Bookmark updated'}).then(() => { 
                             location.reload()  
                         })
-
+*/
                 }
             }        
     })   
@@ -1368,7 +1384,7 @@ async function itemCopy(pageID, groupID, itemID) {
         for (g = 0; g < json.pages[p]['groups'].length; g++) { 
             var gid = p.toString() +'.'+ g.toString();
             var groupLabel = json.pages[p].groups[g].groupLabel;            
-                inputGroups[gid] = pageLabel+' &#11208; '+groupLabel;
+                inputGroups[gid] = pageLabel+' :: '+groupLabel;
         }
     }
     var bookmarkLabel = json.pages[pageID].groups[groupID].itens[itemID].label;
@@ -1377,8 +1393,9 @@ async function itemCopy(pageID, groupID, itemID) {
       input: 'select',
       inputOptions: inputGroups,
       type: 'question',
-      text: 'Copy bookmark "'+bookmarkLabel+'" to which group?',
-      inputPlaceholder: 'Target group',
+      //text: 'Copy bookmark "'+bookmarkLabel+'" to which group?',
+      //inputPlaceholder: 'Target group',
+      inputPlaceholder: 'Select a group',
       inputClass: 'form-control',
       width: '400px',
       showCancelButton: true,      
@@ -1402,7 +1419,8 @@ async function itemCopy(pageID, groupID, itemID) {
         var dstPage = selectedGroup.split('.')[0];
         var dstGroup = selectedGroup.split('.')[1];
         var dstGID =  dstPage.toString() + dstGroup.toString();
-        swal({type: 'success', title: 'Bookmark copied to "'+document.getElementById("groupLabel"+dstGID).innerHTML+'"'}).then(() => { location.reload() })
+        location.reload()
+        /*swal({type: 'success', title: 'Bookmark copied to "'+document.getElementById("groupLabel"+dstGID).innerHTML+'"'}).then(() => { location.reload() })*/
     }
 }
 
@@ -1416,7 +1434,7 @@ async function itemMove(pageID, groupID, itemID) {
             var gid = p.toString() +'.'+ g.toString();
             var groupLabel = json.pages[p].groups[g].groupLabel;
             if (gid !=  curGID) {
-                inputGroups[gid] = pageLabel+' &#11208; '+groupLabel;
+                inputGroups[gid] = pageLabel+' :: '+groupLabel;
             }
             
         }
@@ -1427,9 +1445,9 @@ async function itemMove(pageID, groupID, itemID) {
       input: 'select',
       inputOptions: inputGroups,
       type: 'question',
-      text: 'Move bookmark "'+bookmarkLabel+'" to which group?',
-      inputPlaceholder: 'Target group',
-      inputPlaceholder: 'Select group',
+      //text: 'Move bookmark "'+bookmarkLabel+'" to which group?',
+      //inputPlaceholder: 'Target group',
+      inputPlaceholder: 'Select a group',
       inputClass: 'form-control',
       width: '400px',      
       showCancelButton: true,
@@ -1453,7 +1471,8 @@ async function itemMove(pageID, groupID, itemID) {
         var dstPage = selectedGroup.split('.')[0];
         var dstGroup = selectedGroup.split('.')[1];
         var dstGID =  dstPage.toString() + dstGroup.toString();
-        swal({type: 'success', title: 'Item moved to "'+document.getElementById("groupLabel"+dstGID).innerHTML+'"'}).then(() => { location.reload() })
+        location.reload()
+        /*swal({type: 'success', title: 'Item moved to "'+document.getElementById("groupLabel"+dstGID).innerHTML+'"'}).then(() => { location.reload() })*/
     }
 }
 
@@ -1608,7 +1627,8 @@ async function itemNew(pageID, groupID) {
 
                 json.pages[pageID].groups[groupID]['itens'].push(newBookmarkObj);
                 chrome.storage.local.set({ "jsonUS": JSON.stringify(json) }, function(){
-                	swal({type: 'success', title: 'Bookmark "'+bookmarkLabel+'" created'}).then(() => { location.reload() })
+                    location.reload()
+                	/*swal({type: 'success', title: 'Bookmark "'+bookmarkLabel+'" created'}).then(() => { location.reload() })*/
                 });                
             }
     })   
@@ -1775,7 +1795,8 @@ async function itemNewNoGroupID(pageID) {
 
                 json.pages[pageID].groups[groupID]['itens'].push(newBookmarkObj);
                 chrome.storage.local.set({ "jsonUS": JSON.stringify(json) }, function(){
-                	swal({type: 'success', title: 'Bookmark "'+bookmarkLabel+'" created'}).then(() => { location.reload() })
+                    location.reload()
+                	//swal({type: 'success', title: 'Bookmark "'+bookmarkLabel+'" created'}).then(() => { location.reload() })
                 });                
             }
     })   
@@ -1801,7 +1822,8 @@ function itemDelete(pageID, groupID, itemID) {
         json.pages[pageID].groups[groupID].itens.splice(itemID,1);
         chrome.storage.local.set({ "jsonUS": JSON.stringify(json) }, function() {             
         });
-        swal({type: 'success', title: 'Bookmark "'+currentItemLabel+'" was deleted"'}).then(() => { location.reload() })
+        location.reload()
+        //swal({type: 'success', title: 'Bookmark "'+currentItemLabel+'" was deleted"'}).then(() => { location.reload() })
       }
     })
     
@@ -1964,7 +1986,7 @@ function showSearchResults() {
     
                 //ITEM LINK
                 var itemLink = document.createElement('A');
-                itemLink.className = "itemLink";
+                itemLink.className = "itemLinkSearch";
                 itemLink.id = "itemLinkSearch"+i;    
                 itemLink.href = itemUrl;                
     
@@ -1973,7 +1995,8 @@ function showSearchResults() {
                 itemIconImage.className = "itemIconImage";
                 itemIconImage.id = "itemIconImageSearch"+i;
                 itemIconImage.title = itemAlt+"\n"+itemUrl;
-                if ( (itemIcon.toLowerCase().startsWith('http')) || (itemIcon.toLowerCase().startsWith('file')) ) {
+                //if ( (itemIcon.toLowerCase().startsWith('http')) || (itemIcon.toLowerCase().startsWith('file')) ) {
+                if (itemIcon.toLowerCase().match(/^(http:\/\/|https:\/\/|file:\/\/\/).*/) ) {                
                     itemIconImage.src = itemIcon;    
                 } else if (itemIcon == '') {
                     itemIconImage.src = 'icons/default.png'; 
@@ -1989,12 +2012,12 @@ function showSearchResults() {
     
 
                 //ITEM ASSEMBLE
-                itemLink.appendChild(itemIconImage);
+                itemLink.appendChild(contentItem);
 
-                contentItem.appendChild(itemLink);
+                contentItem.appendChild(itemIconImage);
                 contentItem.appendChild(itemLabel);
 
-                bookmarksListItem.appendChild(contentItem);
+                bookmarksListItem.appendChild(itemLink);
                 bookmarksList.appendChild(bookmarksListItem); 
 
             }  
@@ -2058,7 +2081,7 @@ function reflowSearchResults(searchString) {
     
                 //ITEM LINK
                 var itemLink = document.createElement('A');
-                itemLink.className = "itemLink";
+                itemLink.className = "itemLinkSearch";
                 itemLink.id = "itemLinkSearch"+i;    
                 itemLink.href = itemUrl;                
     
@@ -2067,7 +2090,8 @@ function reflowSearchResults(searchString) {
                 itemIconImage.className = "itemIconImage";
                 itemIconImage.id = "itemIconImageSearch"+i;
                 itemIconImage.title = itemAlt+"\n"+itemUrl;
-                if ( (itemIcon.toLowerCase().startsWith('http')) || (itemIcon.toLowerCase().startsWith('file')) ) {
+                //if ( (itemIcon.toLowerCase().startsWith('http')) || (itemIcon.toLowerCase().startsWith('file')) ) {
+                if (itemIcon.toLowerCase().match(/^(http:\/\/|https:\/\/|file:\/\/\/).*/) ) {                
                     itemIconImage.src = itemIcon;    
                 } else if (itemIcon == '') {
                     itemIconImage.src = 'icons/default.png'; 
@@ -2083,12 +2107,12 @@ function reflowSearchResults(searchString) {
     
 
                 //ITEM ASSEMBLE
-                itemLink.appendChild(itemIconImage);
+                itemLink.appendChild(contentItem);
 
-                contentItem.appendChild(itemLink);
+                contentItem.appendChild(itemIconImage);
                 contentItem.appendChild(itemLabel);
 
-                bookmarksListItem.appendChild(contentItem);
+                bookmarksListItem.appendChild(itemLink);
                 bookmarksList.appendChild(bookmarksListItem); 
 
             }  
@@ -2187,7 +2211,8 @@ function recreateBrowserContextMenus(currentJSON) {
 
     chrome.contextMenus.onClicked.addListener( function (clickData) {
 
-        if ( (clickData.menuItemId.startsWith('contextMenuPage')) || (clickData.menuItemId.startsWith('contextMenuLink')) ) {
+        //if ( (clickData.menuItemId.startsWith('contextMenuPage')) || (clickData.menuItemId.startsWith('contextMenuLink')) ) {
+        if (clickData.toLowerCase().match(/^(contextMenuPage|contextMenuLink).*/) ) {
         } else {        
             chrome.storage.local.get("jsonUS", function(JsonData) {
                 try {

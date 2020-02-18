@@ -2,12 +2,8 @@
   "manifest_version": 2,
   "name": "upStart",
   "short_name": "upStart",
-  "description": "A simple start page.",
-  "version": "1.3",
-  "background": {
-    "scripts": ["js/background.js"],
-    "persistent": true
-      },
+  "description": "Iconized Start Page.",
+  "version": "1.5",
   "browser_action": {
       "default_title": "upStart",
       "default_icon": "img/icon128.png",
@@ -21,7 +17,7 @@
     "128": "img/icon128.png"
    },
   "options_page": "options.html",
-  "permissions": [ "bookmarks", "topSites", "tabs", "history", "management", "storage", "unlimitedStorage", "chrome://favicon/", "contextMenus", "notifications", "alarms", "<all_urls>" ],
+  "permissions": [ "bookmarks", "topSites", "tabs", "history", "management", "storage", "unlimitedStorage", "chrome://favicon/", "contextMenus", "notifications", "alarms", "browsingData", "<all_urls>" ],
   "chrome_url_overrides": {
     "newtab": "main.html"
     },

@@ -1,4 +1,5 @@
 var json; // main json
+var imagesJson; // images json
 var jsonSearchIndex = JSON.parse('{"itens": [] }'); //index items for search
 var allowFileAccessMessage = '';
 
@@ -10,8 +11,7 @@ chrome.extension.isAllowedFileSchemeAccess(function(isAllowedAccess) {
 
 //load links json
 chrome.storage.local.get("jsonUS", callbackJSON);
-
-
+chrome.storage.local.get("jsonIMG", callbackJSONIMG);
 
 //main initialize function
 function initialize() {
@@ -264,7 +264,8 @@ function initialize() {
 	    }	    
 	    contentPage.addEventListener('contextmenu', function(event) { showMenu(event, 'page', this.dataset.page) });
 	    if (pageBackground != '' ) {
-	        if ( (pageBackground.toLowerCase().startsWith('http')) || (pageBackground.toLowerCase().startsWith('file')) ) {        	
+	        //if ( (pageBackground.toLowerCase().startsWith('http://')) || (pageBackground.toLowerCase().startsWith('file:///')) ) {        	
+	        if (pageBackground.toLowerCase().match(/^(http:\/\/|https:\/\/|file:\/\/\/).*/) ) {
 	            contentPage.style.background = pageColor+' url("'+pageBackground+'") no-repeat center center fixed';
 	            contentPage.style.backgroundSize = 'cover';
 	        } else {	        	
@@ -330,7 +331,8 @@ function initialize() {
 	        groupIcon.className = "groupIcon";
 	        groupIcon.id = "groupIcon"+gid;
 	        if ( (groupIconImage != '' ) && (groupIconImage != 'bookmark.png' ) ) {
-	            if ( (groupIconImage.toLowerCase().startsWith('http')) || (groupIconImage.toLowerCase().startsWith('file')) ) {
+	            //if ( (groupIconImage.toLowerCase().startsWith('http://')) || (groupIconImage.toLowerCase().startsWith('file:///')) ) {
+	            if (groupIconImage.toLowerCase().match(/^(http:\/\/|https:\/\/|file:\/\/\/).*/) ) {
 	                groupIcon.style.backgroundImage = 'url("'+groupIconImage+'")';
 	            } else {
 	                groupIcon.style.backgroundImage = 'url("../gicons/'+groupIconImage+'")';
@@ -430,13 +432,19 @@ function initialize() {
 	            itemIconImage.className = "itemIconImage";
 	            itemIconImage.id = "itemIconImage"+iid;
 	            
-	            if ( (itemIcon.toLowerCase().startsWith('http')) || (itemIcon.toLowerCase().startsWith('file')) ) {
+	            //if ( (itemIcon.toLowerCase().startsWith('http')) || (itemIcon.toLowerCase().startsWith('file')) ) {
+	            //if ( (itemIcon.toLowerCase().startsWithAny('http://', 'https://', 'file:///')) || (itemIcon.toLowerCase().startsWith('file:///')) ) {
+	            if (itemIcon.toLowerCase().match(/^(http:\/\/|https:\/\/|file:\/\/\/).*/) ) {	            
 	                itemIconImage.src = itemIcon;   
 	            } else if (itemIcon == '') {
 	                itemIconImage.src = 'icons/default.png'; 
 	            } else {
 	            	itemIconImage.src = 'icons/'+itemIcon;
 	            }
+
+	            //itemIconImage.onerror = 'this.src="icons/default.png"'
+	            //itemIconImage.onload = function() {  };
+	            //itemIconImage.onerror = function() { itemIconImage.src = 'icons/default.png' };
 	            
 				//ITEM LABEL
 	            var itemLabel = document.createElement('DIV');
@@ -481,6 +489,34 @@ function initialize() {
 	/******************** PREPARE DOCUMENT CONTENT BEGIN ****************/		
     $(document).ready(function () {    	
     	document.body.appendChild(bodyContent);
+
+    	// LOOP TO FIX BROKEN ICONS
+		$('.itemIconImage').each(function() {
+  			//console.log($(this).attr('src'));
+ 			var element = $(this);
+			$.ajax( {
+				url:$(this).attr('src'),
+				type:'get',
+				async: false,
+				error:function(response){
+ 			   		var replace_src = "icons/broken.png";
+					// Again check the default image
+		   			$.ajax({
+		    			url: replace_src,
+		    			type:'get',
+		    			async: false,
+		    			success: function(){
+		     				$(element).attr('src', replace_src);
+		    			},
+		    		error:function(response){
+		    			$(element).hide();
+		    			}
+		  			});
+		 		}
+			});
+		});
+
+
 
     	//APPLY SORTABLE ITENS
 		$('ul.bookmarksList').sortable({

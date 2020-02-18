@@ -21,7 +21,7 @@ var defaultParams = {
   target: 'body',
   backdrop: true,
   animation: true,
-  allowOutsideClick: true,
+  allowOutsideClick: false,
   allowEscapeKey: true,
   allowEnterKey: true,
   showConfirmButton: true,

@@ -72,7 +72,8 @@ chrome.storage.local.get("jsonUS", function(JsonData) {
       }
 
       chrome.contextMenus.onClicked.addListener( function (clickData) {
-        if ( (clickData.menuItemId.startsWith('contextMenuPage')) || (clickData.menuItemId.startsWith('contextMenuLink')) ) {
+        //if ( (clickData.menuItemId.startsWith('contextMenuPage')) || (clickData.menuItemId.startsWith('contextMenuLink')) ) {
+        if (clickData.toLowerCase().match(/^(contextMenuPage|contextMenuLink).*/) ) {
         } else {
           saveItem(clickData);
         }

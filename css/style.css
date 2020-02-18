@@ -202,23 +202,6 @@ mix-blend-mode: exclusion;
 
 
 
-li.bookmarksListItemSearch {
-  width: 84px;
-  height: 108px;
-
-  font-family: Helvetica; 
-  vertical-align: top;  
-  overflow: hidden;
-
-  text-overflow: ellipsis;
-  margin: 2px;
-}
-
-li.bookmarksListItemSearch:hover {
-  background-color: #CECECE;
-}
-
-
 img.itemIconImage {  
   min-height: 64px;
 	max-width: 64px;
@@ -383,23 +366,56 @@ span.home-icon-left {
 
 /* Search Bar Results */
 
+
+
+li.bookmarksListItemSearch {
+  width: 84px;
+  height: 108px;
+
+  font-family: Helvetica; 
+  vertical-align: top;  
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+  margin: 6px;
+}
+
+li.bookmarksListItemSearch:hover {
+  background-color: rgba(0,0,0, 0.05);
+  transition: background-color 0.2s; 
+}
+
+a.itemLinkSearch {
+  width: auto;
+  height: auto;
+}
+
+div.itemLabelSearch {
+  margin-top: 3px;
+  font-size: 13px;
+  color: #2b3138;
+  text-align: center;  
+  text-overflow: ellipsis;
+  font-weight: normal;
+}
+
+
 div.search-bar-results {
     height: 100%;
     width: 0px;
     position: fixed;
-    z-index: 1;
     top: 0;
     right: 0;
-	vertical-align: top;
-	box-shadow: 0px 2px 3px 0.5px rgba(0,0,0,0.2), 0 0 1px 1px rgba(0,0,0,0.05);
-	outline: #cecece solid 1px;
-	background-color: #FFF;
-	transition: box-shadow 0.3s, height 0.3s;
-	z-index: 1;
+    vertical-align: top;
+    box-shadow: 0px 2px 3px 0.5px rgba(0,0,0,0.2), 0 0 1px 1px rgba(0,0,0,0.05);
+    outline: #cecece solid 1px;
+    background-color: #FFF;
+    transition: box-shadow 0.3s, height 0.3s;
     overflow-x: hidden;
     transition: 0.5s;  
-    font-family: Helvetica,"Helvetica Nueue", arial, sans-serif;
 }
+
+
 
 
 span.search-close {
