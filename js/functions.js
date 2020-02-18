@@ -2281,30 +2281,69 @@ function firstTime() {
       confirmButtonText: 'Sure!',
       cancelButtonText: 'No',
     }).then((result) => {
+    	$.getJSON( "js/images.json", function(JsonData) { 
+            chrome.storage.local.set({ "jsonIMG": JSON.stringify(JsonData) }, function(){            
+            })
+        });
         if (result.value) {
                 swal({type: 'success', title: 'Great! Here are some pages, groups and icons. Hope you enjoy.'}).then(() => { 
                     $.getJSON( "js/defaultExample.json", function(JsonData) { 
-                        chrome.storage.local.set({ "jsonUS": JSON.stringify(JsonData) }, function(){                            
+                        chrome.storage.local.set({ "jsonUS": JSON.stringify(JsonData) }, function(){
+                        	location.reload()
                         })
-                    });
-                    $.getJSON( "js/images.json", function(JsonData) { 
-                         chrome.storage.local.set({ "jsonIMG": JSON.stringify(JsonData) }, function(){
-                         location.reload()
-                         })
                     });
                 })
             } else if (result.dismiss === 'cancel') {
                 swal({type: 'success', title: 'All right! Let\'s start with a empty page then. Hope you enjoy.'}).then(() => { 
                     $.getJSON( "js/blankPage.json", function(JsonData) { 
                         chrome.storage.local.set({ "jsonUS": JSON.stringify(JsonData) }, function(){
+                        	location.reload()
                         })                        
-                    });
-                    $.getJSON( "js/images.json", function(JsonData) { 
-                         chrome.storage.local.set({ "jsonIMG": JSON.stringify(JsonData) }, function(){
-                         location.reload()
-                         })
-                    });                    
+                    });                   
                 })            
+            }
+
+    })
+}
+
+
+
+
+function updateVersion() {    
+    swal({
+      title: 'Hello!',
+      text: "We need to update your data to the new version",
+      type: 'warning',
+      showCancelButton: false,      
+      confirmButtonColor: '#34CE57',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Begin',
+    }).then((result) => {
+    	$.getJSON( "js/images.json", function(JsonData) { 
+            chrome.storage.local.set({ "jsonIMG": JSON.stringify(JsonData) }, function(){            
+            })
+        });
+        if (result.value) {
+                swal({type: 'info', title: 'First we are going to create a backup'}).then(() => { 
+					//backup
+					var now = new Date();
+    				var formattedDate = (now.getMonth() + 1) + '-' + now.getDate() + '-' + now.getFullYear();
+    				var blob = new Blob([JSON.stringify(json)], {type: "text/plain;charset=utf-8"});
+    				saveAs(blob, 'upStart-export-'+formattedDate+'.txt');             	
+    				//new elements
+    				swal({type: 'info', title: 'All right! Now let\'s update'}).then(() => { 
+						json.settings.version = "1.5";
+						json.settings.scanBrokenIcons = "false";
+						delete json['icons'];
+						delete json['groupicons'];
+						delete json['backgrounds'];
+						chrome.storage.local.set({ "jsonUS": JSON.stringify(json) }, function(){ });
+						chrome.storage.local.set({ "jsonIMG": JSON.stringify(jsonImg) }, function(){ });
+						swal({type: 'success', title: 'Everything looks fine. Thanks!'}).then(() => { 
+							location.reload()
+						})
+					})
+                })
             }
 
     })

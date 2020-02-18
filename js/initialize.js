@@ -28,14 +28,8 @@ console.log("============JSON IMG=================");
 console.log(JSON.stringify(jsonImg));
 */
 
-if (!("version" in json.settings)) {	 
-    json.settings.version = "1.5";
-    json.settings.scanBrokenIcons = "false";
-    delete json['icons'];
-    delete json['groupicons'];
-    delete json['backgrounds'];
-    chrome.storage.local.set({ "jsonUS": JSON.stringify(json) }, function(){ });
-    chrome.storage.local.set({ "jsonIMG": JSON.stringify(jsonImg) }, function(){ location.reload() });  
+if (!("version" in json.settings)) {
+	updateVersion();
 }
 
 /*
