@@ -26,11 +26,12 @@ console.log(JSON.stringify(json));
 
 console.log("============JSON IMG=================");
 console.log(JSON.stringify(jsonImg));
-*/
+
 
 if (!("version" in json.settings)) {
 	updateVersion();
 }
+*/
 
 /*
 //############ FUTURE USE FOR NEWER VERSION ##########################

@@ -2319,10 +2319,6 @@ function updateVersion() {
       cancelButtonColor: '#3085d6',
       confirmButtonText: 'Begin',
     }).then((result) => {
-    	$.getJSON( "js/images.json", function(JsonData) { 
-            chrome.storage.local.set({ "jsonIMG": JSON.stringify(JsonData) }, function(){            
-            })
-        });
         if (result.value) {
                 swal({type: 'info', title: 'First we are going to create a backup'}).then(() => { 
 					//backup
@@ -2338,10 +2334,13 @@ function updateVersion() {
 						delete json['groupicons'];
 						delete json['backgrounds'];
 						chrome.storage.local.set({ "jsonUS": JSON.stringify(json) }, function(){ });
-						chrome.storage.local.set({ "jsonIMG": JSON.stringify(jsonImg) }, function(){ });
-						swal({type: 'success', title: 'Everything looks fine. Thanks!'}).then(() => { 
-							location.reload()
-						})
+                        $.getJSON( "js/images.json", function(JsonData) { 
+                            chrome.storage.local.set({ "jsonIMG": JSON.stringify(JsonData) }, function(){   
+                                swal({type: 'success', title: 'Everything looks fine. Thanks!'}).then(() => { 
+                                    location.reload()
+                                })         
+                            })
+                        });
 					})
                 })
             }
@@ -2370,6 +2369,9 @@ function callbackJSON(JsonData) {
 function callbackJSON(JsonData) {
     if (IsJsonString(JsonData.jsonUS)) {
         json = JSON.parse(JsonData.jsonUS);
+        if (!("version" in json.settings)) {
+            updateVersion();
+        }
     } else {
         firstTime();
     }
@@ -2378,10 +2380,8 @@ function callbackJSON(JsonData) {
 
 function callbackJSONIMG(JsonData) {
     if (IsJsonString(JsonData.jsonIMG)) {
-        jsonImg = JSON.parse(JsonData.jsonIMG);        
+        jsonImg = JSON.parse(JsonData.jsonIMG);
         initialize();
-    } else {
-        firstTime();
     }
     //console.log(JSON.stringify(jsonImg));
 }
