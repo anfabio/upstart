@@ -460,7 +460,7 @@ if (json.settings.version != "1.5") {
 	            
 	            //if ( (itemIcon.toLowerCase().startsWith('http')) || (itemIcon.toLowerCase().startsWith('file')) ) {
 	            //if ( (itemIcon.toLowerCase().startsWithAny('http://', 'https://', 'file:///')) || (itemIcon.toLowerCase().startsWith('file:///')) ) {
-	            if (itemIcon.toLowerCase().match(/^(http:\/\/|https:\/\/|file:\/\/\/).*/) ) {	            
+	            if (itemIcon.toLowerCase().match(/^(http:\/\/|https:\/\/|file:\/\/\/).*|data:image\/.*/) ) {	            
 	                itemIconImage.src = itemIcon;   
 	            } else if ( (itemIcon == '') || (itemIcon == 'undefined') ) {
 	                itemIconImage.src = 'icons/default.png'; 
