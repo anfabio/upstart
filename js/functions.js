@@ -100,6 +100,7 @@ function showMenu(event, type, pageID, groupID, itemID) {
             '<a class="list-group-item" href="#" id="contextItemEdit"><i class="fas fa-pencil-alt"></i>&nbsp;&nbsp; Edit</a>'+
             '<a class="list-group-item" href="#" id="contextItemCopy"><i class="fas fa-clone"></i>&nbsp;&nbsp; Copy</a>'+
             '<a class="list-group-item" href="#" id="contextItemMove"><i class="fas fa-arrows-alt"></i>&nbsp;&nbsp; Move</a>'+
+            '<a class="list-group-item" href="#" id="contextItemConvertIcon"><i class="fas fa-exchange-alt"></i>&nbsp;&nbsp; Convert Icon</a>'+
             '<a class="list-group-item list-group-item-danger" href="#" id="contextItemDelete"><i class="fas fa-trash"></i>&nbsp;&nbsp; Delete</a>'+
             '<hr class="list-group-divider">'+
             '<a class="list-group-item" href="#" id="contextItemAddItem"><i class="fas fa-plus"></i>&nbsp;&nbsp; Add Bookmark</a>';
@@ -109,6 +110,7 @@ function showMenu(event, type, pageID, groupID, itemID) {
         document.getElementById("contextItemCopy").addEventListener('click', function() {$('#contextItemMenu').remove(); itemCopy(pageID, groupID, itemID)});
         document.getElementById("contextItemMove").addEventListener('click', function() {$('#contextItemMenu').remove(); itemMove(pageID, groupID, itemID)});
         document.getElementById("contextItemAddItem").addEventListener('click', function() {$('#contextItemMenu').remove(); itemNew(pageID, groupID, itemID)});
+        document.getElementById("contextItemConvertIcon").addEventListener('click', function() {$('#contextItemMenu').remove(); itemConvertIcon(pageID, groupID, itemID)});
         document.getElementById("contextItemDelete").addEventListener('click', function() {$('#contextItemMenu').remove(); itemDelete(pageID, groupID, itemID)});
         break;        
     default:
@@ -1235,7 +1237,7 @@ async function bookmarkEdit(pageID, groupID, itemID) {
             '<span style="font-weight: bold;">Description</span><input id="swal-bookmarkDescription" class="swal2-input" value="'+currentBookmarkDescription+'">'+
             '<span style="font-weight: bold;">URL</span><input id="swal-bookmarkUrl" class="swal2-input" value="'+currentBookmarkUrl+'">'+
 
-            '<span style="font-weight: bold;">Bookmark Icon</span><div class="settingsBalloon" alt="You can choose one of the icons below or put a URL address of your choice. A local image can be set using <b>file:///</b>.<br>ex:<br>file:///C:/Temp/icon.png<br>file:///home/user/icon.png" ><i class="fas fa-question-circle"></i></div><input id="swal-bookmarkIcon" class="swal2-input" value="'+currentBookmarkIcon+'"><BR><BR>'+
+            '<span style="font-weight: bold;">Bookmark Icon</span><div class="settingsBalloon" alt="You can choose one of the icons below, input an URL address or use a data:image base64 icon of your choice. A local image can be set using <b>file:///</b>.<br>ex:<br>http://www.domain.com/icon.png<br>file:///C:/Temp/icon.png<br>file:///home/user/icon.png<br>data:image/png;base64,UklGRoQVlA4..."><i class="fas fa-question-circle"></i></div><input id="swal-bookmarkIcon" class="swal2-input" value="'+currentBookmarkIcon+'"><BR><BR>'+
 
         '</div>'+
 
@@ -1610,29 +1612,73 @@ async function itemNew(pageID, groupID) {
                 resolve()      
             })
           },
-        }).then((result) => {        
+        }).then(async (result) => {        
             if (result.dismiss) {                
             } else {          
           		bookmarkLabel = document.getElementById('swal-bookmarkLabel').value;
           		bookmarkDescription = document.getElementById('swal-bookmarkDescription').value;
           		bookmarkUrl = document.getElementById('swal-bookmarkUrl').value;
           		bookmarkIcon = document.getElementById('swal-bookmarkIcon').value;
-          		
+
                 var newBookmarkObj = new Object();
                 newBookmarkObj.label = bookmarkLabel;
                 newBookmarkObj.url = bookmarkUrl;
                 newBookmarkObj.alt = bookmarkDescription;
-                newBookmarkObj.icon = bookmarkIcon;
                 newBookmarkObj.date = Date.now().toString();
+                newBookmarkObj.icon = bookmarkIcon;
 
-                json.pages[pageID].groups[groupID]['itens'].push(newBookmarkObj);
-                chrome.storage.local.set({ "jsonUS": JSON.stringify(json) }, function(){
-                    location.reload()
-                	/*swal({type: 'success', title: 'Bookmark "'+bookmarkLabel+'" created'}).then(() => { location.reload() })*/
-                });                
+				if (json['settings'].iconsBase64 == 'true') {
+					if ((bookmarkIcon != '')||(bookmarkIcon != 'undefined')) {
+						try {
+							var base64ImageData = await getBase64ImageAsync(bookmarkIcon, 128, 128);
+							newBookmarkObj.icon = base64ImageData;  
+				    		json.pages[pageID].groups[groupID]['itens'].push(newBookmarkObj);
+						}
+						catch (err) {				
+							//console.log(err);							
+						}				
+	    		    	chrome.storage.local.set({ "jsonUS": JSON.stringify(json) }, function(){  
+        					location.reload();
+        				});				
+					}
+				} else {					
+					json.pages[pageID].groups[groupID]['itens'].push(newBookmarkObj);
+	    		    chrome.storage.local.set({ "jsonUS": JSON.stringify(json) }, function(){
+                    	location.reload();
+                    });
+	    		}
             }
     })   
 }
+
+// ITEM CONVERT ICON
+function itemConvertIcon(pageID, groupID, itemID) {  
+    var curIID = pageID.toString() + groupID.toString() + itemID.toString();
+    var currentItemLabel = json.pages[pageID].groups[groupID].itens[itemID].label;
+    var currentItemIcon = json.pages[pageID].groups[groupID].itens[itemID].icon;
+    swal({
+      title: 'Convert "'+currentItemLabel+'" icon to Base64?',
+      text: "You won't be able to revert this!",
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, convert it'
+    }).then(async (result) => {
+      if (result.value) {
+		try {
+			var base64ImageData = await getBase64ImageAsync(currentItemIcon, 128, 128);
+			json.pages[pageID].groups[groupID].itens[itemID].icon = base64ImageData;
+			chrome.storage.local.set({ "jsonUS": JSON.stringify(json) }, function() {
+        	});       		
+		}
+		catch (err) {		
+          	swal('Icon could not be converted!', 'Error message: '+err,'error').then(() => {  })  					
+			//console.log(err);
+		}
+      }
+    })    
+} 
 
 
 // ITEM NEW NO GROUPID
@@ -1777,7 +1823,7 @@ async function itemNewNoGroupID(pageID) {
                 resolve()      
             })
           },
-        }).then((result) => {        
+        }).then(async (result) => {        
             if (result.dismiss) {                
             } else {          
           		bookmarkLabel = document.getElementById('swal-bookmarkLabel').value;
@@ -1785,19 +1831,34 @@ async function itemNewNoGroupID(pageID) {
           		bookmarkUrl = document.getElementById('swal-bookmarkUrl').value;
           		bookmarkIcon = document.getElementById('swal-bookmarkIcon').value;
           		var groupID =  document.getElementById('swal-targetGroup').value
-          		
+
                 var newBookmarkObj = new Object();
                 newBookmarkObj.label = bookmarkLabel;
                 newBookmarkObj.url = bookmarkUrl;
                 newBookmarkObj.alt = bookmarkDescription;
-                newBookmarkObj.icon = bookmarkIcon;
                 newBookmarkObj.date = Date.now().toString();
+                newBookmarkObj.icon = bookmarkIcon;
 
-                json.pages[pageID].groups[groupID]['itens'].push(newBookmarkObj);
-                chrome.storage.local.set({ "jsonUS": JSON.stringify(json) }, function(){
-                    location.reload()
-                	//swal({type: 'success', title: 'Bookmark "'+bookmarkLabel+'" created'}).then(() => { location.reload() })
-                });                
+				if (json['settings'].iconsBase64 == 'true') {
+					if ((bookmarkIcon != '')||(bookmarkIcon != 'undefined')) {
+						try {
+							var base64ImageData = await getBase64ImageAsync(bookmarkIcon, 128, 128);
+							newBookmarkObj.icon = base64ImageData;  
+				    		json.pages[pageID].groups[groupID]['itens'].push(newBookmarkObj);
+						}
+						catch (err) {				
+							//console.log(err);							
+						}				
+	    		    	chrome.storage.local.set({ "jsonUS": JSON.stringify(json) }, function(){  
+        					location.reload();
+        				});				
+					}
+				} else {					
+					json.pages[pageID].groups[groupID]['itens'].push(newBookmarkObj);
+	    		    chrome.storage.local.set({ "jsonUS": JSON.stringify(json) }, function(){
+                    	location.reload();
+                    });
+	    		}
             }
     })   
 }
@@ -1935,6 +1996,7 @@ function menuOpen(menu) {
 
 
 function showSearchResults() {
+    var darkMode = json['settings'].darkMode;
     searchString = document.getElementById("searchTopBarInput").value;
     if (document.getElementById("groupSectionSearch")) { document.getElementById("groupSectionSearch").remove() };
         
@@ -1954,8 +2016,7 @@ function showSearchResults() {
         bookmarksSection.id = "bookmarksSectionSearch";
     
         //GROUP BOOKMARK LIST
-        var bookmarksList = document.createElement('UL');
-        bookmarksList.className = "bookmarksList";
+        var bookmarksList = document.createElement('UL');        
         bookmarksList.id = "bookmarksListSearch";
 
         //GROUP ASSEMBLE
@@ -2023,11 +2084,19 @@ function showSearchResults() {
             }  
         }
     document.getElementById("searchResultsBar").appendChild(groupSection);
+
+    if (darkMode == 'true') {
+        $("#searchResultsBar").css('backgroundColor', '#1D2327');
+        $("#contentGroupSearch").css('backgroundColor', '#1D2327');
+        $(".itemLabelSearch").css('color', '#CECECE');
+    }
+     
     searchOpen();
 }
 
 
 function reflowSearchResults(searchString) {
+        var darkMode = json['settings'].darkMode;
     searchString = document.getElementById("searchTopBarInput").value;  
     if (document.getElementById("groupSectionSearch")) { document.getElementById("groupSectionSearch").remove() };
         
@@ -2101,7 +2170,7 @@ function reflowSearchResults(searchString) {
                 
                 //ITEM LABEL
                 var itemLabel = document.createElement('DIV');
-                itemLabel.className = "itemLabel";   
+                itemLabel.className = "itemLabelSearch";   
                 itemLabel.id = "itemLabelSearch"+i;         
                 itemLabel.innerHTML = itemLabelText;
     
@@ -2117,7 +2186,14 @@ function reflowSearchResults(searchString) {
 
             }  
         }
+
     document.getElementById("searchResultsBar").appendChild(groupSection);
+
+    if (darkMode == 'true') {
+        $("#searchResultsBar").css('backgroundColor', '#1D2327');
+        $("#contentGroupSearch").css('backgroundColor', '#1D2327');
+        $(".itemLabelSearch").css('color', '#CECECE');
+    }
 }
 
 
@@ -2309,7 +2385,7 @@ function firstTime() {
 
 
 
-function updateVersion() {    
+function updateVersion15() {    
     swal({
       title: 'Hello!',
       text: "We need to update your data to the new version",
@@ -2348,6 +2424,130 @@ function updateVersion() {
     })
 }
 
+function updateVersion16() {
+    json.settings.version = "1.6";
+    json.settings.darkMode = "false";
+    json.settings.colorsTopnavBackgroundColorDark ="161C23";
+    json.settings.colorsTopnavColorDark = "FFFFFF";    
+    json.settings.defaultBackgroundColorDark = "454646";  
+    json.settings.defaultGroupColorDark = "1D2327";
+    json.settings.defaultGroupColor = "FFFFFF";
+    json.settings.itemLabelFontColor = "000000";
+    json.settings.itemLabelFontColorDark = "FFFFFF";
+    json.settings.iconsBase64 = "false";
+    chrome.storage.local.set({ "jsonUS": JSON.stringify(json) }, function(){ location.reload() });
+}
+
+function imageToDataUri(img, width, height) {
+    // create an off-screen canvas
+    var canvas = document.createElement('canvas'),
+        ctx = canvas.getContext('2d');
+
+    // set its dimension to target size
+    canvas.width = width;
+    canvas.height = height;
+
+    // draw source image into the off-screen canvas:
+    ctx.drawImage(img, 0, 0, width, height);
+
+    // encode image to data-uri with base64 version of compressed image
+    return canvas.toDataURL();
+}
+
+function getBase64Image(imgUrl, width, height) {
+  return new Promise(
+    function(resolve, reject) {
+
+      var img = new Image();
+      img.width = width;
+      img.height = height;      
+      img.src = imgUrl;
+      img.setAttribute('crossOrigin', 'anonymous');
+
+      img.onload = function() {
+        var canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+        //ctx.drawImage(img, 0, 0);
+        var dataURL = canvas.toDataURL("image/png");
+        resolve(dataURL);
+        //resolve(dataURL.replace(/^data:image\/(png|jpg);base64,/, ""));
+      }
+      img.onerror = function() {
+        reject("The image could not be loaded.");
+      }
+
+    });
+
+}
+
+function getBase64ImageAsync(imgUrl, width, height) {
+	return new Promise(function(resolve, reject) {
+			//verify url
+			if ( (imgUrl == '') || (imgUrl == 'undefined') ) {
+				imgUrl = 'icons/default.png';					
+			} else if (!imgUrl.toLowerCase().match(/^(http:\/\/|https:\/\/|file:\/\/\/).*/) ) {
+			    imgUrl = 'icons/'+imgUrl;
+			}			
+      		var img = new Image();
+      		img.width = width;
+      		img.height = height;      
+      		img.src = imgUrl;
+      		img.setAttribute('crossOrigin', 'anonymous');
+
+     		img.onload = async function() {
+     			var canvas = document.createElement("canvas");
+     		  	canvas.width = img.width;
+     		  	canvas.height = img.height;
+     		  	var ctx = canvas.getContext("2d");
+     		  	ctx.drawImage(img, 0, 0, width, height);
+     		  	//ctx.drawImage(img, 0, 0);
+     		  	var dataURL = await canvas.toDataURL("image/webp");
+     		  	resolve(dataURL);
+     		  	//resolve(dataURL.replace(/^data:image\/(png|jpg);base64,/, ""));
+     		}
+     		img.onerror = function() {
+     		 	reject("The image could not be loaded.");
+     		}
+	});
+}
+
+function getBase64ImageAsyncTimeOut(imgUrl, width, height) {
+	return new Promise(function(resolve, reject) { 
+    	setTimeout(() => {
+			//verify url
+			if ( (imgUrl == '') || (imgUrl == 'undefined') ) {
+				imgUrl = 'icons/default.png';					
+			} else if (!imgUrl.toLowerCase().match(/^(http:\/\/|https:\/\/|file:\/\/\/).*/) ) {
+			    imgUrl = 'icons/'+imgUrl;
+			}
+			
+      		var img = new Image();
+      		img.width = width;
+      		img.height = height;      
+      		img.src = imgUrl;
+      		img.setAttribute('crossOrigin', 'anonymous');
+
+     		img.onload = async function() {
+     			var canvas = document.createElement("canvas");
+     		  	canvas.width = img.width;
+     		  	canvas.height = img.height;
+     		  	var ctx = canvas.getContext("2d");
+     		  	ctx.drawImage(img, 0, 0, width, height);
+     		  	//ctx.drawImage(img, 0, 0);
+     		  	var dataURL = await canvas.toDataURL("image/webp");
+     		  	resolve(dataURL);
+     		  	//resolve(dataURL.replace(/^data:image\/(png|jpg);base64,/, ""));
+     		}
+     		img.onerror = function() {
+     		 	reject("The image could not be loaded.");
+     		}
+   		}, 200)
+	});
+}
+
 /******************** SUPPORT FUNCTIONS END ********************/
 
 
@@ -2370,7 +2570,9 @@ function callbackJSON(JsonData) {
     if (IsJsonString(JsonData.jsonUS)) {
         json = JSON.parse(JsonData.jsonUS);
         if (!("version" in json.settings)) {
-            updateVersion();
+            updateVersion15();
+        } else if (json.settings.version == "1.5") {
+            updateVersion16();
         }
     } else {
         firstTime();

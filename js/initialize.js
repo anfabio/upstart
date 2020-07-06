@@ -20,12 +20,18 @@ chrome.storage.local.get("jsonIMG", callbackJSONIMG);
 
 //main initialize function
 function initialize() {
+
+	
+
 /*
 console.log("============JSON=================");
 console.log(JSON.stringify(json));
 
 console.log("============JSON IMG=================");
 console.log(JSON.stringify(jsonImg));
+
+
+
 
 
 if (!("version" in json.settings)) {
@@ -221,8 +227,40 @@ if (json.settings.version != "1.5") {
 	
 
 	var defaultPageColumns = json['settings'].defaultPageColumns;
+	var bookmarksListSearchColor = 'FFFFFF';
 	var defaultBackgroundColor = json['settings'].defaultBackgroundColor;
 	var itemLabelFontColor = json['settings'].itemLabelFontColor;
+	var defaultGroupColor = json['settings'].defaultGroupColor;
+	var groupLabelFontColor = "000000";
+	var groupDescriptionFontColor = "000000";
+	var colorsTopnavBackgroundColor = json['settings'].colorsTopnavBackgroundColor;
+	var colorsTopnavColor = json['settings'].colorsTopnavColor;
+
+
+	// DARK MODE	
+	var darkMode = json['settings'].darkMode;	
+	if (darkMode == 'true') {
+		// DARK MODE COLORS
+		var defaultGroupColor = json['settings'].defaultGroupColorDark;
+		var groupLabelFontColor = "FFFFFF";
+		var groupDescriptionFontColor = "FFFFFF";				
+		//DARK MODE COLORS OVERRIDE
+		if (json['settings'].defaultBackgroundColor == "F6F6F9") {
+			var defaultBackgroundColor = json['settings'].defaultBackgroundColorDark;
+			}		
+		if( (json['settings'].itemLabelFontColor == "000000")||(json['settings'].itemLabelFontColor == "") ){
+			var itemLabelFontColor = json['settings'].itemLabelFontColorDark;
+			}
+		if (json['settings'].colorsTopnavBackgroundColor == "2D2D5F") {
+			var colorsTopnavBackgroundColor = json['settings'].colorsTopnavBackgroundColorDark;
+			}	
+		if (json['settings'].colorsTopnavColor == "FFFFFF") {
+			var colorsTopnavColor = json['settings'].colorsTopnavColorDark;
+			} else {
+			var colorsTopnavColor = json['settings'].colorsTopnavColor;
+			}
+		}
+
 
 	/******************** PAGE BEGIN ****************/	
 	for (p = 0; p < json['pages'].length; p++) { 
@@ -325,10 +363,13 @@ if (json.settings.version != "1.5") {
 	        contentGroup.dataset.page = p;
 	        contentGroup.dataset.group = g;
 	        if ( groupColor == 'transparent' ) {
-	        	contentGroup.style.backgroundColor = 'transparent';
+	        	contentGroup.style.backgroundColor = 'transparent';	        		        	
+	        } else if ((groupColor == "FFFFFF")||(!groupColor)||(groupColor == "")) {
+	        	contentGroup.style.backgroundColor = '#'+defaultGroupColor;	        	
 	        } else {
 	        	contentGroup.style.backgroundColor = '#'+groupColor;
 	        }
+	        
 
 	        if ( pageColumns == 0 ) { //pageComuns auto
 	        	if ( defaultPageColumns != 0 ) {
@@ -369,13 +410,21 @@ if (json.settings.version != "1.5") {
 	        var groupLabel = document.createElement('DIV');
 	        groupLabel.className = "groupLabel";
 	        groupLabel.id = "groupLabel"+gid;
-	        groupLabel.innerHTML = groupLabelText;        
+	        groupLabel.innerHTML = groupLabelText;
+	        if ( groupColor == 'transparent' ) {
+	        	groupLabel.style.color = '000000';	        		        	
+	        } else if ((groupColor == "FFFFFF")||(!groupColor)||(groupColor == "")) {
+	        	groupLabel.style.color = groupLabelFontColor;	        	
+	        } else {
+	        	 groupLabel.style.color = '000000';
+	        }
 	
 			//GROUP DESCRIPTION
 	        var groupDescription = document.createElement('DIV');
 	        groupDescription.className = "groupDescription";
 	        groupDescription.id = "groupDescription"+gid;
 	        groupDescription.innerHTML = groupDescriptionText;
+	        groupDescription.style.color = groupDescriptionFontColor;
 	        if (! isNull (groupDescription.innerHTML)) { groupDescription.style.display = 'block'; } //DESCRIPTION HIDE
 
 			//GROUP BOOKMARK SECTION
@@ -460,7 +509,7 @@ if (json.settings.version != "1.5") {
 	            
 	            //if ( (itemIcon.toLowerCase().startsWith('http')) || (itemIcon.toLowerCase().startsWith('file')) ) {
 	            //if ( (itemIcon.toLowerCase().startsWithAny('http://', 'https://', 'file:///')) || (itemIcon.toLowerCase().startsWith('file:///')) ) {
-	            if (itemIcon.toLowerCase().match(/^(http:\/\/|https:\/\/|file:\/\/\/).*|data:image\/.*/) ) {	            
+	            if (itemIcon.toLowerCase().match(/^(http:\/\/|https:\/\/|file:\/\/\/|data:image\/).*/) ) {            
 	                itemIconImage.src = itemIcon;   
 	            } else if ( (itemIcon == '') || (itemIcon == 'undefined') ) {
 	                itemIconImage.src = 'icons/default.png'; 
@@ -473,7 +522,15 @@ if (json.settings.version != "1.5") {
 	            itemLabel.className = "itemLabel";   
 	            itemLabel.id = "itemLabel"+iid;         
 	            itemLabel.innerHTML = itemLabelText;
-	            itemLabel.style.color = itemLabelFontColor;
+	        	if ( groupColor == 'transparent' ) {
+	        		groupLabel.style.color = '000000';	        		        	
+	        	} else if ((groupColor == "FFFFFF")||(!groupColor)||(groupColor == "")) {
+	        		itemLabel.style.color = itemLabelFontColor;	      
+
+  	
+	        	} else {
+	        		 itemLabel.style.color = '000000';
+	        	}		   
 	            
 	 			//ITEM ASSEMBLE
 	            //itemLink.appendChild(itemIconImage);
@@ -507,34 +564,39 @@ if (json.settings.version != "1.5") {
 	
 
 	/******************** PREPARE DOCUMENT CONTENT BEGIN ****************/		
-    $(document).ready(function () {    	
+    $(document).ready(function () {
+
+
     	document.body.appendChild(bodyContent);
+
 
     	// LOOP TO FIX BROKEN ICONS
     	if (json.settings.scanBrokenIcons == 'true') {
 			$('.itemIconImage').each(function() {
   				//console.log($(this).attr('src'));
  				var element = $(this);
-				$.ajax( {
-					url:$(this).attr('src'),
-					type:'get',
-					async: false,
-					error:function(response){
- 				   		var replace_src = "icons/broken.png";
-						// Again check the default image
-			   			$.ajax({
-			    			url: replace_src,
-			    			type:'get',
-			    			async: false,
-			    			success: function(){
-			     				$(element).attr('src', replace_src);
-			    			},
-			    		error:function(response){
-			    			$(element).hide();
-			    			}
-			  			});
-			 		}
-				});
+				if (!$(this).attr('src').toLowerCase().match(/^data:image\/.*/)) { 
+					$.ajax( {
+						url:$(this).attr('src'),
+						type:'get',
+						async: true,
+						error:function(response){
+					   		var replace_src = "icons/broken.png";
+							// Again check the default image
+							$.ajax({
+								url: replace_src,
+								type:'get',
+								async: true,
+								success: function(){
+					 				$(element).attr('src', replace_src);
+								},
+							error:function(response){
+								$(element).hide();
+								}
+							});
+						}
+					});
+				}
 			});
 		}
 
@@ -563,7 +625,7 @@ if (json.settings.version != "1.5") {
 				json.pages[srcPage].groups[srcGroup].itens.splice(srcIndex,1);   
 
 				chrome.storage.local.set({ "jsonUS": JSON.stringify(json) }, function(){ location.reload() });
-        },
+        	},
 			start: function (event, ui) {
 				$(ui.item).attr('data-fromIndex', ui.item.index());
             	$(this).attr('data-fromIndex', ui.item.index());
@@ -631,10 +693,10 @@ if (json.settings.version != "1.5") {
 		/**********************************************/
 		
 		//TOPNAV COLORS
-		document.getElementById("topNav").style.backgroundColor = '#'+json['settings'].colorsTopnavBackgroundColor;
+		document.getElementById("topNav").style.backgroundColor = '#'+colorsTopnavBackgroundColor;
 		$('.topLink').css('color', '#'+json['settings'].colorsTopnavColor);
-
-
+		document.getElementById("plusIcon").style.backgroundColor = '#'+colorsTopnavBackgroundColor;
+		document.getElementById("optionsIcon").style.backgroundColor = '#'+colorsTopnavBackgroundColor;
 
 
 		//ITEM MARGIN		
@@ -671,10 +733,10 @@ if (json.settings.version != "1.5") {
 
 
 */
-		var itemWith = (itemIconSize + itemIconSize*0.2) + 12;
+		var itemWidth = (itemIconSize + itemIconSize*0.2) + 12;
 
 		if (json.settings.noItemLabels == 'true') { 
-			var itemHeight = itemWith;
+			var itemHeight = itemWidth;
 		} else {
 			var itemHeight = (itemIconSize + 3.7*parseInt(json.settings.itemLabelFontSize));
 		}
@@ -682,12 +744,15 @@ if (json.settings.version != "1.5") {
 		
 
 		
-		$('.bookmarksList').css({ 'grid-template-columns': 'repeat(auto-fill, '+itemWith+'px)', 'grid-gap': itemIconMargin+'px'});
+		$('.bookmarksList').css({ 'grid-template-columns': 'repeat(auto-fill, '+itemWidth+'px)', 'grid-gap': itemIconMargin+'px'});
 		
 
-		$('.bookmarksListItem').css({ 'width': itemWith+'px', 'height': itemHeight+'px'});
+		$('.bookmarksListItem').css({ 'width': itemWidth+'px', 'height': itemHeight+'px'});
+		//console.log(itemWidth);
+		//console.log(itemHeight);
 
-		$('.itemIconImage').css({ 'max-width': itemIconSize+'px', 'max-height': itemIconSize+'px' });
+		$('.itemIconImage').css({ 'min-width': itemIconSize+'px', 'min-height': itemIconSize+'px' });
+		//console.log(itemIconSize);
 
 
 		//ITEM RADIUS
@@ -733,7 +798,7 @@ if (json.settings.version != "1.5") {
 	    	chrome.contextMenus.removeAll();
 	    } else {
         recreateBrowserContextMenus(json);        
-      }
+      	}
 
 
 

@@ -13,7 +13,7 @@
     ],
 "settings":     
     {
-    "version": "1.5",
+    "version": "1.6",
     "firstTime": "false",        
     "defaultOptions": "true",
     "appearanceTheme": "default",
@@ -22,20 +22,29 @@
     "defaultPageBackground": "",
     "defaultBackgroundColor": "F6F6F9",
     "defaultItensSort": "manual",
-    "showBrowserContextMenu": "true",
+    "showBrowserContextMenu": "false",
     "defaultPageColumns": "0",
     "remeberLastPage": "true",
     "openLinksNewTab": "false",    
     "noItemLabels": "false",
+    "darkMode": "false",
+    "colorsTopnavBackgroundColorDark": "161C23",
+    "colorsTopnavColorDark": "FFFFFF",    
+    "defaultBackgroundColorDark": "454646",  
+    "defaultGroupColorDark": "1D2327",
+    "defaultGroupColor": "FFFFFF",
     "itemIconSize": "64",
     "itemIconMargin": "0",
     "itemIconRadius": "0",
     "itemLabelFontSize": "13",
+    "itemLabelFontColor": "000000",
+    "itemLabelFontColorDark": "FFFFFF",
     "itemLabelShowLines": "1",
     "itemIconLabelTextAlign": "center",
     "itemIconLabelFontFamily": "'Helvetica', 'Helvetica Nueue', sans-serif",
     "itemIconLabelFontStyle": "normal",
     "itemIconLabelFontWeight": "normal",
-    "scanBrokenIcons": "false"
+    "scanBrokenIcons": "false",
+    "iconsBase64": "false"
     }
 }

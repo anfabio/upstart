@@ -13,6 +13,19 @@ body {
   width: 960px;
 }
 
+.app_loader{
+    position: absolute;
+    top: 0;
+	bottom: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 99;
+    background-image: url("../img/loading.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    visibility: hidden;    
+}
+
 div.tab-content {
 	background-color: #FFF;
 	min-height: 625px;
@@ -229,6 +242,19 @@ div.iconLabelExample {
 img.iconImgExample:hover {   
 }
 
+div.iconLabelExampleDark {
+  margin-top: 3px;
+  overflow: hidden;
+  font-size: 13px;
+  color: #ffffff;
+  text-overflow: ellipsis;
+  text-align: center;
+  transition: all 0.5s;
+  max-height: 1.2em;
+}
+
+img.iconImgExampleDark:hover {   
+}
 
 
 .image_picker_selector {
@@ -244,9 +270,6 @@ div.bootstrap-filestyle {
 }
 
 
-li.nav-item a:hover {
-  background-color: #FFF;
-}
 
 
 div.optBalloon {
@@ -268,6 +291,52 @@ div.optBalloonButton {
   float: right;
 }
 
+
+
+
+li.nav-item a {  
+  font-weight: bold;
+  font-size: 1.3em;
+}
+
+
+
+
+li.nav-item-dark {
+  color: #FFF;
+  background-color: #1D2327;
+  border: 1px solid #CECECE;
+  border-radius: 3px;
+  margin-right: 10px; 
+}
+
+
+li.nav-item-dark a {  
+  color: #FFFFFF;
+  font-size: 1.3em;
+  font-weight: bold;
+}
+
+li.nav-item-dark a:hover {
+  background-color: #1C4775;
+  color: #FFFFFF;
+  border: 1px solid #042A58 !important;
+}
+
+
+
+.form-control-dark {
+  background-color: #4E5559;
+  color: #FFF;
+}
+
+
+
+/* FIXES */
+
+.input-group {
+inline-size: fit-content;
+}
 
 
 

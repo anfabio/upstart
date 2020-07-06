@@ -11,6 +11,7 @@
 <link rel="stylesheet" type="text/css" href="css/bootstrap-toggle.min.css">
 <link rel="stylesheet" type="text/css" href="css/options.css">
 
+
 <script type="text/javascript" src="js/functions.js"></script>
 <script type="text/javascript" src="js/FileSaver.js"></script>
 <script type="text/javascript" src="js/jquery.min.js"></script>
@@ -28,6 +29,8 @@
 </head>
 <body>
 
+<div class="app_loader" id="loadindPanel"></div>
+
 
 <div class="container">
   <h1 style="font-weight: bold;">Options</h1>
@@ -35,14 +38,18 @@
   <p>Make sure you hit "Save Options" before you close this page.</p>
 
   <ul class="nav nav-tabs">
-    <li class="nav-item active"><a style="font-size: 1.3em;" data-toggle="tab" href="#options">Options</a></li>
-    <li class="nav-item"><a style="font-size: 1.3em;" data-toggle="tab" href="#bookmarks">Bookmarks</a></li>
-    <li class="nav-item"><a style="font-size: 1.3em;" data-toggle="tab" href="#appearance">Appearance</a></li>
-    <li class="nav-item"><a style="font-size: 1.3em;" data-toggle="tab" href="#import-export">Import/Export</a></li>
+    <li class="nav-item active"><a data-toggle="tab" href="#options">Options</a></li>
+    <li class="nav-item"><a data-toggle="tab" href="#bookmarks">Bookmarks</a></li>
+    <li class="nav-item"><a data-toggle="tab" href="#appearance">Appearance</a></li>
+    <li class="nav-item"><a data-toggle="tab" href="#import-export">Import/Export</a></li>
   </ul>
 
 
             <!-- ************************ OPTIONS ************************* -->
+
+
+
+
 
   <div class="tab-content">
 
@@ -145,8 +152,37 @@
             </td>          
           </tr>
 
+
+            <tr>        
+              <td>
+                <p>Save icons in base64 by default</p>        
+              </td>
+              <td>
+                <input type="checkbox" id="iconsBase64Toggle" data-toggle="toggle" data-onstyle="success" data-offstyle="danger">
+              </td>
+              <td>
+                <div  class="optBalloon" alt="Convert new bookmark icons to base64 data by default. The current icons will not be affected.">
+                  <i class="fas fa-question-circle"></i>
+                </div>
+              </td>              
+            </tr>  
+            
         </table>
 
+      <table class="optionsTableContentIE" style="margin-top: 100px;">
+        <tr>        
+          <td style="width: 100%;">
+            <button type="button" class="btn btn-primary btn-md btn-warning" id="convertBookmarkIcons" style="width:100%;font-weight: bold;font-size: 120%;">Convert all bookmark icons to base64 data</button>          
+          </td>
+        </tr>   
+
+        <tr>        
+          <td style="width: 100%;">
+            <p style="width: 100%;">Caution! This will convert all bookmark icons to base64 (webp/128x128) image data. All icons will be stored into the configuration file and will be exported whithin your data. The main drawback with this is that the configuration size will be considerable bigger. This could make the loading slower depending on the number of bookmarks you have. Also, the icons will be 128x128 in size, so they will loose details if you prefer bigger icons. <span style="font-weight: bold;">Be sure to export and backup your data first!<span></p>
+            <p>You can also convert each icon individually using the "Convert Icon" option within the right click menu.</p>
+          </td>
+        </tr>
+      </table>
 
         <button type="button" class="btn btn-danger btn-md" id="resetDefaultValuesGeneralOptions" alt="Reset above values to default. Remeber to save these settings in order to enable them" style="width:220px; height:50px; float:right; margin: 30px;">Reset to Default Values <div class="optBalloonButton" alt="Reset above values to default. Remeber to save these settings in order to enable them."><i class="fas fa-question-circle"></i></div></button>
       </div>
@@ -369,9 +405,17 @@
               </td>            
             </tr> 
 
+ 
+
+
           </table>
 
+
+
+
       <button type="button" class="btn btn-primary btn-md btn-danger" id="resetDefaultValuesBookmarks" alt="Reset above values to default. Remeber to save these settings in order to enable them" style="width:220px; height:50px; float:right; margin: 30px;">Reset to Default Values <div class="optBalloonButton" alt="Reset above values to default. Remeber to save these settings in order to enable them."><i class="fas fa-question-circle"></i></div></button>
+
+
 
       </div>
     </div>
@@ -379,7 +423,22 @@
 
   <div id="appearance" class="tab-pane">
 
+
     <div class="optionsTabContent" style="margin-top: -20px;">  
+
+      <table class="optionsTableContent">
+            <tr>        
+              <td>
+                <p><strong>Dark Mode</strong></p>
+                <p>The default backgrounds and colors will use a dark theme.</p>
+              </td>
+              <td>
+                <input type="checkbox" id="darkModeToggle" data-toggle="toggle" data-onstyle="success" data-offstyle="danger">
+              </td>           
+            </tr>
+      </table>
+
+          
       <table class="optionsTableContent">
         <tr>
           <td>
@@ -496,7 +555,7 @@
       <table class="optionsTableContentIE" style="margin-top: 100px;">
         <tr>        
           <td style="width: 100%;">
-            <button type="button" class="btn btn-primary btn-md btn-danger" id="importDefaultSettings" style="width:100%;">Default Settings</button>          
+            <button type="button" class="btn btn-primary btn-md btn-danger" id="importDefaultSettings" style="width:100%;font-weight: bold;font-size: 120%;">Default Settings</button>          
           </td>
         </tr>   
 

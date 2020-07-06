@@ -19,11 +19,51 @@ chrome.storage.local.get("jsonIMG", callbackJSONIMGOptions);
 
 
 function initOptions() {
+
+
+    // DARK MODE  
+    var darkMode = jsonOptions['settings'].darkMode;    
+
+  if (darkMode == 'true') {
+    //TOPNAV COLORS
+    document.body.style.backgroundColor = jsonOptions['settings'].defaultGroupColorDark;
+    document.body.style.color = jsonOptions['settings'].itemLabelFontColorDark;
+    $('.tab-content').css('backgroundColor', '#'+jsonOptions['settings'].defaultGroupColorDark);
+    $('.tab-pane').css('backgroundColor', '#'+jsonOptions['settings'].defaultGroupColorDark);
+
+
+    $(".nav-item").removeClass('nav-item').addClass('nav-item-dark');
+     $(".iconLabelExample").removeClass('niconLabelExample').addClass('iconLabelExampleDark');
+
+
+    $(".form-control")
+      .css('backgroundColor', '#4E5559')
+      .css('color', '#FFFFFF');
+
+    $("#defaultPageColumnsSlider").css('backgroundColor', '#4E5559');
+    $("#iconSizeSlider").css('backgroundColor', '#4E5559');
+    $("#iconMarginSlider").css('backgroundColor', '#4E5559');
+    $("#iconRadiusSlider").css('backgroundColor', '#4E5559');
+    $("#itemLabelFontSizeSlider").css('backgroundColor', '#4E5559');
+    $(".ui-slider-handle")
+      .css('backgroundColor', '#1C4775')
+      .css('color', '#FFFFFF');
+  }
+
+
+    // DARK MODE COLORS
+    var defaultGroupColor = jsonOptions['settings'].defaultGroupColorDark;
+    var groupLabelFontColor = "FFFFFF";
+    var groupDescriptionFontColor = "FFFFFF";
+    var colorsTopnavBackgroundColor = jsonOptions['settings'].colorsTopnavBackgroundColorDark;    
+
+
     //LISTENERS
     document.getElementById("saveOptions").addEventListener('click', function() { saveOptions() });
+    document.getElementById("convertBookmarkIcons").addEventListener('click', function() { convertBookmarkIcons() });  
     document.getElementById("importSettingsButton").addEventListener('click', function() { importSettingsFromFile() });
     document.getElementById("exportSettingsButton").addEventListener('click', function() { exportSettingsToFile() });
-    document.getElementById("importDefaultSettings").addEventListener('click', function() { importDefaultSettings() });    
+    document.getElementById("importDefaultSettings").addEventListener('click', function() { importDefaultSettings() });  
     document.getElementById("resetDefaultValuesGeneralOptions").addEventListener('click', function() { resetDefaultValuesGeneralOptions() });
     document.getElementById("resetDefaultValuesBookmarks").addEventListener('click', function() { resetDefaultValuesBookmarks() });
     document.getElementById("resetDefaultValuesAppearance").addEventListener('click', function() { resetDefaultValuesAppearance() });
@@ -301,11 +341,17 @@ $( function() {
     $("select#itemIconLabelFontWeightSelect").on('change', function() {  $(".iconLabelExample").css({'font-weight': this.value }); });
     $("select#itemIconLabelFontWeightSelect").css('width', '120px');
 
+    if (jsonOptions.settings.iconsBase64 == 'true') { $('#iconsBase64Toggle').bootstrapToggle('on') }
+
 
 /********************** BOOKMARKS END **********************/
 
 
 /********************** APPEARANCE BEGIN **********************/
+
+  // DARK MODE
+  if (jsonOptions.settings.darkMode == 'true') { $('#darkModeToggle').bootstrapToggle('on') }
+
 
     //BACKGROUNDS
     var backgroundOptions = '<option data-img-src="bg/none.png" data-img-label="None" value=""></option>';
@@ -370,6 +416,10 @@ $( function() {
 	/********************** APPEARANCE END **********************/
 
 
+	          //  var loadingdiv = document.createElement('DIV');
+	         //   loadingdiv.className = "app_loader";
+	         //   document.body.appendChild(loadingdiv);
+
     });
 }
 
@@ -399,10 +449,12 @@ function saveOptions() {
     jsonOptions['settings'].itemIconLabelFontStyle = $("#itemIconLabelFontStyleSelect").val();
     jsonOptions['settings'].itemIconLabelFontWeight = $("#itemIconLabelFontWeightSelect").val();
     jsonOptions['settings'].itemLabelFontColor = $("#itemLabelFontColor").val();
+    jsonOptions['settings'].iconsBase64 = $('#iconsBase64Toggle').prop('checked').toString();
 
 
     /*************** APPEARANCE *******************/
 
+    jsonOptions['settings'].darkMode = $('#darkModeToggle').prop('checked').toString();
     jsonOptions['settings'].colorsTopnavBackgroundColor = $("input#colorsTopnavBackgroundColor").val().toString();
     jsonOptions['settings'].colorsTopnavColor = $("input#colorsTopnavColor").val().toString();
     jsonOptions['settings'].defaultBackgroundColor = $("input#defaultBackgroundColor").val().toString();
@@ -444,7 +496,7 @@ function importSettingsFromFile() {
             if (IsJsonString(reader.result)) {
                 chrome.storage.local.set({ "jsonUS": reader.result }, function(){
                     chrome.storage.local.set({ "currentPage": 0 }, function(){
-                      swal('Done', 'Settings loaded successfully!','success').then(() => {location.reload()})
+                      swal('Done', 'Settings loaded successfully!','success').then(() => {window.close()})
                     });                    
                 });               
               } else {
@@ -466,12 +518,58 @@ function importDefaultSettings() {
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, load it!'
+      confirmButtonText: 'Yes, load it!',
+      onOpen: () => swal.getCancelButton().focus()
     }).then((result) => {
         if (result.value) {
             $.getJSON( "js/defaultExample.json", function(JsonData) { callbackJSONDefaultSettings(JsonData) })
             $.getJSON( "js/images.json", function(JsonData) { callbackJSONIMGDefaultSettings(JsonData) })
             .fail(function() { alert('Default data corrupted!'); })
+        }
+    })
+}
+
+function convertBookmarkIcons() {
+    swal({
+      title: 'Convert all bookmark icons to Base64?',
+      text: "You won't be able to revert this!",
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, convert them all!',
+      onOpen: () => swal.getCancelButton().focus()
+    }).then(async (result) => {
+        if (result.value) {
+
+		$('#loadindPanel').css('visibility', 'visible');
+		var totalok = 0;
+		var totalerr = 0;
+		var notfetched = '';
+
+        for (p = 0; p < jsonOptions['pages'].length; p++) {           
+          for (g = 0; g < jsonOptions.pages[p]['groups'].length; g++) {            
+            for (i = 0; i < jsonOptions.pages[p].groups[g]['itens'].length; i++) {
+				try {
+					var iid = p.toString() + g.toString() + i.toString();              
+					var itemIcon = jsonOptions.pages[p].groups[g].itens[i].icon;
+					if (!itemIcon.toLowerCase().match(/^(data:image\/).*/) ) {
+						var base64ImageData = await getBase64ImageAsync(itemIcon, 128, 128);						
+						jsonOptions.pages[p].groups[g].itens[i].icon = base64ImageData; 					
+						totalok++;
+					}
+				}
+				catch (err) {					
+					totalerr++;
+					notfetched = notfetched+"\n"+itemIcon;
+				}
+            }
+          }
+        }
+        $('#loadindPanel').css('visibility', 'hidden');
+        chrome.storage.local.set({ "jsonUS": JSON.stringify(jsonOptions) }, function() {
+          swal('Done', totalok+' icons converted successfully.<br>'+totalerr+' icons failed to fecth/convert.','success').then(() => { window.close() })     
+        });
         }
     })
 }
@@ -495,7 +593,7 @@ function resetDefaultValuesGeneralOptions() {
 
 function resetDefaultValuesBookmarks() {
 
-	$('#noItemLabelsToggle').bootstrapToggle('off')
+	  $('#noItemLabelsToggle').bootstrapToggle('off');
 
     $( "#iconSizeSlider" ).slider( "value", 64 );
     $( "#slider-handle-icon-size").text(64);
@@ -529,9 +627,13 @@ function resetDefaultValuesBookmarks() {
     $(".iconLabelExample").css({'font-weight': 'normal' });
  
     $("input#itemLabelFontColor").val('');
+
+    $('#iconsBase64Toggle').bootstrapToggle('off');
 }
 
 function resetDefaultValuesAppearance() {
+
+    $('#darkModeToggle').bootstrapToggle('off');
 
     $("select#image-picker-default-backgrounds").val('');    
     $("select#image-picker-default-backgrounds").data('picker').sync_picker_with_select();
@@ -580,6 +682,6 @@ function callbackJSONDefaultSettings(JsonData) {
 
 function callbackJSONIMGDefaultSettings(JsonData) {
     chrome.storage.local.set({ "jsonIMG": JSON.stringify(JsonData) }, function(){
-      swal('Done', 'Settings loaded successfully!','success').then(() => {location.reload()})
+      swal('Done', 'Settings loaded successfully!','success').then(() => {window.close()})
         });
 }

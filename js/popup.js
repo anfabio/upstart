@@ -72,9 +72,10 @@ chrome.storage.local.get("jsonUS", function(results){
 
 });
 
+
 function saveCurrentURL(pageID, groupID){
 	chrome.tabs.query({active: true, currentWindow: true}, 
-    	function(arrayOfTabs) {
+    	async function(arrayOfTabs) {
        	var activeTab = arrayOfTabs[0];
        	tabURL = activeTab.url;
        	tabTitle = activeTab.title;
@@ -100,11 +101,30 @@ function saveCurrentURL(pageID, groupID){
           }
         }
 
-		jsonPopup.pages[pageID].groups[groupID]['itens'].push(newItemObj);
-        chrome.storage.local.set({ "jsonUS": JSON.stringify(jsonPopup) }, function(){  
-        	alert('Page "'+tabTitle+'" added to "'+jsonPopup.pages[pageID].groups[groupID].groupLabel+'"');
-        	window.close();			      	
-        }); 
+				
+		if (jsonPopup['settings'].iconsBase64 == 'true') {
+			if ((newItemObj.icon != '')||(newItemObj.icon != 'undefined')) {
+				try {
+					var base64ImageData = await getBase64ImageAsync(newItemObj.icon, 128, 128);
+					newItemObj.icon = base64ImageData;  
+		    		jsonPopup.pages[pageID].groups[groupID]['itens'].push(newItemObj);      		
+				}
+				catch (err) {				
+					//console.log(err);
+					jsonPopup.pages[pageID].groups[groupID]['itens'].push(newItemObj);
+				}				
+	        	chrome.storage.local.set({ "jsonUS": JSON.stringify(jsonPopup) }, function(){  
+        			alert('Page "'+tabTitle+'" added to "'+jsonPopup.pages[pageID].groups[groupID].groupLabel+'"');
+        			window.close();	
+        		});				
+			}
+		} else {
+			jsonPopup.pages[pageID].groups[groupID]['itens'].push(newItemObj);
+	        chrome.storage.local.set({ "jsonUS": JSON.stringify(jsonPopup) }, function(){  
+        		alert('Page "'+tabTitle+'" added to "'+jsonPopup.pages[pageID].groups[groupID].groupLabel+'"');
+        		window.close();	
+        	});
+		}
      });
 }
 
@@ -130,7 +150,7 @@ function popupPageAdd() {
     }
 }        
 
-// PAGE NEW
+// GROUP NEW
 function popupGroupAdd() {
     var groupLabel = $("#popupGroupLabel").val();
     var groupDescription = $("#popupGroupDescription").val();
