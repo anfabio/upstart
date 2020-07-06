@@ -20,7 +20,7 @@
     "scripts": ["js/background.js"]
   },
   "options_page": "options.html",
-  "permissions": [ "file:///*/", "bookmarks", "tabs", "management", "storage", "unlimitedStorage", "chrome://favicon/", "contextMenus", "notifications", "alarms", "browsingData", "<all_urls>" ],
+  "permissions": [ "file:///*/", "tabs", "management", "storage", "chrome://favicon/", "contextMenus", "<all_urls>" ],
   "chrome_url_overrides": {
     "newtab": "main.html"
     },
