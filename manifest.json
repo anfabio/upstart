@@ -10,7 +10,7 @@
       "default_popup": "popup.html"
    },
   "content_security_policy": "script-src 'self'; object-src 'self'",
-  "homepage_url": "https://chrome.google.com/webstore/detail/upstart/ddalpldcidoajbgohbdlelfmfmjiccga",  
+  "homepage_url": "https://github.com/anfabio/upstart",  
   "icons": {
     "16": "img/icon16.png",
     "64": "img/icon64.png",
