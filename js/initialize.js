@@ -243,13 +243,11 @@ if (json.settings.version != "1.5") {
 		// DARK MODE COLORS
 		var defaultGroupColor = json['settings'].defaultGroupColorDark;
 		var groupLabelFontColor = "FFFFFF";
-		var groupDescriptionFontColor = "FFFFFF";				
+		var groupDescriptionFontColor = "FFFFFF";	
+		var itemLabelFontColorDark	= json['settings'].itemLabelFontColorDark;
 		//DARK MODE COLORS OVERRIDE
 		if (json['settings'].defaultBackgroundColor == "F6F6F9") {
 			var defaultBackgroundColor = json['settings'].defaultBackgroundColorDark;
-			}		
-		if( (json['settings'].itemLabelFontColor == "000000")||(json['settings'].itemLabelFontColor == "") ){
-			var itemLabelFontColor = json['settings'].itemLabelFontColorDark;
 			}
 		if (json['settings'].colorsTopnavBackgroundColor == "2D2D5F") {
 			var colorsTopnavBackgroundColor = json['settings'].colorsTopnavBackgroundColorDark;
@@ -521,15 +519,11 @@ if (json.settings.version != "1.5") {
 	            var itemLabel = document.createElement('DIV');
 	            itemLabel.className = "itemLabel";   
 	            itemLabel.id = "itemLabel"+iid;         
-	            itemLabel.innerHTML = itemLabelText;
-	        	if ( groupColor == 'transparent' ) {
-	        		groupLabel.style.color = '000000';	        		        	
-	        	} else if ((groupColor == "FFFFFF")||(!groupColor)||(groupColor == "")) {
-	        		itemLabel.style.color = itemLabelFontColor;	      
-
-  	
+	            itemLabel.innerHTML = itemLabelText;	            
+	        	if (darkMode == "true") {
+	        		itemLabel.style.color = itemLabelFontColorDark;  	
 	        	} else {
-	        		 itemLabel.style.color = '000000';
+	        		 itemLabel.style.color = itemLabelFontColor;
 	        	}		   
 	            
 	 			//ITEM ASSEMBLE

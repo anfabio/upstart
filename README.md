@@ -21,6 +21,9 @@ Firefox: https://addons.mozilla.org/en-US/firefox/addon/upstart/
 
 Changelog:
 
+Version 1.6.1
+- Fix font color when group is colored
+
 Version 1.6
 - New experimental Dark mode
 - You can now use "data:image" icons
