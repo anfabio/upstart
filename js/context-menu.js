@@ -1758,8 +1758,8 @@ async function itemConvertIcon(itemID) {
             await chrome.storage.local.set({"upStartData": JSON.stringify(jsonData)})
 					}
 				}
-				catch (error) {		
-					errorMessage(jsonLanguage.data.message_itemNotConverted+'<span class="iziPage">'+error+'</span>')
+				catch (e) {		
+					errorMessage(jsonLanguage.data.message_itemNotConverted)
 				}        
       }
     }) 

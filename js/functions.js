@@ -1768,7 +1768,7 @@ function getBase64Image(imgUrl, width, height) {
           resolve(dataURL)     		  	
      		}
      		img.onerror = function() {
-     		 	reject("The image could not be loaded.")
+     		 	reject()
      		}
 	})
 }
@@ -1782,7 +1782,7 @@ function fetchImage(imgUrl) {
      		img.onload = async function() {
      		}
      		img.onerror = function() {
-     		 	reject("The image could not be loaded.")
+     		 	reject()
      		}
 	})
 }

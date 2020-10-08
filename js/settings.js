@@ -1,4 +1,5 @@
 //set variables
+let dbxReload = false
 let iziTheme = 'light'
 let bgColor = 'white'
 if (document.body.getAttribute('data-theme') != 'light') {
@@ -20,8 +21,8 @@ initializeSettings()
 async function initializeSettings() {	
   //listen to changes on jsonData
   chrome.storage.onChanged.addListener(function(changes, namespace) {
-    if (changes["upStartSettings"]) {console.log("settings changed")
-			//location.reload() 
+    if (changes["upStartSettings"]) {
+			if (!dbxReload) {location.reload()}			
 		}})
 
 	chrome.extension.isAllowedFileSchemeAccess(function(filesAllowed) {
@@ -961,7 +962,6 @@ async function assembleUploads() {
 						
 						document.getElementById("save-settings").classList.remove('active-green-button')
 						instance.hide({ }, toast)
-						location.reload()
 					},true]
 				]
 			})
@@ -1012,8 +1012,6 @@ async function assembleUploads() {
 							await chrome.storage.local.set({"upStartSettings": JSON.stringify(json)}) 
 						})
 						.catch(reason => console.log(reason.message))
-						
-						location.reload()
 					}]
 				]
 			})
@@ -1074,7 +1072,6 @@ async function assembleUploads() {
 											await loadFromData(data,settings,customImages)	
 											instance.hide({ }, toast)
 											successMessage(jsonLanguage.settings.message_dataImported)
-											location.reload()
 										}]
 									]
 								})
@@ -1129,7 +1126,6 @@ async function assembleUploads() {
 												await importFromOldVersion(jsonResult)
 												instance.hide({ }, toast)
 												successMessage(jsonLanguage.settings.message_dataImported)
-												location.reload()
 											}]											
 										]
 									})							
@@ -1167,7 +1163,6 @@ async function assembleUploads() {
 												await loadFromData(JSON.stringify(jsonResult.data),JSON.stringify(jsonResult.settings),JSON.stringify(jsonResult.customImages))
 												instance.hide({ }, toast)
 												successMessage(jsonLanguage.settings.message_dataImported)
-												location.reload()
 											}]											
 										]
 									})							
@@ -1492,8 +1487,7 @@ async function assembleUploads() {
 										const upStartChannel_reset = new BroadcastChannel('upStartChannel_reset')
 										upStartChannel_reset.postMessage(0)
 
-										instance.hide({}, toast)		
-										location.reload()
+										instance.hide({}, toast)
 									}]									
 								]
 							})	
@@ -2013,7 +2007,6 @@ async function assembleUploads() {
 					},true],
 					['<button style="background-color: #38A12A;"><b>'+jsonLanguage.settings.dialog_Ok+'</b></button>', async function (instance, toast) {
 						await loadFromData(JSON.stringify(jsonBkp.data),JSON.stringify(jsonBkp.settings),JSON.stringify(jsonBkp.customImages))
-						location.reload()						
 						instance.hide({ }, toast)
 					}]
 				]
@@ -2088,13 +2081,19 @@ async function assembleUploads() {
 
 			let ACCESS_TOKEN = localStorage.getItem("upStart_dbxToken")
 			let dbx = new Dropbox.Dropbox({ fetch:fetch, accessToken: ACCESS_TOKEN })	
+
+
+			dbxReload = true
 		
 			await dbx.filesDownload({path: '/upStartDBX.txt'})
 			.then(async function (response) {	
 				if (await downloadDataFromDropbox(response)) {
 					localStorage.setItem('upStart_dbxSync', 'true')			
 					successMessage(jsonLanguage.settings.message_dbxSync)
-					setTimeout(function(){location.reload()}, 2000)
+					setTimeout(function(){
+						dbxReload = false
+						location.reload()
+					}, 3000)
 				} else {errorMessage(jsonLanguage.settings.message_dbxSyncFail)}					
 			})
 			.catch(async (error) => {

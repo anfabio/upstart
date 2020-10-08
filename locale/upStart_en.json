@@ -192,7 +192,7 @@
     "message_itemDeleted": "Bookmark {itemLabel} deleted",    
     "message_itemCreated": "Bookmark {itemLabel} created at {groupLabel}",      
     "message_itemConverted": "Icon converted", 
-    "message_itemNotConverted": "Icon could not be converted. Error message: ",     
+    "message_itemNotConverted": "Icon could not be converted",     
     "message_itemAlready64": "The icon is already in data:image format"
   },
   "shared": {

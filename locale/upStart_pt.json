@@ -192,7 +192,7 @@
     "message_itemDeleted": "Favorito {itemLabel} removido",    
     "message_itemCreated": "Favorito {itemLabel} criado em {groupLabel}",     
     "message_itemConverted": "Ícone convertido",  
-    "message_itemNotConverted": "Ícone não pode ser convertido. Mensagem de erro: ", 
+    "message_itemNotConverted": "Ícone não pode ser convertido", 
     "message_itemAlready64": "O ícone já está no formato data:image"
   },
   "shared": {
