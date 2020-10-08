@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html>
+  <head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title lang="en">upStart Settings</title>
+    <title lang="pt">Configurações do UpStart</title>
+
+    <link rel="stylesheet" type="text/css" href="css/preview.css">
+    <link rel="stylesheet" type="text/css" href="css/iziToast.min.css">
+    <link rel="stylesheet" type="text/css" href="css/pickr-classic.min.css">
+    <link rel="stylesheet" type="text/css" href="css/settings.css">
+    <link rel="stylesheet" type="text/css" href="css/themes.css">
+      
+    
+    <script src="js/dropbox.min.js"></script>
+    <script src="js/jszip.min.js"></script>
+    <script src="js/lz-string.min.js"></script>
+    <script src="js/imageSelect.js"></script>
+    <script src="js/fontawesome-custom.min.js"></script>
+    <script src="js/pickr.min.js"></script>
+    <script src="js/iziToast.min.js"></script>
+    <script src="js/chrome-extension-async.js"></script>
+    <script src="js/FileSaver.min.js"></script>
+    <script src="js/functions.js"></script>
+    
+    <link rel="icon" type="image/png" href="img/icon48.png">
+    
+  </head>
+  <body>
+
+  
+
+    <div id="spinner-wrapper-settings" class="spinner-wrapper">      
+      <div class="spinner">
+        <div class="curve_top_left"></div>
+        <div class="curve_bottom_right"></div>
+        <div class="curve_top_right"></div>
+        <div class="curve_bottom_left"></div>
+        <div class="center_circle"></div>        
+      </div>
+      <div id="spinner-count" class="spinner-count"></div>      
+    </div>
+
+    <div id="backup-preview" class="backup-preview">
+      <div id="preview-content" class="preview-content"></div>      
+    </div>
+
+		<div id="settingsContent">  
+      
+			<div id="sidebar" class="sidebar">
+				
+	  		<div class="iconUpStart">
+	  			<div class="parent-elements-centered">
+	  				<img id="logo-image" src="img/icon.svg" alt="icon">
+	  				<h2 id="upstart-logo-text">
+              <span class="highlight-text-white" lang="en">Settings</span>
+              <span class="highlight-text-white" lang="pt">Configurações</span>
+            </h2>
+	  			</div>
+        </div>        
+
+        <ul id="sidebarItems">
+          <li id="options" class="sidebar-item active-item">
+            <a href="#"><span class="fas fa-cog fa-lg"></span>
+              <span lang="en">Options</span>
+              <span lang="pt">Opções</span>
+            </a>
+          </li>
+          <li id="bookmarks" class="sidebar-item">
+            <a href="#"><span class="fas fa-bookmark fa-lg"></span>
+              <span lang="en">Bookmarks</span>
+              <span lang="pt">Favoritos</span>
+            </a>
+          </li>
+          <li id="appearance" class="sidebar-item">
+            <a href="#"><span class="fas fa-paint-brush fa-lg"></span>
+              <span lang="en">Appearance</span>
+              <span lang="pt">Aparência</span>
+            </a>
+          </li>
+          <li id="import-export" class="sidebar-item">
+            <a href="#"><span class="fas fa-download fa-lg"></span>
+              <span lang="en">Import/Export</span>
+              <span lang="pt">Importar/Exportar</span>
+            </a>
+          </li>
+          <li id="actions" class="sidebar-item">
+            <a href="#"><span class="fas fa-robot fa-lg"></span>
+              <span lang="en">Actions</span>
+              <span lang="pt">Ações</span>
+            </a>
+          </li>    
+          <li id="uploads" class="sidebar-item">
+            <a href="#"><span class="fas fa-upload fa-lg"></span>
+              <span lang="en">Uploads</span>
+              <span lang="pt">Envios</span>
+            </a>
+          </li>       
+          <li id="backups" class="sidebar-item">
+            <a href="#"><span class="fas fa-trash-restore fa-lg"></span>
+              <span lang="en">Restore</span>
+              <span lang="pt">Restauração</span>
+            </a>
+          </li>        
+          <li id="sync" class="sidebar-item">
+            <a href="#"><span class="fas fa-sync-alt fa-lg"></span>
+              <span lang="en">Synchronization</span>
+              <span lang="pt">Syncronização</span>
+            </a>
+          </li>                  
+          <li id="about" class="sidebar-item">
+            <a href="#"><span class="fas fa-info-circle fa-lg"></span>
+              <span lang="en">About</span>
+              <span lang="pt">Sobre</span>
+            </a>
+          </li>
+        </ul>
+
+        <div class="save-button parent-elements-centered">
+          <button-green id="save-settings" class="fancy">
+            <span class="circle" aria-hidden="true">
+              <span class="fancy-icon arrow"></span>
+            </span>
+            <span class="button-green-text" lang="en">Save Settings</span>
+            <span class="button-green-text" lang="pt">Salvar Opções</span>
+          </button-green>
+          <button-red id="load-settings" class="fancy">
+            <span class="circle" aria-hidden="true">
+              <span class="fancy-icon arrow"></span>
+            </span>
+            <span class="button-red-text" lang="en">Load Default</span>
+            <span class="button-red-text" lang="pt">Carregar Padrão</span>
+          </button-red>
+        </div>
+      </div>
+      <!-- sidebar begin -->
+
+
+
+      
+      <!-- Page Content  -->
+      <div id="mainContent">   
+
+        <div id="options-container" class="item-content">  
+          <h1 lang="en">General Options</h1>
+          <h1 lang="pt">Opções Gerais</h1>
+
+          <div class="items-grid-fit">
+
+            <div class="container-item-wrapper">
+              <div class="option-element">
+                <select id="language" class="fancy-select">                            
+                  <option value="en">
+                    <span lang="en">English</span>
+                    <span lang="pt">Inglês</span>
+                  </option>
+                  <option value="pt">
+                    <span lang="en">Portuguese</span>
+                    <span lang="pt">Português</span>
+                  </option>
+                </select>
+            </div>
+
+            <div class="option-element-header">
+                <h3 lang="en">Language</h3>
+                <h3 lang="pt">Idioma</h3>
+              </div>
+              <span class="option-element-text" lang="en">Change the current language</span>
+              <span class="option-element-text" lang="pt">Mudar o idioma atual</span>
+            </div>      
+
+
+            <div class="container-item-wrapper">
+              <div class="option-element">
+                <select id="groups-sort" class="fancy-select">  
+                </select>
+              </div>
+
+
+              <div class="option-element-header">
+                <h3 lang="en">Groups Sort</h3>
+                <h3 lang="pt">Ordenação dos Grupos</h3>
+              </div>
+              <span class="option-element-text" lang="en">The default groups sort. Groups with <span class="highlight-text">auto sort</span> will follow this option</span>
+              <span class="option-element-text" lang="pt">Ordenação padrão dos grupos. Grupos com <span class="highlight-text">ordem auto</span> seguirão esta opção</span>
+            </div>      
+
+            <div class="container-item-wrapper">
+              <div class="option-element">
+                <select id="group-view" class="fancy-select">                    
+                </select>
+              </div>  
+              <div class="option-element-header">
+                <h3 lang="en">Groups View</h3>
+                <h3 lang="pt">Estilo dos Grupos</h3>
+              </div>
+              <span class="option-element-text" lang="en">The default groups view. Groups with <span class="highlight-text">auto view</span> will follow this option</span>
+              <span class="option-element-text" lang="pt">Estilo padrão dos grupos. Grupos com <span class="highlight-text">estilo auto</span> seguirão esta opção</span>
+            </div>        
+
+            <div class="container-item-wrapper">
+              <div class="option-element">
+                <select id="page-columns" class="fancy-select">   
+                </select>
+              </div>
+              <div class="option-element-header">
+                <h3 lang="en">Pages Columns</h3>
+                <h3 lang="pt">Colunas das Páginas</h3>
+              </div>
+              <span class="option-element-text" lang="en">The number of columns the pages will show by default. If <span class="highlight-text">auto</span> is selected, this value will be calculated according to the number of groups on the page. This will not affect pages with columns value set</span>
+              <span class="option-element-text" lang="pt">O número de colunas que as páginas exibirão por padrão. Se a opção <span class="highlight-text">auto</span> estiver selecionada, este valor será calculado de acordo com a quantidade grupos existentes na página. ISto não afetará páginas com o valor das colunas já configurado</span>
+            </div>          
+
+            <div class="container-item-wrapper">
+              <div id="remember-page" class="option-element fancy-toggle">
+                <input type="checkbox" id="remember-page-check" class="input-fancy-toggle">
+                <label for="remember-page-check"></label>
+              </div>
+              <div class="option-element-header">
+                <h3 lang="en">Remember Page</h3>
+                <h3 lang="pt">Lembrar Página</h3>
+              </div>
+              <span class="option-element-text" lang="en">If switched on, the last selected page will be shown on new tabs</span>
+              <span class="option-element-text" lang="pt">Se ligado, a última página selecionada será exibida em novas abas</span>
+            </div>
+
+            <div class="container-item-wrapper">
+              <div id="new-tab" class="option-element fancy-toggle">
+                <input type="checkbox" id="new-tab-check" class="input-fancy-toggle">
+                <label for="new-tab-check"></label>
+              </div>
+              <div class="option-element-header">
+                <h3 lang="en">Open Links in New Tab</h3>
+                <h3 lang="pt">Abrir Links em Nova Aba</h3>
+              </div>
+              <span class="option-element-text" lang="en">Activate this option to open the bookmarks in a new tab</span>
+              <span class="option-element-text" lang="pt">Ative esta opção para abrir os favoritos em uma nova aba</span>
+            </div>
+
+            <div class="container-item-wrapper">
+              <div id="context-menu" class="option-element fancy-toggle">
+                <input type="checkbox" id="context-menu-check" class="input-fancy-toggle">
+                <label for="context-menu-check"></label>
+              </div>
+              <div class="option-element-header">
+                <h3 lang="en">Context Menu</h3>
+                <h3 lang="pt">Menu de Contexto</h3>
+              </div>
+              <span class="option-element-text" lang="en">Activate this to show upStart at the browser context menu</span>
+              <span class="option-element-text" lang="pt">Ative esta opção para mostrar o upStart no menu de contexto do navegador</span>
+            </div>
+
+            <div class="container-item-wrapper">
+              <div id="base64-icons" class="option-element fancy-toggle">
+                <input type="checkbox" id="base64-icons-check" class="input-fancy-toggle">
+                <label for="base64-icons-check"></label>
+              </div>
+              <div class="option-element-header">
+                <h3 lang="en">Use data:image Icons</h3>
+                <h3 lang="pt">Usar Ícones em data:image</h3>
+              </div>
+              <span class="option-element-text" lang="en">If active the icon of new bookmarks will be automatically converted in <span class="highlight-text">base64 data:image</span>. The current icons will not be affected</span>
+              <span class="option-element-text" lang="pt">Se ativo os ícones de novos favoritos serão automaticamente convertidos em <span class="highlight-text">base64 data:image</span>. Os ícones atuais não serão afetados</span>
+            </div>       
+
+          </div>
+        </div>
+
+
+        <div id="bookmarks-container" class="item-content">
+          <h1 lang="en">Bookmarks Settings</h1>
+          <h1 lang="pt">Configurações dos Favoritos</h1>
+
+          <div class="items-grid-fit">
+
+            <div class="container-item-wrapper">
+              <div class="option-element">
+                <select id="icon-size" class="fancy-select">
+                </select>
+              </div>  
+              <div class="option-element-header">
+                <h3 lang="en">Icon Size</h3>
+                <h3 lang="pt">Tamanho do Ícone</h3>
+              </div>
+              <span class="option-element-text" lang="en">The size of the bookmark icon</span>
+              <span class="option-element-text" lang="pt">O tamanho do ícone dos favoritos</span>
+            </div>     
+
+            <div class="container-item-wrapper">
+              <div class="option-element">
+                <select id="font-size" class="fancy-select">
+                </select>
+              </div>  
+              <div class="option-element-header">
+                <h3 lang="en">Font Size</h3>
+                <h3 lang="pt">Tamanho da Fonte</h3>
+              </div>
+              <span class="option-element-text" lang="en">The size of the bookmarks labels</span>
+              <span class="option-element-text" lang="pt">O tamanho da fonte dos títulos dos favoritos</span>
+            </div>        
+
+            <div class="container-item-wrapper">
+              <div class="option-element">
+                <select id="font-style" class="fancy-select"> 
+                </select>
+              </div>  
+              <div class="option-element-header">
+                <h3 lang="en">Font Style</h3>
+                <h3 lang="pt">Estilo da Fonte</h3>
+              </div>
+              <span class="option-element-text" lang="en">The style of the bookmarks labels</span>
+              <span class="option-element-text" lang="pt">O estilo do título dos favoritos</span>
+            </div>          
+
+            <div class="container-item-wrapper">
+              <div class="option-element">
+                <select id="label-alignment" class="fancy-select">  
+                </select>
+              </div>  
+              <div class="option-element-header">
+                <h3 lang="en">Label Alignment</h3>
+                <h3 lang="pt">Alinhamento do Título</h3>
+              </div>
+              <span class="option-element-text" lang="en">The alignment of the bookmarks labels</span>
+              <span class="option-element-text" lang="pt">Alinhamento dos títulos dos favoritos</span>
+            </div>
+          
+            <div class="container-item-wrapper">
+              <div class="option-element">
+                <select id="label-lines" class="fancy-select"> 
+                </select>
+              </div>  
+              <div class="option-element-header">
+                <h3 lang="en">Visible Lines</h3>
+                <h3 lang="pt">Linhas Visíveis</h3>
+              </div>
+              <span class="option-element-text" lang="en">The number of visible lines of the bookmarks labels</span>
+              <span class="option-element-text" lang="pt">O número de linhas exibidas nos títulos dos favoritos</span>
+            </div>
+            
+            <div class="container-item-wrapper">
+              <div id="hide-labels" class="option-element fancy-toggle">
+                <input type="checkbox" id="hide-labels-check" class="input-fancy-toggle">
+                <label for="hide-labels-check"></label>
+              </div>
+              <div class="option-element-header">
+                <h3 lang="en">Hide Labels</h3>
+                <h3 lang="pt">Ocultar Títulos</h3>
+              </div>
+              <span class="option-element-text" lang="en">Activate this option to hide all bookmarks labels. This will affect only groups with <span class="highlight-text">auto hide labels</span></span>
+              <span class="option-element-text" lang="pt">Ative esta opção para ocultar os títulos dos favoritos. Isto afetará apenas os grupos com a opção <span class="highlight-text">ocultar títulos em auto</span></span>
+            </div>          
+
+
+            <div class="container-item-wrapper" id="files-allowed">
+              <div class="option-element">
+                <img src="icon/alert.svg" alt="alert" style="width:64px;height:64px;">
+              </div>
+              <div class="option-element-header">
+                <h3 lang="en">Allow Access to File URLs</h3>
+                <h3 lang="pt">Permitir Acesso a URLs de Arquivos</h3>
+              </div>
+              <span class="option-element-text-nowrap" lang="en">If you want to use local files like <span style="color:red;white-space:nowrap;display:inline-block;">file:///</span>, please check the option "allow access to file URLs" at the link below</span>
+              <span class="option-element-text-nowrap" lang="pt">Se você quiser usar arquivos locais como <span style="color:red;white-space:nowrap;display:inline-block;">file:///</span>, por favor marque a opção "permitir acesso a URLs de arquivos" localizado no link abaixo</span>
+              <div id="extension-manager-link" style="color:rgb(0, 81, 255);text-decoration: none;font-weight: 800; cursor: pointer; text-align: center;">
+                <span lang="en">Extensions Manager Page</span>
+                <span lang="pt">Página de Gerenciamento de Extensões</span>
+              </div>
+            </div> 
+            
+          </div>
+        </div>
+
+
+        <div id="appearance-container" class="item-content">
+          <h1 lang="en">Appearance</h1>
+          <h1 lang="pt">Aparência</h1>
+
+          <div class="items-grid-fit">
+
+            <div class="container-item-wrapper">
+              <div class="option-element">
+                <select id="theme" class="fancy-select">  
+                </select>
+              </div>  
+              <div class="option-element-header">
+                <h3 lang="en">Theme</h3>
+                <h3 lang="pt">Tema</h3>
+              </div>
+              <span class="option-element-text" lang="en">The current theme</span>
+              <span class="option-element-text" lang="pt">O tema atual</span>
+            </div>
+
+
+            <div class="container-item-wrapper">
+              <div class="option-element">
+                <div class="pickr-container">            
+                  <div id="group-fg-color-picker" class="color-picker">
+                  <button type="button" class="pcr-button" aria-label="toggle color picker dialog" style="width: 200px; color: rgb(66, 68,  90); "></button>
+                  </div>
+                </div>
+              </div>  
+              <div class="option-element-header">
+                <h3 lang="en">Groups Foreground Color</h3>
+                <h3 lang="pt">Cor da Fonte dos Grupos</h3>
+              </div>
+              <span class="option-element-text" lang="en">The default foreground color of the groups</span>
+              <span class="option-element-text" lang="pt">A cor padrão do primeiro plano (fonte) dos grupos</span>
+            </div>  
+
+            <div class="container-item-wrapper">
+              <div class="option-element">
+                <div class="pickr-container">            
+                  <div id="group-bg-color-picker" class="color-picker">
+                  <button type="button" class="pcr-button" aria-label="toggle color picker dialog" style="width: 200px; color: rgb(66, 68,  90); "></button>
+                  </div>
+                </div>
+              </div>  
+              <div class="option-element-header">
+                <h3 lang="en">Groups Background Color</h3>
+                <h3 lang="pt">Cor de Fundo dos Grupos</h3>
+              </div>
+              <span class="option-element-text" lang="en">The default background color of the groups</span>
+              <span class="option-element-text" lang="pt">A cor de fundo padrão dos grupos</span>
+            </div>            
+
+
+            <div class="container-item-wrapper">
+              <div class="option-element">
+                <div id="button-page-icon-selector"><img id="page-icon-selector" class="page-icon-selector" src="../img/theme.svg"></div>
+              </div>  
+              <div class="option-element-header">
+                <h3 lang="en">Pages Icon</h3>
+                <h3 lang="pt">Ícone das Páginas</h3>
+              </div>
+              <span class="option-element-text" lang="en">The default icon of the pages</span>
+              <span class="option-element-text" lang="pt">O ícone padrão das páginas</span>
+            </div>
+
+
+            <div class="container-item-wrapper">
+              <div class="option-element">
+                <div id="button-page-image-selector"><img id="page-image-selector" class="page-image-selector" src="../img/themewide.svg"></div>
+              </div>  
+              <div class="option-element-header">
+                <h3 lang="en">Pages Background</h3>
+                <h3 lang="pt">Fundo das Páginas</h3>
+              </div>
+              <span class="option-element-text" lang="en">The default background image of the pages</span>
+              <span class="option-element-text" lang="pt">A imagem de fundo padrão das páginas</span>
+            </div>
+
+            <div class="container-item-wrapper">
+              <div class="option-element">
+                <div class="pickr-container">            
+                  <div id="page-bg-color-picker" class="color-picker">
+                  <button type="button" class="pcr-button" aria-label="toggle color picker dialog" style="width: 200px; color: rgb(66, 68,  90); "></button>
+                  </div>
+                </div>
+              </div>  
+              <div class="option-element-header">
+                <h3 lang="en">Page Background Color</h3>
+                <h3 lang="pt">Cor de Fundo das Páginas</h3>
+              </div>
+              <span class="option-element-text" lang="en">The default background color of the pages</span>
+              <span class="option-element-text" lang="pt">A cor de fundo padrão das páginas</span>
+            </div>
+
+            <div class="container-item-wrapper">
+              <div class="option-element">
+                <div class="pickr-container">            
+                  <div id="navbar-fg-color-picker" class="color-picker">
+                  <button type="button" class="pcr-button" aria-label="toggle color picker dialog" style="width: 200px; color: rgb(66, 68,  90); "></button>
+                  </div>
+                </div>
+              </div>  
+              <div class="option-element-header">
+                <h3 lang="en">Navigation Bar Foreground Color</h3>
+                <h3 lang="pt">Cor da Fonte da Barra de Navegação</h3>
+              </div>
+              <span class="option-element-text" lang="en">The foreground color of the navigation bar</span>
+              <span class="option-element-text" lang="pt">A cor de primeiro plano (fonte) da barra de navegação</span>
+            </div>
+
+            <div class="container-item-wrapper">
+              <div class="option-element">
+                <div class="pickr-container">            
+                  <div id="navbar-bg-color-picker" class="color-picker">
+                  <button type="button" class="pcr-button" aria-label="toggle color picker dialog" style="width: 200px; color: rgb(66, 68,  90); "></button>
+                  </div>
+                </div>
+              </div>  
+              <div class="option-element-header">
+                <h3 lang="en">Navigation Bar Background Color</h3>
+                <h3 lang="pt">Cor de Fundo da Barra de Navegação</h3>
+              </div>
+              <span class="option-element-text" lang="en">The background color of the navigation bar</span>
+              <span class="option-element-text" lang="pt">A cor de fundo da barra de navegação</span>
+            </div>
+          </div>
+
+          <form id="image-selector-page-background" class="image-selector-page-background" name="imageSelectorPageBackground">
+            <label data-img="img/themewide.svg" data-value="theme" class="page-bg-label"><input type="radio" name="pageBgImages"/><img src="img/themewide.svg"/><span>Theme</span></label>
+            <label data-img="bg/autumn.jpg" data-value="bg/autumn.jpg" class="page-bg-label"><input type="radio" name="pageBgImages"/><img src="bg/autumn.jpg"/><span>Autumn</span></label>
+            <label data-img="bg/chamomile.jpg" data-value="bg/chamomile.jpg" class="page-bg-label"><input type="radio" name="pageBgImages"/><img src="bg/chamomile.jpg"/><span>Chamomile</span></label>
+            <label data-img="bg/flower.jpg" data-value="bg/flower.jpg" class="page-bg-label"><input type="radio" name="pageBgImages"/><img src="bg/flower.jpg"/><span>Flower</span></label>
+            <label data-img="bg/lemon.jpg" data-value="bg/lemon.jpg" class="page-bg-label"><input type="radio" name="pageBgImages"/><img src="bg/lemon.jpg"/><span>Lemon</span></label>
+            <label data-img="bg/lines.svg" data-value="bg/lines.jpg" class="page-bg-label"><input type="radio" name="pageBgImages"/><img src="bg/lines.svg"/><span>Lines</span></label>
+            <label data-img="bg/pencils.jpg" data-value="bg/pencils.jpg" class="page-bg-label"><input type="radio" name="pageBgImages"/><img src="bg/pencils.jpg"/><span>Pencils</span></label>
+            <label data-img="bg/stone.jpg" data-value="bg/stone.jpg" class="page-bg-label"><input type="radio" name="pageBgImages"/><img src="bg/stone.jpg"/><span>Stone</span></label>
+            <label data-img="bg/tools.jpg" data-value="bg/tools.jpg" class="page-bg-label"><input type="radio" name="pageBgImages"/><img src="bg/tools.jpg"/><span>Tools</span></label>
+            <label data-img="bg/umbrella.jpg" data-value="bg/umbrella.jpg" class="page-bg-label"><input type="radio" name="pageBgImages"/><img src="bg/umbrella.jpg"/><span>Umbrella</span></label>
+            <label data-img="bg/water.jpg" data-value="bg/water.jpg" class="page-bg-label"><input type="radio" name="pageBgImages"/><img src="bg/water.jpg"/><span>Water</span></label>
+          </form>
+
+          <form id="image-selector-page-icon" class="image-selector-page-icon" name="imageSelectorPageIcon">
+            <label data-img="img/theme.svg" data-value="theme" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="img/theme.svg"/></label>
+            <label data-img="icon/addressbook.svg" data-value="icon/addressbook.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/addressbook.svg"/></label>
+            <label data-img="icon/alarmclock.svg" data-value="icon/alarmclock.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/alarmclock.svg"/></label>
+            <label data-img="icon/alert.svg" data-value="icon/alert.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/alert.svg"/></label>
+            <label data-img="icon/android.svg" data-value="icon/android.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/android.svg"/></label>
+            <label data-img="icon/bank.svg" data-value="icon/bank.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/bank.svg"/></label>
+            <label data-img="icon/bars.svg" data-value="icon/bars.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/bars.svg"/></label>
+            <label data-img="icon/basketball.svg" data-value="icon/basketball.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/basketball.svg"/></label>
+            <label data-img="icon/blue-bookmark.svg" data-value="icon/blue-bookmark.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/blue-bookmark.svg"/></label>
+            <label data-img="icon/board.svg" data-value="icon/board.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/board.svg"/></label>
+            <label data-img="icon/bookmark.svg" data-value="icon/bookmark.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/bookmark.svg"/></label>
+            <label data-img="icon/bookshelf.svg" data-value="icon/bookshelf.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/bookshelf.svg"/></label>
+            <label data-img="icon/burger.svg" data-value="icon/burger.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/burger.svg"/></label>
+            <label data-img="icon/calc.svg" data-value="icon/calc.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/calc.svg"/></label>
+            <label data-img="icon/calendar2.svg" data-value="icon/calendar2.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/calendar2.svg"/></label>
+            <label data-img="icon/checklist.svg" data-value="icon/checklist.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/checklist.svg"/></label>
+            <label data-img="icon/circle-bookmark.svg" data-value="icon/circle-bookmark.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/circle-bookmark.svg"/></label>
+            <label data-img="icon/clapperboard.svg" data-value="icon/clapperboard.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/clapperboard.svg"/></label>
+            <label data-img="icon/creditcard.svg" data-value="icon/creditcard.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/creditcard.svg"/></label>
+            <label data-img="icon/default.svg" data-value="icon/default.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/default.svg"/></label>
+            <label data-img="icon/diagram2.svg" data-value="icon/diagram2.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/diagram2.svg"/></label>
+            <label data-img="icon/diagram.svg" data-value="icon/diagram.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/diagram.svg"/></label>
+            <label data-img="icon/dialog.svg" data-value="icon/dialog.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/dialog.svg"/></label>
+            <label data-img="icon/diamond.svg" data-value="icon/diamond.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/diamond.svg"/></label>
+            <label data-img="icon/document.svg" data-value="icon/document.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/document.svg"/></label>
+            <label data-img="icon/drop.svg" data-value="icon/drop.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/drop.svg"/></label>            
+            <label data-img="icon/femaleprofile.svg" data-value="icon/femaleprofile.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/femaleprofile.svg"/></label>
+            <label data-img="icon/file.svg" data-value="icon/file.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/file.svg"/></label>
+            <label data-img="icon/flashdrive.svg" data-value="icon/flashdrive.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/flashdrive.svg"/></label>
+            <label data-img="icon/flask.svg" data-value="icon/flask.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/flask.svg"/></label>
+            <label data-img="icon/float.svg" data-value="icon/float.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/float.svg"/></label>
+            <label data-img="icon/floppydisk.svg" data-value="icon/floppydisk.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/floppydisk.svg"/></label>
+            <label data-img="icon/flower.svg" data-value="icon/flower.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/flower.svg"/></label>
+            <label data-img="icon/folder.svg" data-value="icon/folder.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/folder.svg"/></label>
+            <label data-img="icon/gallery.svg" data-value="icon/gallery.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/gallery.svg"/></label>
+            <label data-img="icon/gameboy.svg" data-value="icon/gameboy.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/gameboy.svg"/></label>
+            <label data-img="icon/gamepad.svg" data-value="icon/gamepad.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/gamepad.svg"/></label>
+            <label data-img="icon/headphones.svg" data-value="icon/headphones.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/headphones.svg"/></label>
+            <label data-img="icon/heart.svg" data-value="icon/heart.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/heart.svg"/></label>
+            <label data-img="icon/hotdog.svg" data-value="icon/hotdog.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/hotdog.svg"/></label>
+            <label data-img="icon/house.svg" data-value="icon/house.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/house.svg"/></label>
+            <label data-img="icon/idcard.svg" data-value="icon/idcard.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/idcard.svg"/></label>
+            <label data-img="icon/idea.svg" data-value="icon/idea.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/idea.svg"/></label>
+            <label data-img="icon/key.svg" data-value="icon/key.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/key.svg"/></label>
+            <label data-img="icon/lollipop.svg" data-value="icon/lollipop.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/lollipop.svg"/></label>
+            <label data-img="icon/mail.svg" data-value="icon/mail.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/mail.svg"/></label>
+            <label data-img="icon/maleprofile.svg" data-value="icon/maleprofile.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/maleprofile.svg"/></label>
+            <label data-img="icon/map.svg" data-value="icon/map.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/map.svg"/></label>
+            <label data-img="icon/medal.svg" data-value="icon/medal.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/medal.svg"/></label>
+            <label data-img="icon/money.svg" data-value="icon/money.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/money.svg"/></label>
+            <label data-img="icon/muffin.svg" data-value="icon/muffin.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/muffin.svg"/></label>
+            <label data-img="icon/music.svg" data-value="icon/music.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/music.svg"/></label>
+            <label data-img="icon/notes.svg" data-value="icon/notes.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/notes.svg"/></label>
+            <label data-img="icon/pencil.svg" data-value="icon/pencil.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/pencil.svg"/></label>
+            <label data-img="icon/picture.svg" data-value="icon/picture.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/picture.svg"/></label>
+            <label data-img="icon/piechart.svg" data-value="icon/piechart.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/piechart.svg"/></label>
+            <label data-img="icon/pizza.svg" data-value="icon/pizza.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/pizza.svg"/></label>
+            <label data-img="icon/play.svg" data-value="icon/play.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/play.svg"/></label>
+            <label data-img="icon/popcorn.svg" data-value="icon/popcorn.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/popcorn.svg"/></label>
+            <label data-img="icon/presentation.svg" data-value="icon/presentation.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/presentation.svg"/></label>
+            <label data-img="icon/pricetag.svg" data-value="icon/pricetag.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/pricetag.svg"/></label>
+            <label data-img="icon/red-bookmark.svg" data-value="icon/red-bookmark.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/red-bookmark.svg"/></label>
+            <label data-img="icon/safebox.svg" data-value="icon/safebox.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/safebox.svg"/></label>
+            <label data-img="icon/sandclock.svg" data-value="icon/sandclock.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/sandclock.svg"/></label>
+            <label data-img="icon/scissors.svg" data-value="icon/scissors.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/scissors.svg"/></label>
+            <label data-img="icon/shield.svg" data-value="icon/shield.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/shield.svg"/></label>
+            <label data-img="icon/shopping.svg" data-value="icon/shopping.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/shopping.svg"/></label>
+            <label data-img="icon/shuttle.svg" data-value="icon/shuttle.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/shuttle.svg"/></label>
+            <label data-img="icon/smartphone.svg" data-value="icon/smartphone.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/smartphone.svg"/></label>
+            <label data-img="icon/speechbubble.svg" data-value="icon/speechbubble.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/speechbubble.svg"/></label>
+            <label data-img="icon/store.svg" data-value="icon/store.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/store.svg"/></label>
+            <label data-img="icon/sunflower.svg" data-value="icon/sunflower.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/sunflower.svg"/></label>
+            <label data-img="icon/swissknife.svg" data-value="icon/swissknife.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/swissknife.svg"/></label>
+            <label data-img="icon/target.svg" data-value="icon/target.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/target.svg"/></label>
+            <label data-img="icon/teacup.svg" data-value="icon/teacup.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/teacup.svg"/></label>
+            <label data-img="icon/trophy.svg" data-value="icon/trophy.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/trophy.svg"/></label>
+            <label data-img="icon/umbrella.svg" data-value="icon/umbrella.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/umbrella.svg"/></label>
+            <label data-img="icon/videoplayer.svg" data-value="icon/videoplayer.svg" class="page-icon-label"><input type="radio" name="pageIconImages"/><img src="icon/videoplayer.svg"/></label>
+          </form>
+        </div>
+
+
+        <div id="import-export-container" class="item-content">
+          <h1 lang="en">Import & Export</h1>
+          <h1 lang="pt">Importação & Exportação</h1>
+      
+          <div class="container-item-wrapper" style="width:100%;">
+            <div class="option-element-header" style="text-align: justify;">
+              <span lang="en">Here you can import and export you data and settings as well as reset them. You can also import the browser bookmarks which will create pages and groups to acommodate them. You can also choose what will be imported. It is worth mentioning that there is an option to try to fetch the bookmark icon, which can take a reasonable time depending of the number of bookmarks. If you find any problem with this import, please uncheck this option and try again.</span>
+              <span lang="pt">Aqui você pode importar e exportar seus dados e configurações além de redefini-los. Você também pode importar os favoritos do navegador o que criará páginas e grupos para acomodá-los. Você também poderá escolher o que será importado. Vale lembrar que há uma opção para tentar obter os ícones de cada favorito, o que pode levar um tempo razoável dependendo da quantidade. Caso você encontre algum problema nesta importação, desmarque esta opção e tente novamente.</span>
+            </div>
+          </div>
+
+          <div class="items-grid-fit-import-export">
+
+            <div class="container-item-wrapper">
+              <div class="option-element-import">
+
+                <button id="button-import-settings" class="btn-settings">
+                  <span lang="en">Import Data and Settings</span>
+                  <span lang="pt">Importar Dados e Configurações</span>
+                  </button>
+                <div class='input-wrapper'>
+                  <label for='inputFile' id="inputFileLabel"><span class="fa fa-upload"></span></label>
+                  <input type="file" id="inputFile" class="btn-settings" accept=".txt,.zip">  
+                  <span id='file-name'></span>
+                </div>
+                        
+              </div>  
+              <div class="option-element-header">
+                <h3 lang="en">Import Data and Settings</h3>
+                <h3 lang="pt">Importar Dados e Configurações</h3>
+                <span class="option-element-text" lang="en">Import the data from a backup file. You can choose the compacted backup files or the old plain text backups from older version or even the Dropbox sync file</span>
+                <span class="option-element-text" lang="pt">Importar os dados de um arquivo de backup. Você pode escolher arquivos de backup compactados ou antigos arquivos em texto puro de versões anteriores ou mesmo o arquivo de sincronia do seu Dropbox</span>
+              </div>                            
+            </div>
+
+            <div class="container-item-wrapper">
+              <div class="option-element">
+                <button id="button-export-settings" class="btn-settings">
+                  <span class="fa fa-download" style="margin-right:20px;"></span>
+                  <span lang="en">Export Data and Settings</span>
+                  <span lang="pt">Exportar Dados e Configurações</span>
+                </button>
+              </div>  
+              <div class="option-element-header">
+                <h3 lang="en">Export Data and Settings</h3>
+                <h3 lang="pt">Exportar Dados e Configurações</h3>
+              </div>
+              <span class="option-element-text" lang="en">Export your data into a compressed backup file</span>
+              <span class="option-element-text" lang="pt">Exportar seus dados para um arquivo de backup compactado</span>
+            </div>
+
+
+            <div class="container-item-wrapper" style="grid-column: 3/1;">
+              <div class="option-element">
+                <button id="button-browser-import" type="button" class="btn-settings" style="width: 500px; background-color: rgb(145, 123, 2); font-size:25px;"><span class="fa fa-unlink" style="margin-right:20px;"></span>
+                  <span lang="en">Import Browser Bookmarks</span>
+                  <span lang="pt">Importar Favoritos do Navegador</span>
+              </button>            
+              </div> 
+              <div class="option-element-header">
+                <h3 lang="en">Import Browser Bookmarks</h3>
+                <h3 lang="pt">Importar Favoritos do Navegador</h3>
+              </div>
+              <span class="option-element-text" lang="en">Import the current browser bookmarks. You can choose which bookmarks will be imported and if the icon will be fetched online. If the import procedure <span class="highlight-text">hangs</span>, please uncheck this option and try again. You can cancel this operation reloading the page</span>
+              <span class="option-element-text" lang="pt">Importe os favoritos atuais do navegador. Você pode escolher quais favoritos serão importados e se o ícone será obtido online. Caso a importação <span class="highlight-text">trave</span>, por favor desmarque esta opção e tenta novamente</span>
+            </div>            
+            
+            
+            <div class="container-item-wrapper" style="grid-column: 3/1;">
+              <div class="option-element">
+                <button id="button-clear-settings" type="button" class="btn-settings" style="width: 500px; background-color: rgb(168, 25, 25);font-size:25px;"><span class="fa fa-cogs" style="margin-right:20px;"></span>
+                  <span lang="en">Clear Data and Reset</span>
+                  <span lang="pt">Remover os Dados e Redefinir</span>
+                </button>
+              </div>
+              <div class="option-element-header">
+                <h3 lang="en">Clear Data and Settings and Load Default Example</h3>
+                <h3 lang="pt">Remover Dados e Configurações e Carregar o Exemplo Padrão</h3>
+              </div>
+              <span class="option-element-text" lang="en">Caution! This will <span class="highlight-text">clear all bookmarks and settings</span> and load the default template data. The Restore Points will <span class="highlight-text">NOT</span> be affected. Dropbox synchronization will also be reset, but the synched data will <span class="highlight-text">NOT</span> be overwrited. Be sure to export your data first!</span>
+              <span class="option-element-text" lang="pt">Cuidado! Isto vai <span class="highlight-text">apagar todos os favoritos e configurações</span> e carregar os dados de exemplo padrão. Os Pontos de Restauração <span class="highlight-text">NÃO</span> serão afetados. A sincronização com o Dropbox também será redefinida, mas os dados sincronizados <span class="highlight-text">NÃO</span> serão sobrescritos. Tenha certeza de ter criado um backup antes!</span>
+            </div>
+
+          </div>
+        </div>
+
+
+
+
+
+        <div id="actions-container" class="item-content">
+          <h1 lang="en">Actions</h1>
+          <h1 lang="pt">Ações</h1>
+                    
+          <div class="items-grid-fit-actions">
+
+            <div class="container-item-wrapper">
+              <div class="option-element">
+                <button id="button-broken-links" type="button" class="btn-settings" style="width: 500px; background-color: rgb(145, 123, 2); font-size:25px;"><span class="fa fa-unlink" style="margin-right:20px;"></span>
+                  <span lang="en">Look for Broken Links</span>
+                  <span lang="pt">Procurar por Links Quebrados</span>
+                </button>            
+              </div> 
+              <div class="option-element-header">
+                <h3 lang="en">Change the Icon of Bookmarks with a Broken Link</h3>
+                <h3 lang="pt">Mudar o Ícone dos Favoritos com um Link Quebrado</h3>
+              </div>
+              <span class="option-element-text" lang="en">This action will change the icon of bookmarks with a link that cannot be reached. This could take several minutes depending on the number of bookmarks</span>
+              <span class="option-element-text" lang="pt">Esta ação vai mudar o ícone dos favoritos com um link que não pôde ser carregado. Isto pode levar vários minutos dependendo da quantidade de favoritos</span>
+            </div>            
+
+            <div class="container-item-wrapper">
+              <div class="option-element">
+                <button id="button-broken-icons" type="button" class="btn-settings" style="width: 500px; background-color: rgb(117, 7, 84); font-size:25px;"><span class="fa fa-unlink" style="margin-right:20px;"></span>
+                  <span lang="en">Check Bookmarks Icons</span>
+                  <span lang="pt">Checar Ícones dos Favoritos</span>
+                </button>            
+              </div> 
+              <div class="option-element-header">
+                <h3 lang="en">Change the Image of Bookmarks with Non Existent Icons</h3>
+                <h3 lang="pt">Mudar a Imagem de Favoritos com Ícones Não Existentes</h3>
+              </div>
+              <span class="option-element-text" lang="en">This action will change the image of the bookmark icons that could not be found. It could take some time depending on the number of bookmarks</span>
+              <span class="option-element-text" lang="pt">Esta ação vai mudar a imagem do ícone dos favoritos que não puderam ser encontrados. Isto pode levar um tempo dependendo da quantidade de favoritos</span>
+            </div>
+
+            <div class="container-item-wrapper">
+              <div class="option-element">
+                <button id="button-convert-icons" type="button" class="btn-settings" style="width: 500px; background-color: rgb(5, 73, 14); font-size:25px;"><span class="fa fa-hashtag" style="margin-right:20px;"></span>
+                  <span lang="en">Convert Bookmark Icons</span>
+                  <span lang="pt">Converter Ícones dos Favortios</span>
+                </button>
+              </div>  
+              <div class="option-element-header">
+                <h3 lang="en">Convert Icons to base64 data:image</h3>
+                <h3 lang="pt">Converter Ícones para base64 data:image</h3>
+              </div>
+              <span class="option-element-text" lang="en">This action will convert the bookmarks icons to <span class="highlight-text">base64 data:image (webp/128x128 pixels)</span>. After this, the icons will be stored within the data itself and will not be loaded from a file or URL every time the page loads.<br>The main drawback is the fact that the <span class="highlight-text">data size will be bigger</span>. This could make the pages load a bit slower depending on the number of bookmarks you have. Besides, the icons will be stored with a resolution of 128x128 pixels, so they will loose some details if you prefer really bigger ones (the default icons are shown as 64x64 pixels). Be sure to export your data or create a restore point first, so this can be reverted. There is also a option to <span class="highlight-text">convert each icon individually at the bookmark menu</span></span>
+              <span class="option-element-text" lang="pt">Esta ação vai converter todos os ícones dos favoritos para <span class="highlight-text">base64 data:image (webp/128x128 pixels)</span>. Depois disso, os ícones serão armazenados dentro dos dados em si e não serão carregados de um arquivo ou URL toda vez que a página carregar.<br>O único inconveninete é o fato de que o <span class="highlight-text">tamanho dos dados será maior</span>. Isto pode deixar o carregamento das páginas um pouco mais lento dependendo da quantidade de favoritos. Além disso, os ícones serão guardados com uma resolução de 128x128 pixels, então eles podem perder um pouco de detalhes se você preferir ícones realmente grandes (por padrão os ícones são mostrados em uma resolução de 64x64 pixels). Tenha certeza de ter exportado seus dados ou criado um ponto de restauração primeiro, assim está ação poderá ser revertida. Há também a opção de <span class="highlight-text">converter cada ícone individualmente no menu do favorito</span>.</span>              
+            </div>
+
+          </div>
+        </div>
+
+
+
+
+        <div id="uploads-container" class="item-content" >
+          <h1 lang="en">Uploaded Images</h1>
+          <h1 lang="pt">Imagens Enviadas</h1>
+
+          <div class="container-item-wrapper" style="width:100%;">
+            <div class="option-element-header" style="text-align: justify;">
+              <span lang="en">Uploaded icons and backgrounds can be managed here. If you experience slow page loads, please try to use smaller images</span>
+              <span lang="pt">Ícones e papéis de parede enviados podem se gerenciados aqui. Se você notar carregamentos de página lentos, por favor tente usar imagens menores</span>
+            </div>
+          </div>
+
+          <div class="items-grid-fit-uploads" style="margin-bottom:50px;">
+
+            <div class="container-item-wrapper" style="width:100%;">
+              <div class="option-element-header" style="text-align:left;">
+                <h3 lang="en">Icons</h3>
+                <h3 lang="pt">Ícones</h3>
+              </div>
+            </div>
+
+            <div id="container-item-wrapper-icon" class="container-item-wrapper" style="display:none;width: 100%;"></div>
+              <div class="parent-elements-centered" id="noicons-message" style="margin:50px;">
+                <div style="color: red; font-size:30px; font-weight: 800;">
+                  <span lang="en">No Icons Uploaded</span>                
+                  <span lang="pt">Nenhum Ícone Enviado</span> 
+                </div>
+              </div>
+
+            <div class="container-item-wrapper" style="width:100%; display: grid;place-items: center;">              
+              <div class="upload-image-buttons" id="upload-image-buttons-icon" style="width:280px;">
+                <button id="upload-image-icon" type="button" class="btn-settings" style=" font-size:18px;">
+                  <span lang="en">Upload Icon</span>
+                  <span lang="pt">Enviar Ícone</span>                  
+                </button>
+                <div class="input-wrapper">
+                  <label id="iconFileLabel">
+                    <span class="fa fa-upload"></span>
+                    <input type="file" class="upload-image" accept="image/*" id="input-image-file-icon">
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>     
+
+
+          <div class="items-grid-fit-uploads" style="margin-bottom:50px;">
+
+            <div class="container-item-wrapper" style="width:100%;">
+              <div class="option-element-header" style="text-align:left;">
+                <h3 lang="en">Backgrounds</h3>
+                <h3 lang="pt">Papéis de Parede</h3>
+              </div>
+            </div>
+
+            <div id="container-item-wrapper-bg" class="container-item-wrapper" style="display:none;width:100%;"></div>
+            <div class="parent-elements-centered" id="nobgs-message" style="margin:50px;">
+              <div style="color: red; font-size:30px; font-weight: 800;">
+                <span lang="en">No Backgrounds Uploaded</span>
+                <span lang="pt">Nenhum Papel de Parede Enviado</span>
+              </div>
+            </div>
+
+            <div class="container-item-wrapper" style="width:100%; display: grid; place-items: center;">              
+              <div class="upload-image-buttons" id="upload-image-buttons-bg" style="width:280px;">
+                <button id="upload-image-bg" type="button" class="btn-settings" style=" font-size:18px;">
+                  <span lang="en">Upload Background</span>
+                  <span lang="pt">Enviar Papel de Parede</span>  
+                </button>
+                <div class="input-wrapper">
+                  <label id="bgFileLabel">
+                    <span class="fa fa-upload"></span>
+                    <input type="file" class="upload-image" accept="image/*" id="input-image-file-bg">
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>    
+
+        </div>
+
+
+
+
+
+
+        <div id="backups-container" class="item-content">
+          <h1 lang="en">Restore Points</h1>
+          <h1 lang="pt">Pontos de Restauração</h1>
+        
+          <div class="container-item-wrapper" style="width:100%;">
+            <div class="option-element-header" style="text-align: justify;">
+              <span lang="en">Here you can create restore points. They are useful if you want to revert changes or just look at old bookmarks you removed. They are created automatically into the time frame of your choice or manually. You can also choose the maximum number of restore points that will be created so, if that number is reached, new restore points will replace the older ones. These points are created only on this device and <span class="highlight-text">are not be affected by resets or imports</span>. They are not synced with other devices or exported either and will be removed if you uninstall this application. You can preview, delete or download them. Previews can be browsed but not changed. If you choose to restore some point remember that the current data will be lost and, if your synchronization is active, the sync data <span class="highlight-text">will be overwrited</span>, so disconnect from Dropbox if you don't want this.</span>
+              <span lang="pt">Aqui você pode criar pontos de restauração. Eles são úteis caso você necessite reverter alguma mudança ou apenas procurar favoritos antigos que você removeu. Eles são criados automaticamente na janela de tempo à sua escolha ou manualmente. Você também pode escolher o número máximo de pontos de restauração que serão criados assim, caso este número for alcançado, novos pontos sobrescreverão os mais antigos. Estes pontos são criados apenas neste dispositivo e <span class="highlight-text">não são afetados por redefinições ou importações</span>. Eles também não são sincronizados com outros dispositivos ou exportados e serão removidos caso você desinstale esta aplicação. Você pode visualizar, remover ou baixar cada um deles. Visualizações podem ser navegadas mas não modificadas. Caso você escolha restaurar um ponto, lembre-se de que seus dados atuais serão perdidos e, caso a sincronia esteja ativa, os dados se sincronia <span class="highlight-text">serão sobrescritos</span>, então, desconecte do Dropbox se você não quiser que isso aconteça.</span>
+            </div>
+          </div>
+
+          <div class="container-item-wrapper">
+            <div class="option-element-header" style="text-align:left;">
+              <h3 lang="en">Automatic Restore Points</h3>
+              <h3 lang="pt">Pontos de Restauração Automáticas</h3>
+            </div>
+          </div>
+          <div class="container-item-wrapper">
+            <div class="option-element-header" style="text-align:left; display:grid; place-items:center; grid-template-columns: auto auto; grid-gap: 5px 5px;width: 100%;justify-content: flex-end;">
+              
+              <div class="option-element">
+                <select id="auto-backup-time" class="fancy-select">
+                </select>
+              </div>
+
+              <div class="option-element" style="place-items: baseline;">
+                <select id="auto-backup-max" class="fancy-select">  
+                </select>
+              </div>
+              
+            </div>
+
+            <div class="container-item-wrapper" style="width: 100%;">
+              <div class="parent-elements-centered" id="no-auto-bkp-message" >
+                <div style="color: red; font-size:30px; font-weight: 800; margin:40px;text-align:center;">
+                  <span lang="en">No Automatic Restore Points</span>
+                  <span lang="pt">Nenhum Ponto de Restauração Automática</span>
+                </div>
+              </div>              
+              <div id="container-auto-backups" class="container-backups"></div>            
+            </div>            
+
+          </div>
+
+
+          <div class="container-item-wrapper" style="margin-top:70px;">
+            <div class="option-element-header" style="text-align:left;">
+              <h3 lang="en">Manual Restore Points</h3>
+              <h3 lang="pt">Pontos de Restauração Manuais</h3>
+            </div>         
+          </div>
+          <div class="container-item-wrapper">
+            <div class="option-element-header" style="text-align:left; display:grid; place-items:center; grid-template-columns: auto auto; grid-gap: 5px 5px;width: 100%;justify-content: flex-end;">
+              <div class="option-element" style="place-items: baseline;">
+                <div class="btn-settings" id="make-backup-button" title="create a restore point">
+                  <span lang="en">Create Restore Point</span>
+                  <span lang="pt">Criar Ponto de Restauração</span>
+                </div>
+              </div>
+
+              <div class="option-element">
+                <select id="manual-backup-max" class="fancy-select">                  
+                </select>
+              </div>              
+            </div>
+
+            <div class="container-item-wrapper" style="width: 100%;">
+              <div class="parent-elements-centered" id="no-manual-bkp-message" >
+                <div style="color: red; font-size:30px; font-weight: 800; margin:40px;text-align:center;">
+                  <span lang="en">No Manual Restore Points</span>
+                  <span lang="pt">Nenhum Ponto de Restauração Manual</span>
+                </div>
+              </div>
+              <div id="container-manual-backups" class="container-backups"></div>            
+            </div>
+
+          </div>
+
+        </div>
+
+
+
+
+        <div id="sync-container" class="item-content" style="min-width: 700px;">
+          
+          <div class="container-item-wrapper">
+            <h1 lang="en">Synchronization</h1>
+            <h1 lang="pt">Sincronização</h1>
+
+            <div class="option-element-sync" style="font-size: 16px;text-align: justify;">
+              <div class="sync-line">
+                <img src="img/dropbox.svg" style="width:40px;height:40px">
+                <h2>Dropbox</h2>
+              </div>
+              <p lang="en">You can connect to your Dropbox account to synchronize your data with others devices. Once the first connection is stablished, a sync file is created with the current data. However, if a sync file is found at Dropbox it <span class="highlight-text">WILL OVERWRITE</span> the current data. You can delete the Dropbox sync file located at your <span class="highlight-text">Dropbox Apps</span> folder if you want to start a brand new sincronization with the current data. To start the process follow the steps below:</p>
+              <p lang="pt">Você pode conectar a sua conta do Dropbox para sincronizar seus dados com outros dispositivos. Uma vez que a conexão é estabelecida, um arquivo de sincronia será criado com os dados atuais. Porém, caso um arquivo de sincronia seja encontrado no Dropbox, ele <span class="highlight-text">SOBRESCREVERÁ</span> os dados atuais. Você pode remover o arquivo de sincronia localizado na pasta de <span class="highlight-text">Aplicações do Dropbox</span> se quiser iniciar uma nova sincronia com os dados atuais. Para iniciar o processo siga os passos abaixo:</p>
+            </div>
+          
+            <div class="container-item-wrapper" style="font-size: 16px; display: grid; place-content: center;">
+
+              <div id="dropbox-disconnected-wrapper">
+                <ol>
+                  <li style="margin-top: 30px;">                                      
+                      <span lang="en">Get an authorization code</span>
+                      <span lang="pt">Obtenha um código de autorização</span>
+                      <div class="parent-elements-centered">
+                        <a href="https://www.dropbox.com/oauth2/authorize?client_id=pb82c8abics6xcp&response_type=code" id="dropbox-get-token" class="dbx-button" target="_blank" style="margin-top: 30px;">
+                          <span lang="en">Get Authorization Code</span>
+                          <span lang="pt">Obter Código de Autorização</span>
+                        </a>
+                      </div>
+                  </li>
+                  <li style="margin-top: 60px">
+                    <span lang="en">Paste the code in the field below and click the "Save the Code" button</span>
+                    <span lang="pt">Cole o código no campo abaixo e clique no botão "Salvar o Código"</span>
+                    <div class="parent-elements-centered" style="margin-top: 30px">
+                      <input id="dropbox-code" style="width: 460px; height: 30px; border: 1px solid blue; border-radius: 5px; padding: 5px; text-align: center; font-size: 16px;">
+                      <button id="dropbox-save-token" class="dbx-button" style="margin-top: 30px;">
+                        <span lang="en">Save the Code</span>
+                        <span lang="pt">Salvar o Código</span>
+                      </button>                      
+                    </div>
+                                        
+                  </li>
+                </ol>
+              </div>
+
+
+
+
+
+
+
+              <div id="dropbox-connected-wrapper" class="parent-elements-centered" style="display: none;">
+                <div class="grid-half-h">
+                  <div class="grid-half-v" style="color: green; font-size:30px;font-weight: bold">
+                    <span lang="en">Dropbox Connected</span>
+                    <span lang="pt">Dropbox Conectado</span>
+                  </div>
+                </div>
+
+                <p lang="en">Your data is now synced through your Dropbox account. The synchronization file can be found inside you <span class="highlight-text">Dropbox Apps</span> folder.</p>    
+                <p lang="pt">Seus dados agora estão sincronizados através da sua conta do Dropbox. O arquivo de sincronia pode ser encontrado dentro da sua pasta de <span class="highlight-text">Aplicações do Dropbox</span></p>
+
+                <div class="parent-elements-centered" style="grid-template-columns: auto auto;">
+                  <button id="dropbox-disconnect" class="dbx-button">
+                    <span lang="en">Disconnect from Dropbox</span>
+                    <span lang="pt">Desconectar do Dropbox</span>                    
+                  </button>                    
+                  <button id="dropbox-sync" class="dbx-button">
+                    <span lang="en">Synchronize Now</span>
+                    <span lang="pt">Sincronizar Agora</span>                                                            
+                  </button>
+                </div>
+              </div>
+
+            </div>
+            
+            
+
+              
+              
+          </div>
+        </div>   
+        
+        
+
+
+        <div id="about-container" class="item-content" style="overflow:hidden">
+          <h1></h1>
+
+
+          <div class="items-grid-fit-about">
+
+            <div class="container-item-wrapper">
+              <div class="treat-wrapper">
+                <button class="treat-button"></button>
+              </div>
+            </div>
+
+            <div class="container-item-wrapper" style="font-size:32px;" lang="en">
+              <p style="font-weight:900; text-align: center; font-size:72px;" class="highlight-text-white">upStart</p>              
+              <p style="font-weight:900;"><span class="highlight-text">Version:</span> 2.0</p>
+              <p style="font-weight:900;"><span class="highlight-text">Author:</span> Fábio Rodrigues</p>
+              <p style="font-weight:900;"><span class="highlight-text">E-mail:</span> anfabio.dev@gmail.com</p>  
+              <p style="font-weight:900;"><span class="highlight-text">Source: </span><a style="text-decoration: none; color:dodgerblue" href="https://github.com/anfabio/upstart">github.com/anfabio/upstart</a></p>
+            </div>
+
+            <div class="container-item-wrapper" style="font-size:32px;" lang="pt">
+              <p style="font-weight:900; text-align: center; font-size:72px;" class="highlight-text-white">upStart</p>              
+              <p style="font-weight:900;"><span class="highlight-text">Versão:</span> 2.0</p>
+              <p style="font-weight:900;"><span class="highlight-text">Autor:</span> Fábio Rodrigues</p>
+              <p style="font-weight:900;"><span class="highlight-text">E-mail:</span> anfabio.dev@gmail.com</p>  
+              <p style="font-weight:900;"><span class="highlight-text">Source: </span><a style="text-decoration: none; color:dodgerblue" href="https://github.com/anfabio/upstart">github.com/anfabio/upstart</a></p>
+            </div>
+
+          </div>   
+
+        </div>
+      </div>
+        
+
+
+          
+
+    </div>
+
+    
+
+  <script src="js/settings.js"></script>
+  </body>
+</html>

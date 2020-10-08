@@ -1,16 +1,31 @@
-# upStart Browser Extension
-A iconized start page extension for chrome and firefox (with a few modifications).
-It's available on both Chrome Extensions page and Firefox Add-ons page
+# upStart
 
-![Upstart Screenshot 1](readme_images/upstart0.png?raw=true "Upstart Screenshot")
+upStart is a replacement of new tab page with quick access to your bookmarked pages.
+Keep your bookmarks organized into groups and pages.
+Look & Fell highly customizable.
 
-![Upstart Screenshot 1](readme_images/upstart1.jpg?raw=true "Upstart Screenshot 1")
+• Easily add bookmarks from any page or save all open tabs
+• Intuitive and easy to customize
+• Features like check for broken links and import bookmarks from the browser
+• Synchronization with other devices through Dropbox
+• Easily import and export your data
+• Use your own icons and images
+• Create restore points to revert changes
+• Search bookmarks easily
+• Themes
+• Made with vanilla JS for better performance
 
-![Upstart Screenshot 1](readme_images/upstart2.png?raw=true "Upstart Screenshot 2")
 
-![Upstart Screenshot 1](readme_images/upstart3.png?raw=true "Upstart Screenshot 3")
+![Main Page](screenshots/1.png?raw=true "Main Page")
 
-![Upstart Screenshot 1](readme_images/upstart4.png?raw=true "Upstart Screenshot 4")
+![Icon Picker](screenshots/2.jpg?raw=true "Icon Picker")
+
+![Popup Menu and Layout Changes](screenshots/3.png?raw=true "Popup Menu and Layout Changes")
+
+![Example Page](screenshots/4.png?raw=true "Example Page")
+
+![Settings](screenshots/5.png?raw=true "Settings")
+![Bookmarks Importer](screenshots/6.png?raw=true "Bookmarks Importer")
 
 
 Chrome: https://chrome.google.com/webstore/detail/upstart/ddalpldcidoajbgohbdlelfmfmjiccga
@@ -19,7 +34,65 @@ Firefox: https://addons.mozilla.org/en-US/firefox/addon/upstart/
 
 
 
+
+
+
+
+
+Libraries
+
+Chrome Extension Async
+https://github.com/KeithHenry/chromeExtensionAsync
+
+Dropbox for JavaScript
+https://www.dropbox.com/developers/documentation/javascript
+
+FileSaver.js
+https://github.com/eligrey/FileSaver.js/
+
+Font Awesome
+https://fontawesome.com
+
+iziToast
+https://izitoast.marcelodolza.com/
+
+JSZip
+https://stuk.github.io/jszip/
+
+lz-string
+https://github.com/pieroxy/lz-string
+
+Pickr
+https://github.com/Simonwep/pickr
+
+SortableJS
+https://github.com/SortableJS/sortablejs
+
+SweetAlert2
+https://sweetalert2.github.io
+
+
+
+
+Code
+
+Treats
+https://codepen.io/team/keyframers/pen/wvvoBQW
+
+On/Off Toggle Switch
+https://codepen.io/agoodwin/pen/JBvBPr
+
+
+
 Changelog:
+
+Version 2.0
+- Application refactored from the ground with a lot of new features.
+- Some of the older options will have to be replaced
+- Complete new set of icons and Backgrounds
+- Multiple language support. Right now we have only English and Portuguese
+- Synchronization with Dropbox
+- Sorry, but there are too many changes to list
 
 Version 1.6.1
 - Fix font color when group is colored

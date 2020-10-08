@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Capa_1"
+   enable-background="new 0 0 512 512"
+   height="512"
+   viewBox="0 0 768 512"
+   width="768"
+   version="1.1"
+   sodipodi:docname="themewide.svg"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)">
+  <metadata
+     id="metadata33">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs31" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1670"
+     inkscape:window-height="819"
+     id="namedview29"
+     showgrid="false"
+     inkscape:zoom="0.65186406"
+     inkscape:cx="-82.825862"
+     inkscape:cy="315.1517"
+     inkscape:window-x="813"
+     inkscape:window-y="117"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="g26" />
+  <g
+     id="g26">
+    <path
+       d="m 500.28133,412.95237 v 63.7642 H 387.92935 L 308.43503,349.18818 Z"
+       id="path2"
+       style="fill:#ff0000;fill-opacity:0.64705882;stroke-width:0.94928199"
+       inkscape:connector-curvature="0" />
+    <path
+       d="M 116.58872,168.94806 H 387.92935 V 476.71657 H 116.58872 Z"
+       id="path4"
+       style="fill:#ff0000;fill-opacity:1;stroke-width:0.94928199"
+       inkscape:connector-curvature="0" />
+    <path
+       d="M 387.92935,41.419679 451.5248,130.68955 H 275.57737 V 41.419679 Z"
+       id="path6"
+       inkscape:connector-curvature="0"
+       style="fill:#ffe7b5;stroke-width:0.94928199" />
+    <path
+       d="M 659.26998,41.419679 V 349.18818 H 579.77565 387.92935 V 41.419679 Z"
+       id="path8"
+       inkscape:connector-curvature="0"
+       style="fill:#ffd06a;stroke-width:0.94928199" />
+    <path
+       d="m 579.77565,349.18818 v 63.76419 H 500.28133 L 468.48359,323.6825 Z"
+       id="path10"
+       inkscape:connector-curvature="0"
+       style="fill:#373e9f;stroke-width:0.94928199" />
+    <path
+       d="m 500.28133,323.6825 v 89.26987 H 387.92935 L 356.13162,323.6825 Z"
+       id="path12"
+       inkscape:connector-curvature="0"
+       style="fill:#3a6fd8;stroke-width:0.94928199" />
+    <path
+       d="M 275.57737,105.18387 339.17283,219.95942 196.08305,168.94806 V 105.18387 Z"
+       id="path14"
+       inkscape:connector-curvature="0"
+       style="fill:#6241ea;stroke-width:0.94928199" />
+    <path
+       d="m 196.08305,168.94806 h 191.8463 v 244.00431 h -191.8463 z"
+       id="path16"
+       inkscape:connector-curvature="0"
+       style="fill:#3b88f5;stroke-width:0.94928199" />
+    <path
+       d="M 579.77565,105.18387 V 349.18818 H 500.28133 L 324.3339,259.06812 387.92935,105.18387 Z"
+       id="path18"
+       inkscape:connector-curvature="0"
+       style="fill:#2db94d;stroke-width:0.94928199" />
+    <path
+       d="M 387.92935,105.18387 V 259.06812 L 275.57737,168.94806 v -63.76419 z"
+       id="path20"
+       inkscape:connector-curvature="0"
+       style="fill:#61ce5a;stroke-width:0.94928199" />
+    <path
+       d="M 500.28133,168.94806 V 349.18818 H 387.92935 l -63.59545,-90.12006 63.59545,-90.12006 z"
+       id="path22"
+       inkscape:connector-curvature="0"
+       style="fill:#61ce5a;stroke-width:0.94928199" />
+    <path
+       d="M 275.57737,168.94806 H 387.92935 V 349.18818 H 275.57737 Z"
+       id="path24"
+       inkscape:connector-curvature="0"
+       style="fill:#94e368;stroke-width:0.94928199" />
+  </g>
+</svg>

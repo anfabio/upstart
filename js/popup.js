@@ -1,173 +1,450 @@
-var jsonPopup;
-var jsonPopupImg;
+//set theme
+let theme = localStorage.getItem('upStartSettings_theme')
+document.body.setAttribute('data-theme', theme)
 
-chrome.storage.local.get("jsonIMG", function(results){
-
-    //TEST CHROME LOCAL STORAGE
-    try {
-        JSON.parse(results.jsonIMG);
-    } catch (e) {
-        return false;
-    }
-    jsonPopupImg = JSON.parse(results.jsonIMG); 
-});
-
-chrome.storage.local.get("jsonUS", function(results){
-
-	//TEST CHROME LOCAL STORAGE
-	try {
-        JSON.parse(results.jsonUS);
-    } catch (e) {
-        return false;
-    }
-    jsonPopup = JSON.parse(results.jsonUS);	
-	var accordionPages = document.getElementById("accordionPages");
-
-	// PAGE
-	for (p = 0; p < jsonPopup['pages'].length; p++) { 
-	    var pageLabel = jsonPopup.pages[p].pageLabel;
-	
-		var accordionPagesPanel = document.createElement('DIV');
-		accordionPagesPanel.className = 'panel panel-default';
-
-		var accordionPagesItem = document.createElement('A'); 		
-		accordionPagesItem.id = "accordionPagesItem"+p;	
-		accordionPagesItem.dataset.toggle = 'collapse';
-		accordionPagesItem.dataset.parent = '#accordionPages';
-		accordionPagesItem.href = '#page'+p;
-		accordionPagesItem.innerHTML = '<div class="panel-heading">'+pageLabel+'</div>';		
-
-		var accordionPagesGroups = document.createElement('DIV');
-		accordionPagesGroups.className ="panel-collapse collapse";
-		accordionPagesGroups.id = 'page'+p;
-
-		accordionPagesPanel.appendChild(accordionPagesItem);
-		accordionPagesPanel.appendChild(accordionPagesGroups);
-	
-		// GROUP
-	    for (g = 0; g < jsonPopup.pages[p]['groups'].length; g++) { 
-	        var groupLabel = jsonPopup.pages[p].groups[g].groupLabel;        
-	
-			var accordionGroupItem = document.createElement('DIV');
-			accordionGroupItem.id = "accordionGroupItem"+p+g;
-			accordionGroupItem.className = 'panel-collapse collapse in';
-			accordionGroupItem.dataset.page = p;
-			accordionGroupItem.dataset.group = g;	
-			accordionGroupItem.innerHTML = '<div class="panel-body">'+groupLabel+'</div>';
-			accordionGroupItem.addEventListener('click', function() { saveCurrentURL(this.dataset.page, this.dataset.group) });
-		
-			accordionPagesGroups.appendChild(accordionGroupItem);
-		}
-		accordionPages.appendChild(accordionPagesPanel);	
-	}
-
-	$("button#popupPageAdd").click(function() { popupPageAdd(); });
-
-	var popupPageTarget = document.getElementById('popupPageTarget');
-    for (p = 0; p < jsonPopup['pages'].length; p++) { 
-        popupPageTarget.innerHTML += '<option value="'+p+'">'+jsonPopup.pages[p].pageLabel+'</option>';
-    }
-    
-    $("button#popupGroupAdd").click(function() { popupGroupAdd(); });
-
-});
-
-
-function saveCurrentURL(pageID, groupID){
-	chrome.tabs.query({active: true, currentWindow: true}, 
-    	async function(arrayOfTabs) {
-       	var activeTab = arrayOfTabs[0];
-       	tabURL = activeTab.url;
-       	tabTitle = activeTab.title;
-        tabIcon = activeTab.favIconUrl;
-
-        //GET ROOT DOMAIN
-        var domainName = tabURL.replace('http://','').replace('https://','').replace('www.','').replace('web.','').split(/[/?#]/)[0];
-
-        var newItemObj = new Object();
-        newItemObj.label = tabTitle;
-        newItemObj.url = tabURL;
-        newItemObj.alt = '';
-        newItemObj.date = Date.now().toString();
-        newItemObj.icon = ''+tabIcon;             
-
-        //GET MATCH ICON
-        for (i = 0; i < jsonPopupImg['icons'].length; i++) {
-          var allString = jsonPopupImg.icons[i].label;
-
-          if (allString.includes(domainName)) {
-            newItemObj.icon = jsonPopupImg.icons[i].value;
-            break;
-          }
-        }
-
-				
-		if (jsonPopup['settings'].iconsBase64 == 'true') {
-			if ((newItemObj.icon != '')||(newItemObj.icon != 'undefined')) {
-				try {
-					var base64ImageData = await getBase64ImageAsync(newItemObj.icon, 128, 128);
-					newItemObj.icon = base64ImageData;  
-		    		jsonPopup.pages[pageID].groups[groupID]['itens'].push(newItemObj);      		
-				}
-				catch (err) {				
-					//console.log(err);
-					jsonPopup.pages[pageID].groups[groupID]['itens'].push(newItemObj);
-				}				
-	        	chrome.storage.local.set({ "jsonUS": JSON.stringify(jsonPopup) }, function(){  
-        			alert('Page "'+tabTitle+'" added to "'+jsonPopup.pages[pageID].groups[groupID].groupLabel+'"');
-        			window.close();	
-        		});				
-			}
-		} else {
-			jsonPopup.pages[pageID].groups[groupID]['itens'].push(newItemObj);
-	        chrome.storage.local.set({ "jsonUS": JSON.stringify(jsonPopup) }, function(){  
-        		alert('Page "'+tabTitle+'" added to "'+jsonPopup.pages[pageID].groups[groupID].groupLabel+'"');
-        		window.close();	
-        	});
-		}
-     });
+//iziToast and slider
+let iziTheme = 'light'
+let iziBgColor = '#fff'
+if (theme != 'light') {
+	iziTheme = 'dark'
+	iziBgColor = '#192935'
 }
 
-// PAGE NEW
-function popupPageAdd() {
-    var pageLabel = $("#popupPageLabel").val();
-    var pageDescription = $("#popupPageDescription").val();
-    var nextPageID = jsonPopup['pages'].length;
-    if  ( typeof pageLabel === 'undefined' || pageLabel === null || pageLabel === "" ) {
- 		alert('Page label cannot be empty!');
-    } else {  
-    	window.close();  
-        var newPageObj = new Object();
-        newPageObj.pageLabel = pageLabel;
-        newPageObj.pageDescription = pageDescription;
-        newPageObj.pageColumns = "0",
-        newPageObj.pageBackground = "",
-        newPageObj['groups'] = [];
-    
-        jsonPopup['pages'].push(newPageObj);
-        chrome.storage.local.set({ "jsonUS": JSON.stringify(jsonPopup) }, function(){});
-        	alert('Page "'+pageLabel+'" successfully created.');
-    }
-}        
+let lang = localStorage.getItem('upStartSettings_language')
 
-// GROUP NEW
-function popupGroupAdd() {
-    var groupLabel = $("#popupGroupLabel").val();
-    var groupDescription = $("#popupGroupDescription").val();
-    var pageTarget = $("#popupPageTarget").val();
+drawPopupDOM()
 
-    if  ( typeof groupLabel === 'undefined' || groupLabel === null || groupLabel === "" ) {
- 		alert('Group label cannot be empty!');
-    } else {  
-    	window.close();  
-        var newGroupObj = new Object();
-        newGroupObj.groupLabel = groupLabel;
-        newGroupObj.groupDescription = groupDescription;
-        newGroupObj.groupIcon = "";
-        newGroupObj['itens'] = [];
+
+
+async function drawPopupDOM () {
+	//event listeners
+	document.getElementById("popup-sidebar").addEventListener('click', showPopupContainer )
+	document.getElementById('save-all-tabs').addEventListener('click', saveAllTabs)
+	
+	let result = await chrome.storage.local.get("upStartData")
+	let jsonData = JSON.parse(result.upStartData)   
+
+	result = await chrome.storage.local.get("upStartLanguage")  
+	let jsonLanguage = JSON.parse(result.upStartLanguage)
+  console.log("######### DUMP #########: drawPopupDOM -> jsonLanguage", jsonLanguage)
+
+	let mainContent = document.getElementById('main-content')
+	let pageList = document.getElementById('page-list')
+	
+
+	//language
+	let style = document.createElement("STYLE");		
+	style.innerText = '[lang='+lang+'] {display: block;}'
+	document.body.appendChild(style)
+	document.getElementById('new-group').placeholder = jsonLanguage.shared.popup_newGroupPlaceholder
+
+	for (p = 0; p < jsonData['pages'].length; p++) {			
+		let pageLabel = jsonData.pages[p].pageLabel			
+		let groups = []
+		
+		//DOM
+		let collapse = document.createElement('DIV')  
+		collapse.id = 'collapse'+p
+		collapse.className = "collapse"
+
+		let collapseLink = document.createElement('A')  
+		collapseLink.id = 'collapse-link'+p
+		collapseLink.href = '#'+collapse.id
+		collapseLink.innerHTML = pageLabel
+		//settings page icon
+		if (localStorage.getItem("upStartSettings_pageIcon") != "theme") {
+		  collapseLink.style.backgroundImage = "url('"+localStorage.getItem("upStartSettings_pageIcon")+"')"
+		}				
+		//set custom page icon
+		if (jsonData.pages[p].pageIcon != "theme") {collapseLink.style.backgroundImage = "url('"+jsonData.pages[p].pageIcon+"')"}
+			
+		//page list
+		pageList.innerHTML += '<option value="'+p+'">'+jsonData.pages[p].pageLabel+'</option>'
+		
+	
+		let content = document.createElement('DIV')  
+		content.className = "content"
+
+		let innerContent = document.createElement('DIV')  
+		innerContent.className = "inner-content"
+
+
+		//assemble
+		content.appendChild(innerContent)
+		collapse.appendChild(collapseLink)
+		collapse.appendChild(content)
+		mainContent.appendChild(collapse)
+
+		//groups
+		for (c=0; c<jsonData.pages[p].columns.length; c++) {
+			let columnGroups = jsonData.pages[p].columns[c]
+			
+			for (g = 0; g < columnGroups.length; g++) {   
+				group = jsonData['groups'].find(group => group.id == columnGroups[g])
+						
+				let groupCollapse = document.createElement('DIV')  
+				groupCollapse.id = 'group'+group.id
+				groupCollapse.dataset.group = group.id
+				groupCollapse.className = "group-collapse"
+				groupCollapse.innerHTML = group.groupLabel
+				if (group.groupIcon != '' ) { groupCollapse.style.backgroundImage = "url("+group.groupIcon+")"}
+
+				groupCollapse.addEventListener('click', collapseClick)
+				
+
+				innerContent.appendChild(groupCollapse)
+			}
+		} 
+	}
+	
+
+	function collapseClick(e) {
+		console.log(e.target.className)        
+		console.log(e)
+		saveLink(e.target.closest('.group-collapse').dataset.group)
+	}
+	
+	
+	async	function showPopupContainer(e) {
+		let container = e.target.closest('.popup-sidebar-item').dataset.container
+		
+		if (container != 'settings') {
+			if (container == 'popup-recover') {
+				if (!sessionStorage.getItem('upStart_sessionAssembledBackups')) {
+	
+					let result = await chrome.storage.local.get("upStartBackups")  		
+					let jsonBackups = JSON.parse(result.upStartBackups)  
+	
+					let bkpAutoList = document.getElementById("auto-backup-list")
+					for (i=0;i<jsonBackups.auto.length;i++) { 
+						let item = await drawRecover(jsonBackups.auto[i])   					  
+						bkpAutoList.append(item)
+					}
+					//event listeners
+					bkpAutoList.addEventListener('click', async (e) => {
+						if (e.target.closest('.btn-actions-download')) {				
+							let timestamp = e.target.closest('.backup-actions').dataset.timestamp
+							let bkpData = JSON.parse(await LZString.decompress(jsonBackups['auto'].find(bkpItem => bkpItem.timestamp == timestamp).backupData))
+							exportToFilePopup(JSON.stringify(bkpData.data), JSON.stringify(bkpData.settings), JSON.stringify(bkpData.customImages))
+						}		
+	
+						if (e.target.closest('.btn-actions-restore')) {				
+							let timestamp = e.target.closest('.backup-actions').dataset.timestamp
+							restoreBkpPopup(JSON.parse(await LZString.decompress(jsonBackups['auto'].find(bkpItem => bkpItem.timestamp == timestamp).backupData)))
+						}
+					})
+	
+					let bkpManualList = document.getElementById("manual-backup-list")
+					for (i=0;i<jsonBackups.manual.length;i++) { 
+						let item = await drawRecover(jsonBackups.manual[i]) 
+						bkpManualList.append(item)
+					}
+					//event listeners
+					bkpManualList.addEventListener('click', async (e) => {
+						if (e.target.closest('.btn-actions-download')) {				
+							let timestamp = e.target.closest('.backup-actions').dataset.timestamp
+							let bkpData = JSON.parse(await LZString.decompress(jsonBackups['manual'].find(bkpItem => bkpItem.timestamp == timestamp).backupData))
+							exportToFilePopup(JSON.stringify(bkpData.data), JSON.stringify(bkpData.settings), JSON.stringify(bkpData.customImages))
+						}		
+	
+						if (e.target.closest('.btn-actions-restore')) {				
+							let timestamp = e.target.closest('.backup-actions').dataset.timestamp
+							restoreBkpPopup(JSON.parse(await LZString.decompress(jsonBackups['manual'].find(bkpItem => bkpItem.timestamp == timestamp).backupData)))
+						}
+					})		
+					sessionStorage.setItem('upStart_sessionAssembledBackups', 'true')
+				}		
+			}
+			let containers = document.querySelectorAll('.popup-container')
+			for (i=0;i<containers.length;i++) { containers[i].style.display = 'none' }	
+			document.getElementById(container).style.display = 'block'
+			let sidebarItems = document.querySelectorAll('.popup-sidebar-item')
+			for (i=0;i<sidebarItems.length;i++) { sidebarItems[i].classList.remove('popup-sidebar-item-active') }	
+			e.target.closest('.popup-sidebar-item').classList.add('popup-sidebar-item-active')		
+		} else {
+			window.close()
+		}
+	}
+	
+	
+	
+	async function drawRecover(jsonBkp, index) {	
+		let date = new Date(Number(jsonBkp.timestamp)) 
+		let formattedDate = date.toLocaleString('en-us', {dateStyle:'short', timeStyle:'short'})
+	
+		let bkpWrapper = document.createElement('DIV')    
+		bkpWrapper.className = "backup-wrapper"
+		bkpWrapper.id = 'backup-wrapper-'+jsonBkp.timestamp
+	
+		let bkpDate = document.createElement('DIV')    
+		bkpDate.className = "backup-timestamp"
+		bkpDate.id = 'backup-timestamp-'+jsonBkp.timestamp
+		bkpDate.innerHTML = formattedDate
+	
+		let bkpActions = document.createElement('DIV')    
+		bkpActions.className = "backup-actions"
+		bkpActions.id = 'backup-actions-'+jsonBkp.timestamp
+		bkpActions.dataset.index = index
+		bkpActions.dataset.timestamp = jsonBkp.timestamp
+		bkpActions.dataset.date = formattedDate
+		
+	
+		let btnActionsDownload = document.createElement('BUTTON')    
+		btnActionsDownload.className = "btn-actions btn-actions-download"
+		btnActionsDownload.title = jsonLanguage.settings.restore_btnActionsDownloadTitle
+		btnActionsDownload.innerHTML = '<i class="context-menu-icon fas fa-download"></i>'   
+		
+		let btnActionsRestore = document.createElement('BUTTON')    
+		btnActionsRestore.className = "btn-actions btn-actions-restore"
+		btnActionsRestore.title = jsonLanguage.settings.restore_btnActionsRestoreTitle
+		btnActionsRestore.innerHTML = '<i class="context-menu-icon fas fa-undo-alt"></i>'    
+		
+		//bkp assemble
+		bkpActions.append(btnActionsDownload)
+		bkpActions.append(btnActionsRestore)
+	
+		bkpWrapper.append(bkpDate) 
+		bkpWrapper.append(bkpActions) 
+		
+	
+		return bkpWrapper
+	
+	}
+	
+	
+	
+	
+	async function exportToFilePopup(jsonData,jsonSettings,jsonCustomImages) {
+		try {  
+		if (!(jsonData && jsonSettings && jsonCustomImages)) {
+			let resultData = await chrome.storage.local.get("upStartData")
+			jsonData = resultData.upStartData
+			let resultSettings = await chrome.storage.local.get("upStartSettings")
+			jsonSettings = resultSettings.upStartSettings
+			let resultCustomImages = await chrome.storage.local.get("upStartCustomImages")
+			jsonCustomImages = resultCustomImages.upStartCustomImages
+		}
+			let now = new Date()
+			let formattedDate = (now.getMonth() + 1) + '-' + now.getDate() + '-' + now.getFullYear()
+	
+			var zip = new JSZip()
+			zip.file('data.txt', jsonData)
+			zip.file('settings.txt', jsonSettings)
+			zip.file('customImages.txt', jsonCustomImages)
+			
+			zip.generateAsync({type:"blob", compression: "DEFLATE"})
+			.then(function(content) { 
+				saveAs(content, 'upStart-'+formattedDate+'.zip') 
+				window.close()		
+			})		
+		}
+		catch (error) {
+			console.log(error)
+		}
+	}			
+	
+	
+	
+	
+	
+	async function saveAllTabs() {	
+		let result = await chrome.storage.local.get("upStartData")
+		let jsonData = JSON.parse(result.upStartData)   
+		let pageID = document.getElementById('page-list').value
+		let groupLabel = document.getElementById('new-group').value
+	
+		if (groupLabel == '') {groupLabel = jsonLanguage.shared.popup_savedTabs}
+	
+	
+		let newGroupObj = new Object()
+		newGroupObj.groupLabel = groupLabel
+		newGroupObj.groupDescription = ''
+		newGroupObj.groupIcon = "icon/bookmark.svg"
+		newGroupObj.groupBgColor = "theme",
+		newGroupObj.groupFgColor = "theme", 
+		newGroupObj.groupSort = "auto"
+		newGroupObj.groupView = "auto",
+		newGroupObj.hideBookmarkLabels = "auto",
+		newGroupObj.id = Date.now().toString(),
+		newGroupObj.items = []	
+	
+		//push group to page
+		jsonData.pages[pageID].columns[0].push(newGroupObj.id)
+		jsonData.groups.push(newGroupObj)
+	
+	
+		chrome.tabs.query({}, async function(tabs) {
     
-    	jsonPopup.pages[pageTarget]['groups'].push(newGroupObj);
-        chrome.storage.local.set({ "jsonUS": JSON.stringify(jsonPopup) }, function(){});
-        	alert('Group "'+groupLabel+'" successfully created.');
-    }
-}    
+	
+			for (let i=0;i<tabs.length;i++) {
+
+				let tabURL = tabs[i].url
+				let tabLabel = tabs[i].title
+				let tabIcon = tabs[i].favIconUrl
+				
+				console.log('tabCase: ',tabURL.toLowerCase())
+	
+				if (!tabURL.toLowerCase().match(/^(chrome-extension:\/\/|chrome:\/\/|about:|moz-extension:\/\/).*/)) {
+					console.log(tabLabel)
+	
+					let newItemObj = new Object()
+					newItemObj.label = tabLabel
+					newItemObj.description = ''					
+					newItemObj.icon = 'icon/default.svg'
+					if ((tabIcon) && (tabIcon != '') &&  (tabIcon != undefined)) { newItemObj.icon = tabIcon }
+					newItemObj.url = tabURL
+					newItemObj.id = Date.now().toString()
+	
+					//base64 icon
+					if (localStorage.getItem('upStartSettings_iconsBase64') == 'true') {
+						try {
+							let base64ImageData = await getBase64Image(newItemObj.icon, 128, 128)
+							newItemObj.icon = base64ImageData 
+						}
+						catch (error) {console.log(error)}
+					}
+		
+					//push item to json
+					newGroupObj.items.push(newItemObj.id)
+					jsonData.items.push(newItemObj)	          
+				}				
+			}
+	
+			console.log("######### DUMP #########: saveAllTabs -> jsonData", jsonData)
+			//store
+			await chrome.storage.local.set({"upStartData": JSON.stringify(jsonData)})
+			//message
+			let msg = jsonLanguage.shared.popup_sysMsgTabsSavedMsg.replace('{pageLabel}', '"'+jsonData.pages[pageID].pageLabel+'"')
+			chrome.notifications.create('', {
+				title: jsonLanguage.shared.popup_sysMsgTabsSaved,
+				message: msg.replace('{groupLabel}', '"'+groupLabel+'"'),
+				iconUrl: 'img/icon64.png',
+				type: 'basic'
+			}, function() {window.close()})		
+		})
+	}
+	
+	
+	
+	function saveLink(groupID){
+		let jsonData
+		console.log(groupID)
+	
+		chrome.tabs.query({active: true, currentWindow: true}, 
+			async function(arrayOfTabs) {
+				let activeTab = arrayOfTabs[0];
+				tabURL = activeTab.url;
+				tabLabel = activeTab.title;
+				tabIcon = activeTab.favIconUrl;
+	
+				//get root domain			
+				//let domainName = tabURL.replace('http://','').replace('https://','').replace('www.','').replace('web.','').split(/[/?#]/)[0];
+				
+				let newItemObj = new Object()
+				newItemObj.label = tabLabel
+				newItemObj.description = ''
+				newItemObj.url = tabURL
+				newItemObj.icon = 'icon/default.svg'
+				if ((tabIcon) && (tabIcon != '')) { newItemObj.icon = tabIcon }
+				newItemObj.id = Date.now().toString()
+	
+	
+				if (localStorage.getItem('upStartSettings_iconsBase64') == 'true') {
+					try {
+						let base64ImageData = await getBase64Image(newItemObj.icon, 128, 128)
+						newItemObj.icon = base64ImageData 
+					}
+					catch (error) {		
+						console.log(error)
+					}
+				}
+	
+				try {
+					let result = await chrome.storage.local.get("upStartData")
+					jsonData = JSON.parse(result.upStartData) 
+	
+					//push item to json
+					jsonData.items.push(newItemObj)				
+					
+					let group = jsonData['groups'].find(group => group.id == groupID)
+					let groupLabel = group.groupLabel
+		
+					//add to group items
+					group.items.push(newItemObj.id)
+		
+					//store
+					await chrome.storage.local.set({"upStartData": JSON.stringify(jsonData)})
+					//message
+					let msg = jsonLanguage.data.sysMessage_itemCreatedMsg.replace('{itemLabel}', '"'+newItemObj.label+'"')
+					chrome.notifications.create('', {
+						title: jsonLanguage.data.sysMessage_itemCreatedTitle,
+						message: msg.replace('{groupLabel}', '"'+groupLabel+'"'),
+						iconUrl: 'img/icon64.png',
+						type: 'basic'
+					}, function() {window.close()})
+				}
+				catch (error) {		
+					console.log(error)
+				}
+			})
+	}
+	
+	
+	
+	function restoreBkpPopup(jsonBkp) {
+		console.log(jsonBkp)
+			iziToast.show({
+				theme: iziTheme,
+				timeout: false,
+				progressBar: false,
+				closeOnEscape: true,
+				close: false,
+				backgroundColor: iziBgColor,    
+				position: 'topCenter',
+				title: jsonLanguage.shared.popup_restorePoint,
+				titleSize: '16',
+				titleLineHeight: '16',
+				titleColor: '#008200',			
+				displayMode: 2,
+				layout: 2,
+				buttons: [
+					['<button style="background-color: #DA5234;"><b>'+jsonLanguage.settings.dialog_Ok+'</b></button>', async function (instance, toast) {
+						await loadFromDataPopup(JSON.stringify(jsonBkp.data),JSON.stringify(jsonBkp.settings),JSON.stringify(jsonBkp.customImages))
+						window.close()
+						instance.hide({ }, toast)
+					}],
+					['<button style="background-color: #38A12A;">'+jsonLanguage.settings.dialog_Cancel+'</button>', function (instance, toast) {
+						instance.hide({ }, toast)
+					},true]
+				]
+			})
+	}
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	async function loadFromDataPopup(jsonFileData,jsonFileSettings,jsonFileCustomImages) {   
+		await chrome.storage.local.set({"upStartData": jsonFileData})
+		await chrome.storage.local.set({"upStartSettings": jsonFileSettings})
+		await chrome.storage.local.set({"upStartCustomImages": jsonFileCustomImages})
+	}
+
+
+
+}
+
+
+
+

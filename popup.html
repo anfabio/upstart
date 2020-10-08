@@ -1,94 +1,92 @@
+<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>upStart Popup Menu</title>
 
+  <link rel="stylesheet" href="css/popup.css">
+  <link rel="stylesheet" href="css/themes.css">
 
-<link rel="stylesheet" href="css/jquery-ui.min.css">
-<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
-<link rel="stylesheet" href="css/popup.css">
-
-<script src="js/jquery.min.js"></script>
-<script src="js/jquery-ui.min.js"></script>
-<script type="text/javascript" src="js/bootstrap.min.js"></script>
-<script type="text/javascript" src="js/fontawesome-all.min.js"></script>
-<script type="text/javascript" src="js/functions.js"></script>
+  <script src="js/iziToast.min.js"></script>
+  <script src="js/FileSaver.min.js"></script>
+  <script src="js/jszip.min.js"></script>
+  <script src="js/lz-string.min.js"></script>
+  <script src="js/chrome-extension-async.js"></script>
+  <script src="js/fontawesome-custom.min.js"></script>
+  <script src="js/functions.js"></script>
 </head>
+
 <body>
+  <div id="popup-content-wrapper">
 
-
-  <table class="optionsTableContent" align="center" style="width:100%; background-color: #F6F6F9; border: 1px solid #CECECE">
-    <tr align="center" valign="middle">        
-      <td style="width:50%;">
-        <h2 class="popupHeader">Save Page</h2>            
-      </td>
-      <td style="width:50%;">
-        <a style="text-align: right; font-size: 14px; font-weight: bold; text-decoration: none; color: #4587EE;" href=options.html target="_blank">Options</a>
-      </td>          
-    </tr>
-  </table>
-  <div class="panel-group" id="accordionPages" style="min-height: 190px;""></div>
-
-  
-  <div class="popupFooter">
-    <div>
-      <button type="button" class="btn btn-primary btn-md" data-toggle="modal" data-target="#popupNewPageModal"><i class="fas fa-plus fa-sm"></i>&nbsp;Page</button>
-      <button type="button" class="btn btn-primary btn-md" data-toggle="modal" data-target="#popupNewGroupModal"><i class="fas fa-plus fa-sm"></i>&nbsp;Group</button>
+    <div id="popup-sidebar" class="popup-sidebar">   
+      <div id="icon-save" data-container="popup-save" class="popup-sidebar-item popup-sidebar-item-active" title="Bookmark"><span class="fas fa-bookmark fa-2x"></span></div>
+      <div id="icon-save-all" data-container="popup-save-all" class="popup-sidebar-item" title="Bookmark Tabs"><span class="fas fa-window-restore fa-2x"></span></div>
+      <div id="icon-recover" data-container="popup-recover" class="popup-sidebar-item" title="Restore Points"><span class="fas fa-trash-restore fa-2x"></span></div>
+      <a id="icon-settings" href="settings.html" data-container="settings" class="popup-sidebar-item" target="_blank" title="Settings"><span class="fas fa-cog fa-2x"></span></a>
+      <div id="icon-about" data-container="popup-about" class="popup-sidebar-item" title="About"><span class="fas fa-info-circle fa-2x"></span></div>
     </div>
-  </div> 
 
 
+    <div id="popup-save" class="popup-container" style="display: block;">
+      <div class="popup-header" lang="en">Save Bookmark</div>
+      <div class="popup-header" lang="pt">Salvar Favorito</div>
+      <div id="accordion" class="accordion">
+        <div class="collapse-content" id="main-content"></div>
+      </div>  
+    </div>
 
-  <div class="modal" tabindex="-1" role="dialog" id="popupNewPageModal">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-            <div class="form-group">
-              <label class="col-form-label">Page label</label>
-              <input type="text" class="form-control" id="popupPageLabel" style="height: 28px; padding: 3px 6px;"> 
-              <div style="height: 10px;"></div>             
-              <label class="col-form-label">Page description</label>
-              <input type="text" class="form-control" id="popupPageDescription" style="height: 28px; padding: 3px 6px;">
-            </div>
-          <button type="button" class="btn btn-secondary btn-sm" style="float:right; margin-left: 3px; margin-right: 3px;"  data-dismiss="modal">Cancel</button>      
-          <button type="button" class="btn btn-primary btn-sm" style="float:right; paddinmarging-left: 3px; margin-right: 3px;" id  ="popupPageAdd">OK</button>          
+
+    <div id="popup-save-all" class="popup-container" style="margin-bottom:10px;">
+      <div class="popup-header" lang="en">Save Open Tabs</div>
+      <div class="popup-header" lang="pt">Salvar Abas Abertas</div>
+      <div style="display:grid; place-items: center; grid-template-rows: 50px 50px 50px;">
+        <select id="page-list" class="fancy-select"></select>
+        <input id="new-group" placeholder="Optional Group Label">
+        <button id="save-all-tabs" class="save-button">
+          <span lang="en">Save Tabs</span>
+          <span lang="pt">Salvar Abas</span>
+        </button>
+      </div>
+    </div>
+
+
+    <div id="popup-recover" class="popup-container"  style="min-width: 180px;">
+      <div class="popup-header" lang="en">Restore Points</div>        
+      <div class="popup-header" lang="pt">Pontos de Restauração</div> 
+      <div style="display:grid; place-items: center; grid-template-rows: auto auto; font-size: 12px">
+        <div id="auto-backup-list-label" class="bkp-items-wrapper">
+          <span style="font-weight: bold; text-align: center;" lang="en">Automatic Restore Points</span>
+          <span style="font-weight: bold; text-align: center;" lang="pt">Pontos de Restauração Automático</span>
+          <div id="auto-backup-list"></div>
+        </div>
+
+        <div id="manual-backup-list-label" class="bkp-items-wrapper">
+          <span style="font-weight: bold; text-align: center;" lang="en">Manual Restore Points</span>
+          <span style="font-weight: bold; text-align: center;" lang="pt">Pontos de Restauração Manual</span>
+          <div id="manual-backup-list"></div>
+        </div>  
+      </div>
+    </div>
+
+
+    <div id="popup-about" class="popup-container">        
+      <div id="about-wrapper">
+        <div id="about-icon"></div>
+        <div style="font-size:20px; margin: 5px; height: 20px; padding-top: 5px; font-weight: bold;">upStart</div>
+        <div id="about-info" style="padding-top: 15px; font-size: 12px">            
+          <p lang="en"><b>Version:</b> 2.0</p>
+          <p lang="pt"><b>Versão:</b> 2.0</p>
+          <p lang="en"><b>Author:</b> Fábio Rodrigues</p>
+          <p lang="pt"><b>Autor:</b> Fábio Rodrigues</p>
+          <p><b>E-mail:</b> anfabio.dev@gmail.com</p>
         </div>
       </div>
     </div>
-  </div>
-  
-  <div class="modal" tabindex="-1" role="dialog" id="popupNewGroupModal">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-            <div class="form-group">
-              <label for="recipient-name" class="col-form-label">Group label</label>
-              <input type="text" class="form-control" id="popupGroupLabel" style="height: 28px; padding: 3px 6px;">        
-              <div style="height: 10px;"></div>
-              <label class="col-form-label">Group description</label>
-              <input type="text" class="form-control" id="popupGroupDescription" style="height: 28px; padding: 3px 6px;">
-              <div style="height: 10px;"></div>
-              <label class="col-form-label">Target page</label>
-              <select class="form-control" id="popupPageTarget" style="height: 28px; padding: 3px 6px;">
-              </select>          
-            </div>
-          <button type="button" class="btn btn-secondary btn-sm" style="float:right; margin-left: 3px; margin-right: 3px;"  data-dismiss="modal">Cancel</button>      
-          <button type="button" class="btn btn-primary btn-sm" style="float:right; paddinmarging-left: 3px; margin-right: 3px;" id  ="popupGroupAdd">OK</button>
-          
-        </div>
-      </div>
-    </div>
+
   </div>
 
-
-
-
-
-<script src="js/popup.js"></script>
-
-
+  <script src="js/popup.js"></script>
 </body>
 
 </html>
-
-

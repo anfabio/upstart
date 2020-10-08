@@ -1,207 +1,278 @@
-var jsonBackground;
+//run once upon browser start
+chrome.runtime.onStartup.addListener( async function() {
+  console.log('browser start');
 
-chrome.storage.local.get("jsonUS", function(JsonData) {
-  try {
-      JSON.parse(JsonData.jsonUS);
-  } catch (e) {
-      //alert ('No data found on Chrome Storage!');
-  } 
+  //sync at browser start
+  if (localStorage.getItem('upStart_dbxSync') == 'true') {    
+    let dbxServerModified = new Date(localStorage.getItem('upStart_dbxServerModified'))
+    console.log("LOCALLastModification", dbxServerModified)
+    let ACCESS_TOKEN = localStorage.getItem("upStart_dbxToken")  
+    let dbx = new Dropbox.Dropbox({ fetch:fetch, accessToken: ACCESS_TOKEN })
 
-  jsonBackground = JSON.parse(JsonData.jsonUS);
+    try {    
+      await dbx.filesDownload({path: '/upStartDBX.txt'})
+      .then(async function (response) {	
+        localStorage.setItem("upStart_dbxLastSyncCheck", Date.now().toString())
+        let remoteServerModified = new Date(response.server_modified)  
 
-  if (jsonBackground.settings.showBrowserContextMenu == 'true') {
-    chrome.contextMenus.removeAll(function(){
+        console.log("remoteServerModified", remoteServerModified)
 
-      //PAGE MENUS
-      chrome.contextMenus.create({
-        "id": "contextMenuPageRoot",
-        "title": "upStart - Add bookmark to",
-        "contexts": ["page"]
-      });
+        if (remoteServerModified > dbxServerModified) { 				
+          if (await downloadDataFromDropbox(response)) {
+            //ignore local changes to prevent conflicts
+            localStorage.setItem('upStart_newChanges', false)
+          }	
+        } else {
+          console.log("Dropbox already synchronized")        
+        }
+      })
 
-      //LIK MENUS
-      chrome.contextMenus.create({
-        "id": "contextMenuLinkRoot",
-        "title": "upStart - Add bookmark to",
-        "contexts": ["link"]
-      });
+    }
+    catch(error) {    
+    }
+  }
 
+  //context menu at browser start
+  chrome.contextMenus.removeAll(function () {
+    if (localStorage.getItem('upStart_firstTime') !== null) { //firstTime
+      if (localStorage.getItem('upStartSettings_showContextMenu') == 'true') { createContextMenu() }    
+    }
+  })
 
-      //POPULATE MENUS WITH CURRENT PAGES AND GROUPS
-      for (p = 0; p < jsonBackground['pages'].length; p++) { 
-        var pageLabel = jsonBackground.pages[p].pageLabel;
-
-        //PAGES TO PAGEMENU
-        chrome.contextMenus.create({
-          "id": "contextMenuPage"+p,
-          "title": pageLabel,
-          "parentId": "contextMenuPageRoot"   
-        }); 
-
-        //PAGES TO LINKMENU
-        chrome.contextMenus.create({
-          "id": "contextMenuLink"+p,
-          "title": pageLabel,
-          "parentId": "contextMenuLinkRoot" ,
-          "contexts": ["link"]   
-        }); 
+})
 
 
-        for (g = 0; g < jsonBackground.pages[p]['groups'].length; g++) {      
-          var groupLabel = jsonBackground.pages[p].groups[g].groupLabel;
-          var gid = p.toString() +'.'+ g.toString();
+chrome.storage.onChanged.addListener(async function(changes, namespace) {
+  let syncData = false
+  
+  if (localStorage.getItem('upStart_firstTime') !== null) { //firstTime
+    console.log("changes", changes)
+    localStorage.setItem('upStart_validLastMsg', 'true')
+    
+    for (key in changes) {
+      //upStartDOM
+      if (key == 'upStartDOM') {
 
-          //GROUPS TO PAGEMENU
-          chrome.contextMenus.create({
-            "id": "Page_"+gid,
-            "title": groupLabel,
-            "parentId": "contextMenuPage"+p
-          });   
+      //upStartData
+      } else if (key == 'upStartData') {                
+        syncData = true
+        let jsonData = JSON.parse(changes.upStartData.newValue)
+        let bodyContent = await drawDOM(jsonData)
+        await chrome.storage.local.set({"upStartDOM": bodyContent})
+        if (localStorage.getItem('upStartSettings_showContextMenu') == 'true') {
+          await chrome.contextMenus.removeAll()
+          await createContextMenu()
+        }          
 
-          //GROUPS TO LINKMENU
-          chrome.contextMenus.create({
-             "id": "Link_"+gid,
-             "title": groupLabel,
-             "parentId": "contextMenuLink"+p,
-             "contexts": ["link"] 
-          });     
+      //upStartSettings
+      } else if (key == 'upStartCustomImages') {
+        syncData = true
+      } else if (key == 'upStartSettings') {
+        syncData = true
+        let jsonSettings = JSON.parse(changes.upStartSettings.newValue)
+        let oldJsonSettings = JSON.parse(changes.upStartSettings.oldValue)          
+        setStorageVariables(jsonSettings)
+        
+        let result = await chrome.storage.local.get("upStartData")
+        let jsonData = JSON.parse(result.upStartData)
+        let dataModified = false
 
-        }                        
+        //language
+  	    const settingsLanguage = chrome.runtime.getURL('locale/upStart_'+jsonSettings.language+'.json')
+  	    await fetch(settingsLanguage)
+		    .then((response) => response.json())			
+		    .then(async(json) => {await chrome.storage.local.set({"upStartLanguage": JSON.stringify(json)})})    
 
+        //groups sort changed
+        if ((jsonSettings.groupsSort != oldJsonSettings.groupsSort) && (jsonSettings.groupsSort != 'manual')) {
+          console.log("sort changed")
+          dataModified = true
+          let sort = jsonSettings.groupsSort
+
+          for (g = 0; g < jsonData.groups.length; g++) {            
+            group = jsonData.groups[g]
+            if (group.groupSort == 'auto') {
+              let newOrder = []
+              switch(sort) {
+                case 'az': case 'za':
+                  let items = []      
+                  //array of arrays with key(label) value(id)
+                  for (i = 0; i < group.items.length; i++) {            
+                    items[i] = [jsonData['items'].find(item => item.id == group.items[i]).label.toLowerCase(), group.items[i]]
+                  }        
+                  //sort array by key(label)
+                  sort == 'az' ? items.sort() : items.sort().reverse()        
+                  //get new id order
+                  for (i = 0; i < items.length; i++) {            
+                    newOrder.push(items[i][1])
+                  }        
+                  group.items = newOrder   
+                  break        
+                case 'newest': case 'oldest':                  
+                  //sort array by key(label)
+                  sort == 'newest' ? group.items.sort().reverse() : group.items.sort() 
+                  break
+              }
+            }
+          }
+        }
+
+        //columns changed
+        if (jsonSettings.pageColumns != oldJsonSettings.pageColumns) {
+          console.log("columns changed")
+          dataModified = true
+
+          //distribute group into columns
+          for (p = 0; p<jsonData.pages.length; p++) {  
+            if (jsonData.pages[p].pageColumns == 'auto') {
+              jsonData.pages[p].columns = await distributeGroups(jsonData.pages[p])
+              jsonData.pages[p].pageAutoColumns = jsonData.pages[p].columns.length
+            }
+          }
+        }
+
+        //context menus
+        if (jsonSettings.showContextMenu != oldJsonSettings.showContextMenu) {
+          await chrome.contextMenus.removeAll()
+          if (jsonSettings.showContextMenu) { await createContextMenu() }
+        }   
+    
+        //store
+        if (dataModified) { await chrome.storage.local.set({"upStartData": JSON.stringify(jsonData)}) }
+        else {
+          let bodyContent = await drawDOM(jsonData)
+          await chrome.storage.local.set({"upStartDOM": bodyContent})
+         }
       }
 
-      chrome.contextMenus.onClicked.addListener( function (clickData) {
-        if ( (clickData.menuItemId.startsWith('contextMenuPage')) || (clickData.menuItemId.startsWith('contextMenuLink')) ) {
-        //if (clickData.menuItemId.match(/^(contextMenuPage|contextMenuLink).*/) ) {
-
-        } else {
-          saveItem(clickData);
-        }
-      });
+      if (localStorage.getItem('upStart_dbxSync') == 'true') { localStorage.setItem('upStart_newChanges', 'true') }
+      
+    }
 
 
-    });
-
+    if ((localStorage.getItem('upStart_dbxSync') == 'true') && (syncData == true)) {      
+      
+      localStorage.setItem('upStart_newChanges', 'true')      
+      if (await uploadDataToDropbox()) {
+        localStorage.setItem('upStart_newChanges', 'false')   
+        syncData == false     
+        console.log("Dropbox data synchronized")
+      } else {
+        console.log("Data could not be synchronized.") 
+      }     
+      
+    }
   }
 })
 
 
 
-function saveCurrentURL(pageID, groupID){
-  chrome.tabs.query({active: true, currentWindow: true}, 
-      function(arrayOfTabs) {
-        var activeTab = arrayOfTabs[0];
-        tabURL = activeTab.url;
-        tabTitle = activeTab.title;
-        tabIcon = activeTab.favIconUrl;
-
-        //GET ROOT DOMAIN
-        var domainName = tabURL.replace('http://','').replace('https://','').replace('www.','').replace('web.','').split(/[/?#]/)[0];
-
-        var newItemObj = new Object();
-        newItemObj.label = tabTitle;
-        newItemObj.url = tabURL;
-        newItemObj.alt = '';
-        newItemObj.date = Date.now().toString();
-        newItemObj.icon = ''+tabIcon;             
-
-        //GET MATCH ICON
-        for (i = 0; i < jsonPopupImg['icons'].length; i++) {
-          var allString = jsonPopupImg.icons[i].label;
-
-          if (allString.includes(domainName)) {
-            newItemObj.icon = jsonPopupImg.icons[i].value;
-            break;
+async function createContextMenu() {
+  //context menus
+  console.log('context start')
+  let result = await chrome.storage.local.get("upStartData")
+  let jsonData = JSON.parse(result.upStartData)  
+  	try {
+      chrome.contextMenus.removeAll(function () {
+  
+        chrome.contextMenus.create({
+          "id": "upStartRootMenu",
+          "title": "upStart",
+          "contexts": ["page"]
+        }) 
+        
+        //populate menu
+        for (p = 0; p < jsonData['pages'].length; p++) {             
+          let groupCount = 0
+          for (let i=0; i<jsonData.pages[p].columns.length; i++) {  groupCount += jsonData.pages[p].columns[i].length }
+          
+          if (groupCount > 0) {
+            let pageLabel = jsonData.pages[p].pageLabel    
+            chrome.contextMenus.create({
+              "id": 'page'+p,
+              "title": pageLabel,
+              "parentId": "upStartRootMenu",
+            }) 
+    
+            //groups
+            for (c=0; c<jsonData.pages[p].columns.length; c++) {
+              let columnGroups = jsonData.pages[p].columns[c]
+    
+              for (g = 0; g < columnGroups.length; g++) {   
+                group = jsonData['groups'].find(group => group.id == columnGroups[g])  
+                chrome.contextMenus.create({
+                  "id": columnGroups[g],
+                  "title": group.groupLabel,
+                  "parentId": 'page'+p
+                })
+              }
+            }
           }
         }
-
-    jsonPopup.pages[pageID].groups[groupID]['itens'].push(newItemObj);
-        chrome.storage.local.set({ "jsonUS": JSON.stringify(jsonPopup) }, function(){  
-          alert('Page "'+tabTitle+'" added to "'+jsonPopup.pages[pageID].groups[groupID].groupLabel+'"');
-          window.close();             
-        }); 
-     });
+        chrome.contextMenus.onClicked.addListener(addToGroup)
+      })
+    }
+    catch (error) {
+      console.log(error)
+    }    
 }
 
-
-function saveItem(clickData) {
-
-var jsonBackground;
-var jsonBackgroundImg;
-
-          chrome.storage.local.get("jsonIMG", function(results){
-              try {
-                  JSON.parse(results.jsonIMG);
-              } catch (e) {
-                  return false;
-              }
-              jsonBackgroundImg = JSON.parse(results.jsonIMG); 
-          });
-
-          chrome.storage.local.get("jsonUS", function(JsonData) {
-            try {
-                JSON.parse(JsonData.jsonUS);
-            } catch (e) {
-                //alert ('No data found on Chrome Storage!');
-            } 
-            jsonBackground = JSON.parse(JsonData.jsonUS);
-
-            menuID = clickData.menuItemId;
-            pageURL = clickData.pageUrl;
-
-            var contextID = menuID.split('_')[0];
-            var GID = menuID.split('_')[1];
-            var dstPage = GID.split('.')[0];
-            var dstGroup = GID.split('.')[1];
+//register an 10 min alarm
+chrome.alarms.create('', { periodInMinutes: 10 })
 
 
-            chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
-              var activeTab = arrayOfTabs[0];
-              var tabURL;
-              var tabTitle;
-              var tabAlt;
-              var tabIcon;
+//background cron tasks
+chrome.alarms.onAlarm.addListener(async function() {
+  let now = Date.now().toString()
+  console.log("now: ", now)
 
-              //LINKMENU EVENT
-              if (contextID == 'Page') {       
-                tabURL = activeTab.url;
-                tabTitle = activeTab.title;
-                tabIcon = activeTab.favIconUrl; 
-              } else { // Just a link, no title
-                tabURL = clickData.linkUrl;
+  //backup
+  let autoBkpTime = localStorage.getItem('upStartSettings_autoBkpTime')
+  console.log("autoBkpTime: ", autoBkpTime)
 
-              if (clickData.linkUrl.split('/')[2] == '') { tabTitle = clickData.linkUrl.split('/')[3]; } else { tabTitle = clickData.linkUrl.split('/')[2] }
-              }
 
-              //GET ROOT DOMAIN
-              var domainName = tabURL.replace('http://','').replace('https://','').replace('www.','').replace('web.','').split(/[/?#]/)[0];
+  if (autoBkpTime != 'disabled') {   
+    let lastBkp = localStorage.getItem('upStart_lastAutoBackup')
+    let timeDiff = (now-lastBkp)/3600000*60*60 //seconds    
+    console.log("timeDiff: ", timeDiff)
+    
+    if (timeDiff > localStorage.getItem('upStartSettings_autoBkpTime')) {
+      await createBackup('auto') 
+    }
+  }
+  
+  console.log("sync: ", localStorage.getItem('upStart_dbxSync'))
 
-              var newItemObj = new Object();
-              newItemObj.label = tabTitle;
-              newItemObj.url = tabURL;
-              newItemObj.alt = '';
-              newItemObj.date = Date.now().toString();
-              newItemObj.icon = ''+tabIcon;             
+  //dropbox sync
+  if (localStorage.getItem('upStart_dbxSync') == 'true') {  
+    dropboxSync('bg')
+  }
 
-              //GET MATCH ICON
-              for (i = 0; i < jsonBackgroundImg['icons'].length; i++) {
-                var allString = jsonBackgroundImg.icons[i].label;
+})
 
-                if (allString.includes(domainName)) {
-                  newItemObj.icon = jsonBackgroundImg.icons[i].value;
-                  break;
-                }
-              }
-              jsonBackground.pages[dstPage].groups[dstGroup]['itens'].push(newItemObj);
-              
-              chrome.storage.local.set({"jsonUS": JSON.stringify(jsonBackground)}, function() {
-                if (contextID == 'Page') { 
-                  //alert("Page added to "+ jsonBackground.pages[dstPage].pageLabel +' - '+jsonBackground.pages[dstPage].groups[dstGroup].groupLabel)
-                } else {
-                  //alert("Link added to "+ jsonBackground.pages[dstPage].pageLabel +' - '+jsonBackground.pages[dstPage].groups[dstGroup].groupLabel)
-                }          
-              });              
-            });
-          });
 
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

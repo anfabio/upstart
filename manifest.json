@@ -2,27 +2,31 @@
   "manifest_version": 2,
   "name": "upStart",
   "short_name": "upStart",
-  "description": "Iconized Start Page",
-  "version": "1.6.1",
+  "description": "Bookmark Organizer",
+  "version": "2",
   "browser_action": {
-      "default_title": "upStart",
-      "default_icon": "img/icon128.png",
-      "default_popup": "popup.html"
-   },
+    "default_title": "upStart",
+    "default_icon": "img/icon64.png",
+    "default_popup": "popup.html"
+ },  
+ "icons": {
+  "16": "img/icon16.png",
+  "48": "img/icon48.png",
+  "128": "img/icon128.png"
+ },
   "content_security_policy": "script-src 'self'; object-src 'self'",
-  "homepage_url": "https://github.com/anfabio/upstart",  
-  "icons": {
-    "16": "img/icon16.png",
-    "64": "img/icon64.png",
-    "128": "img/icon128.png"
-   },
-  "background": {
-    "scripts": ["js/background.js"]
-  },
-  "options_page": "options.html",
-  "permissions": [ "file:///*/", "tabs", "management", "storage", "chrome://favicon/", "contextMenus", "<all_urls>" ],
+  "web_accessible_resources": ["js/*.json"],
+  "homepage_url": "https://github.com/anfabio/upstart",
+  "permissions": [ "file:///*/", "tabs", "management", "alarms", "storage", "unlimitedStorage", "contextMenus", "<all_urls>", "notifications", "bookmarks" ],
   "chrome_url_overrides": {
     "newtab": "main.html"
     },
+  "background": {
+    "scripts": [ "js/chrome-extension-async.js", "js/lz-string.min.js", "js/dropbox.min.js", "js/functions.js", "js/background.js"]
+  },
+  "options_ui": {
+    "page": "settings.html",
+    "open_in_tab": true
+  },
   "web_accessible_resources": [ "newtab.html" ]
 }
