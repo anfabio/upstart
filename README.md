@@ -5,33 +5,42 @@ Keep your bookmarks organized into groups and pages.
 Look & Fell highly customizable.
 
 • Easily add bookmarks from any page or save all open tabs
+
 • Intuitive and easy to customize
+
 • Features like check for broken links and import bookmarks from the browser
+
 • Synchronization with other devices through Dropbox
+
 • Easily import and export your data
+
 • Use your own icons and images
+
 • Create restore points to revert changes
+
 • Search bookmarks easily
+
 • Themes
+
 • Made with vanilla JS for better performance
 
 
 ![Main Page](screenshots/1.png?raw=true "Main Page")
 
-![Icon Picker](screenshots/2.jpg?raw=true "Icon Picker")
+![Icon Picker](screenshots/2.png?raw=true "Icon Picker")
 
 ![Popup Menu and Layout Changes](screenshots/3.png?raw=true "Popup Menu and Layout Changes")
 
 ![Example Page](screenshots/4.png?raw=true "Example Page")
 
 ![Settings](screenshots/5.png?raw=true "Settings")
+
 ![Bookmarks Importer](screenshots/6.png?raw=true "Bookmarks Importer")
 
 
 Chrome: https://chrome.google.com/webstore/detail/upstart/ddalpldcidoajbgohbdlelfmfmjiccga
 
 Firefox: https://addons.mozilla.org/en-US/firefox/addon/upstart/
-
 
 
 
