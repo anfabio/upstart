@@ -1172,7 +1172,9 @@ div[class^='curve_'] {
   background-color: unset;
 }
 
-
+.iziToast>.iziToast-body .iziToast-icon {
+  display: block;
+}
 
 
 #inputFile {

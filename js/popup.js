@@ -371,6 +371,13 @@ async function drawPopupDOM () {
 		
 					//add to group items
 					group.items.push(newItemObj.id)
+
+					//sort
+          if ((group.groupSort != 'manual') && (group.groupSort != 'auto')){
+            group.items = sortGroup(group.items, group.groupSort, jsonData)
+          } else if ((group.groupSort == 'auto') && (localStorage.getItem('upStartSettings_groupsSort') != 'manual')) {
+            group.items = sortGroup(group.items, localStorage.getItem('upStartSettings_groupsSort'), jsonData)
+          }										
 		
 					//store
 					await chrome.storage.local.set({"upStartData": JSON.stringify(jsonData)})

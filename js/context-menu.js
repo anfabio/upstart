@@ -378,7 +378,7 @@ async function pageDelete(pageID) {
       swal.fire({
         title: jsonLanguage.data.dialog_pageDelete,
         html: jsonLanguage.data.dialog_pageDeleteMsg+'<span class="text-spot"> '+pageLabel+'</span>?',
-        icon: 'question',
+        icon: 'warning',
         showClass: {
         popup: 'animated fadeIn faster',
         icon: 'animated heartBeat delay-1s'
@@ -822,7 +822,7 @@ async function groupMove(groupID, columnID, pageID) {
 
     let inputPages = {}
     for (p = 0; p < jsonData['pages'].length; p++) { 
-      inputPages[p] = jsonData.pages[p].pageLabel
+      if (p != pageID) {inputPages[p] = jsonData.pages[p].pageLabel}
     }
 
     let groupLabel = jsonData['groups'].find(group => group.id == groupID).groupLabel
@@ -896,8 +896,10 @@ async function groupMerge(groupID, columnID, pageID) {
       for (c=0; c<jsonData.pages[p].columns.length; c++) {
         let columnGroups = jsonData.pages[p].columns[c]
         for (g = 0; g<columnGroups.length; g++) {   
-          group = jsonData['groups'].find(group => group.id == columnGroups[g]) 
-          if (group.id != groupID) {inputGroups[columnGroups[g]] = pageLabel+' :: '+group.groupLabel}
+          let group = jsonData['groups'].find(group => group.id == columnGroups[g]) 
+          if (group) {
+            if (group.id != groupID) {inputGroups[p+'.'+c+'.'+columnGroups[g]] = pageLabel+' :: '+group.groupLabel}
+          }
         }
       }      
     }
@@ -922,49 +924,53 @@ async function groupMerge(groupID, columnID, pageID) {
     showCancelButton: true,
     inputValidator: async (target) => {
       if (!target) { return jsonLanguage.data.dialog_selectOptionError}
-        else {   
-          let targetGroup = jsonData['groups'].find(group => group.id == target)
-          let targetGroupLabel = targetGroup.groupLabel
+        else {
+          let targetValues = target.split('.')
+          let targetPage = targetValues[0]
+          let targetColumn = targetValues[1]
+          let targetGroupID = targetValues[2]
 
-          //push item from source to target group
-          for (i = 0; i<sourceGroup.items.length; i++) {   
-            targetGroup['items'].push(sourceGroup.items[i])
-          }
+          let targetGroup = jsonData['groups'].find(group => group.id == targetGroupID)
+          let targetGroupLabel = targetGroup.groupLabel          
 
-          //target group label
-          targetGroup.groupLabel = sourceGroupLabel+' + '+targetGroup.groupLabel
+          //push items from target
+          for (i = 0; i<targetGroup.items.length; i++) {   
+            sourceGroup.items.push(targetGroup.items[i])
+          }          
 
-          //remove group from source page
-          jsonData.pages[pageID].columns[columnID].splice(jsonData.pages[pageID].columns[columnID].findIndex(group => group == sourceGroup),1)    
-          //remove source group
-          jsonData.groups.splice(jsonData.groups.findIndex(group => group.id == sourceGroup.id),1)                
-          //distribute group into columns
-          if (jsonData.pages[pageID].pageColumns == "auto") {
-            jsonData.pages[pageID].columns = await distributeGroups(jsonData.pages[pageID])
-            jsonData.pages[pageID].pageAutoColumns = jsonData.pages[pageID].columns.length
+          //label
+          sourceGroup.groupLabel += ' + '+targetGroupLabel
+
+          //remove group from target page
+          jsonData.pages[targetPage].columns[targetColumn].splice(jsonData.pages[targetPage].columns[targetColumn].indexOf(targetGroupID),1)  
+
+          //remove group
+          jsonData.groups.splice(jsonData.groups.findIndex(group => group.id == targetGroupID),1)
+          
+          //distribute columns
+          if (jsonData.pages[targetPage].pageColumns == "auto") {
+            jsonData.pages[targetPage].columns = await distributeGroups(jsonData.pages[targetPage])
+            jsonData.pages[targetPage].pageAutoColumns = jsonData.pages[targetPage].columns.length
           }
 
           //sort
-          if ((targetGroup.groupSort != 'manual') && (targetGroup.groupSort != 'auto')){
-            targetGroup.items = sortGroup(targetGroup.items, targetGroup.groupSort, jsonData)
-          } else if ((targetGroup.groupSort == 'auto') && (localStorage.getItem('upStartSettings_groupsSort') != 'manual')) {
-            targetGroup.items = sortGroup(targetGroup.items, localStorage.getItem('upStartSettings_groupsSort'), jsonData)
+          if ((sourceGroup.groupSort != 'manual') && (sourceGroup.groupSort != 'auto')){
+            sourceGroup.items = sortGroup(sourceGroup.items, sourceGroup.groupSort, jsonData)
+          } else if ((sourceGroup.groupSort == 'auto') && (localStorage.getItem('upStartSettings_groupsSort') != 'manual')) {
+            sourceGroup.items = sortGroup(sourceGroup.items, localStorage.getItem('upStartSettings_groupsSort'), jsonData)
           }
 
-          //store
-          await chrome.storage.local.set({"upStartData": JSON.stringify(jsonData)})
+          await chrome.storage.local.set({"upStartData": JSON.stringify(jsonData)})          
 
-          //message
           let msg = jsonLanguage.data.message_groupMerged.replace('{targetGroupLabel}', '<span class="highlight-text">'+targetGroupLabel+'</span>')
           sessionStorage.setItem('upStart_lastSuccessMsg', msg.replace('{sourceGroupLabel}', '<span class="highlight-text">'+sourceGroupLabel+'</span>'))
+          
         }
       }
     })
   }
-  catch(error) {
-    console.log(error)
-  }   
-}  
+  catch(e) { }   
+}
 
 
 
@@ -1095,7 +1101,7 @@ async function groupDelete(groupID, columnID, pageID) {
     swal.fire({
       title: jsonLanguage.data.dialog_groupDelete,
       html: jsonLanguage.data.dialog_groupDeleteMsg.replace('{groupLabel}', '<span class="highlight-text">'+groupLabel+'</span>'),
-      icon: 'question',
+      icon: 'warning',
       showClass: {
         popup: 'animated fadeIn faster',
         icon: 'animated heartBeat delay-1s'
@@ -1785,7 +1791,7 @@ async function itemDelete(itemID, groupID) {
     swal.fire({
       title: jsonLanguage.data.dialog_itemDelete,
       html: jsonLanguage.data.dialog_itemDeleteMsg.replace('{itemLabel}', '<span class="highlight-text">'+itemLabel+'</span>'),
-      icon: 'question',
+      icon: 'warning',
       showClass: {
         popup: 'animated fadeIn faster',
         icon: 'animated heartBeat delay-1s'

@@ -23,6 +23,7 @@ body {
   min-height: calc(100vh - 34px);
   background-size: cover;
   grid-gap: 5px;
+  background-color: unset;
 }
 
 .group {
@@ -1044,7 +1045,9 @@ div.swal-content-label {
 }
 
 
-
+.iziToast>.iziToast-body .iziToast-icon {
+  display: block;
+}
 
 
 /* spinner */

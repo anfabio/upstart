@@ -1,0 +1,257 @@
+
+Newer components
+	- fontawesome-free-5.13.1
+	- sweetalert2 19.15.2
+	
+
+
+Roadmap
+1. finish popup
+2. context menu
+3. settings
+	modo lista
+3.1 Columns reflow
+4. icons and colors
+6. auto columns
+5. search
+ok manage uploaded images
+
+ok default group colors
+OK verify broken links (not icons)
+OK - Icon upload (base64)
+ok merge groups (menu option)
+ok save all tabs in a group (popup)
+ok Compressed auto history (zip)
+Import/Export bookmarks from/to html
+sync between devices
+ok button in group (open all and + and 3 dots)
+ok copy link  to clipboard
+
+
+8. Locale
+
+
+
+Pre-Beta
+ok Pop up (save, save all, last resource, about)
+ok fix search (empty and width) and search heigh
+ok ok body content vs body height
+ok space vert and hor between groups and columns
+ok menu out of the page (width)
+ok messages not showing after reload
+ok reload after layout changes? (current page)
+ok filesystem warning
+ok import from dropbox file
+ok load settings
+ok explain sync (WILL overwrite if the is a copy into cloud)
+ok backgrounds
+ok top nav https://isthereanydeal.com/
+ok Broadcast function
+ok broken links gauge 
+ok import bookmarks count and show gauge 
+ok fix search
+ok boxshadows
+ok not drag menu
+ok themes
+
+
+
+- melhor fetch icon
+
+ok adjust sortable delay
+ok hide message from sync spinner
+ok default page icon on topnav
+ok hover dbx buttons (pointer)
+
+
+
+
+
+ok 3 dot menu 
+ok hint open all tabs
+ok 3 dot icons  color (light)
+ok create page -> go to
+ok save buttons
+ok izitoast white icons
+ok save (green) (right)
+ok red if image is selected
+ok ignore bad data
+
+
+
+
+
+
+
+Firefox version
+-> remove extension page link
+-> basse64 function -> jpeg 0.8
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+- remove unnecessary files
+- remove console.log
+- firefox -> remove local files
+
+
+
+- Bugs and tests
+
+
+
+
+Produção
+- remove spaces
+- remove logs
+- remove comments
+
+
+
+
+Future
+- better auto columns algorithm
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+7. polish
+	ok menu header
+	ok swatches
+5. themes
+		https://codepen.io/fontawesome/pen/jzNBBK
+	- rainbow
+	- light
+	- dark
+	- darker (white background)
+
+
+
+ok 0. autocomoplete on search input
+disable double click 'select text'
+
+	0. ','+coisa
+	ok. remove all jquery
+	ok. forEach
+	ok. load from DOM  
+  ok remove ;
+	ok clicar fora de search fecha
+
+	
+
+
+
+9. tests and bugs
+10. Firefox version
+Pop up as last resource
+
+
+
+major functions:
+
+
+
+minor:
+fechar grupos ao mover
+Wildcard values in initial config for future use
+new icon new logo
+Better icons
+Smaller
+Less empty space
+Widgets
+
+
+
+
+
+
+
+
+
+icons
+https://www.flaticon.com/free-icon/check_1828644
+
+image load
+https://github.com/adispartadev/spartan-multi-image-picker
+https://stackoverflow.com/questions/27387737/javascript-show-selected-image
+
+
+loading animation
+	https://codepen.io/Manoz/pen/pydxK
+
+acordion
+	https://codepen.io/abergin/pen/ihlDf
+	https://codepen.io/villa7/pen/grPddp
+	https://codepen.io/topic/accordion/picks?cursor=ZD0wJm89MSZwPTEmdj0zMzQ0MjQ5
+
+group Color
+https://codepen.io/quinlo/pen/ZMzOoE
+https://codepen.io/templarian/pen/jPyvpv
+https://codepen.io/cmegown/pen/VaMzQq
+https://simonwep.github.io/pickr/
+https://www.cssscript.com/demo/chrome-devtools-color-picker/
+https://seballot.github.io/spectrum/
+
+
+options page
+	https://codepen.io/v_Bauer/pen/WNroMOq
+	https://codepen.io/kathykato/details/rZRaNe
+	https://codepen.io/agoodwin/pen/JBvBPr
+	https://codepen.io/hailjake/pen/pbdvPa
+	https://codepen.io/oliviale/pen/xxboXzo
+	https://codepen.io/topic/toggle/picks
+
+	https://codepen.io/simeydotme/pen/mJLPPq
+
+	icon zoom
+		https://codepen.io/TurkAysenur/pen/JjGKKrP
+
+search
+https://mdbootstrap.com/docs/jquery/components/dropdowns/
+
+
+
+
+https://developer.mozilla.org/en-US/docs/Web/API/Broadcast_Channel_API
+
+But if you've been on the web since the 90s, and have an extensive bookmark collection, it's less helpful.
+
+
+COMPONENTS TEST
+
+	- https://alertifyjs.com/
+	- https://izitoast.marcelodolza.com/
+	- http://bootboxjs.com/examples.html
+

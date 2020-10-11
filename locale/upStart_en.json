@@ -65,7 +65,7 @@
   "dialog_restoreBkpTitle": "Restore this Backup?",
   "dialog_deleteBkpTitle": "Delete this Backup?",
   "dialog_bkpCreateTitle": "Create Restore Point?",
-  "dialog_bkpCreateMsg": "It will overwrite the oldest restore point if the points limit is reached",
+  "dialog_bkpCreateMsg": "The oldest restore point will be replaced if the limit of points is reached",
   "dialog_dbxDisconnectTitle": "Disconnect from Dropbox?",
   "dialog_dbxDisconnectMsg": "This will just stop the synchronization of this device. The data at Dropbox will NOT be deleted",  
   "message_description": "Description",

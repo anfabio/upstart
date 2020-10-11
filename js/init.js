@@ -4,6 +4,8 @@ var jsonDataTmp = false
 var saveMsg = false
 var iziTheme = 'light'
 var iziBgColor = '#fff'
+var SortableTopNav
+var columnChangedPages = []
 let bookmarksDrag
 let changePageDrag
 let jsonLanguage
@@ -134,7 +136,7 @@ async function initialize(currentPage) {
 
     //Sortable NavLinks
     let topNavPages = document.getElementById('top-nav-list')
-    new Sortable(topNavPages, { 
+    SortableTopNav = new Sortable(topNavPages, { 
       group: 'navPages',
       revertOnSpill: true,
       //delay: 100,
@@ -252,11 +254,24 @@ async function initialize(currentPage) {
       if (e.target.matches('.switch-icon')) {toggleDark()}
       if (e.target.matches('#search')) {search.style.display = 'none'}
 
+
       if (e.target.closest('.group-open-button')) {
-        groupOpen(e.target.closest('.group').dataset.group)
+        if (saveMsg == true) {
+          e.preventDefault()
+          e.stopPropagation()
+          infoMessage(jsonLanguage.data.message_layoutInfo)
+        } else {        
+          groupOpen(e.target.closest('.group').dataset.group)
+        }
       }
       if (e.target.closest('.group-add-button')) {
-        itemAdd(e.target.closest('.group').dataset.group)
+        if (saveMsg == true) {
+          e.preventDefault()
+          e.stopPropagation()
+          infoMessage(jsonLanguage.data.message_layoutInfo)
+        } else {
+          itemAdd(e.target.closest('.group').dataset.group)
+        }
       }
       if (e.target.closest('.group-dots-button')) {
         if (saveMsg == true) {
@@ -635,10 +650,6 @@ function setOptions() {
   //page background
   //function DrawDOM
 
-
-  //background color  
-  let pageBgColor = localStorage.getItem("upStartSettings_pageBgColor")
-  if (pageBgColor != "theme") {document.body.setAttribute("style", "background-color: "+pageBgColor+";")}
 
   //top navigation foreground color  
   let topNavFgColor = localStorage.getItem("upStartSettings_topNavFgColor")

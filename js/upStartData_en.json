@@ -58,12 +58,12 @@
     },
     {
       "pageLabel":"Shopping",
-      "pageDescription":"List View",
+      "pageDescription":"Page with a custom background color",
       "pageIcon":"theme",
       "pageColumns":"auto",
       "pageAutoColumns":"1",
       "pageBgImage":"theme",
-      "pageBgColor":"theme",
+      "pageBgColor":"rgba(40, 82, 124, 1)",
       "columns":[
         [
           "1597103476636"
@@ -304,7 +304,7 @@
       "groupDescription":"This is a group with 30% opacity",
       "groupIcon":"icon/bookmark.svg",
       "groupBgColor":"rgba(253, 1, 96, 0.3)",
-      "groupFgColor":"000000",
+      "groupFgColor":"rgba(255, 255, 255, 1)",
       "groupSort":"auto",
       "groupView":"auto",
       "hideBookmarkLabels":"auto",

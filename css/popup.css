@@ -14,9 +14,9 @@ body {
 
 #popup-content-wrapper {
   display: grid;
-  grid-template-columns: 41px auto;
+  grid-template-rows: 40px auto;
   background-color: var(--body-background-color);
-  min-width: 210px; 
+  min-width: 250px; 
   min-height: 160px;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.19);
@@ -39,10 +39,8 @@ body {
 
 .popup-sidebar {
   display: grid;
-  width: 40px;
-  grid-template-rows: auto auto auto auto auto;
-  place-items: center;
-  justify-items: center;
+  width: 100%;
+  grid-template-columns: auto auto auto auto auto;
   border-right: 1px solid var(--collapse-page-hover-color);
 }
 

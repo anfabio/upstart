@@ -47,120 +47,125 @@ chrome.storage.onChanged.addListener(async function(changes, namespace) {
   
   if (localStorage.getItem('upStart_firstTime') !== null) { //firstTime
     console.log("changes", changes)
-    localStorage.setItem('upStart_validLastMsg', 'true')
-    
-    for (key in changes) {
-      //upStartDOM
-      if (key == 'upStartDOM') {
 
-      //upStartData
-      } else if (key == 'upStartData') {                
-        syncData = true
-        let jsonData = JSON.parse(changes.upStartData.newValue)
-        let bodyContent = await drawDOM(jsonData)
-        await chrome.storage.local.set({"upStartDOM": bodyContent})
-        if (localStorage.getItem('upStartSettings_showContextMenu') == 'true') {
-          await chrome.contextMenus.removeAll()
-          await createContextMenu()
-        }          
+    //loading from file, sync or default
+    if (localStorage.getItem('upStart_loading') == 'false') {
 
-      //upStartSettings
-      } else if (key == 'upStartCustomImages') {
-        syncData = true
-      } else if (key == 'upStartSettings') {
-        syncData = true
-        let jsonSettings = JSON.parse(changes.upStartSettings.newValue)
-        let oldJsonSettings = JSON.parse(changes.upStartSettings.oldValue)          
-        setStorageVariables(jsonSettings)
-        
-        let result = await chrome.storage.local.get("upStartData")
-        let jsonData = JSON.parse(result.upStartData)
-        let dataModified = false
+      localStorage.setItem('upStart_validLastMsg', 'true')
+      
+      for (key in changes) {
+        //upStartDOM
+        if (key == 'upStartDOM') {
 
-        //language
-  	    const settingsLanguage = chrome.runtime.getURL('locale/upStart_'+jsonSettings.language+'.json')
-  	    await fetch(settingsLanguage)
-		    .then((response) => response.json())			
-		    .then(async(json) => {await chrome.storage.local.set({"upStartLanguage": JSON.stringify(json)})})    
+        //upStartData
+        } else if (key == 'upStartData') {                
+          syncData = true
+          let jsonData = JSON.parse(changes.upStartData.newValue)
+          let bodyContent = await drawDOM(jsonData)
+          await chrome.storage.local.set({"upStartDOM": bodyContent})
+          if (localStorage.getItem('upStartSettings_showContextMenu') == 'true') {
+            await chrome.contextMenus.removeAll()
+            await createContextMenu()
+          }          
 
-        //groups sort changed
-        if ((jsonSettings.groupsSort != oldJsonSettings.groupsSort) && (jsonSettings.groupsSort != 'manual')) {
-          console.log("sort changed")
-          dataModified = true
-          let sort = jsonSettings.groupsSort
+        //upStartSettings
+        } else if (key == 'upStartCustomImages') {
+          syncData = true
+        } else if (key == 'upStartSettings') {
+          syncData = true
+          let jsonSettings = JSON.parse(changes.upStartSettings.newValue)
+          let oldJsonSettings = JSON.parse(changes.upStartSettings.oldValue)          
+          setStorageVariables(jsonSettings)
 
-          for (g = 0; g < jsonData.groups.length; g++) {            
-            group = jsonData.groups[g]
-            if (group.groupSort == 'auto') {
-              let newOrder = []
-              switch(sort) {
-                case 'az': case 'za':
-                  let items = []      
-                  //array of arrays with key(label) value(id)
-                  for (i = 0; i < group.items.length; i++) {            
-                    items[i] = [jsonData['items'].find(item => item.id == group.items[i]).label.toLowerCase(), group.items[i]]
-                  }        
-                  //sort array by key(label)
-                  sort == 'az' ? items.sort() : items.sort().reverse()        
-                  //get new id order
-                  for (i = 0; i < items.length; i++) {            
-                    newOrder.push(items[i][1])
-                  }        
-                  group.items = newOrder   
-                  break        
-                case 'newest': case 'oldest':                  
-                  //sort array by key(label)
-                  sort == 'newest' ? group.items.sort().reverse() : group.items.sort() 
-                  break
+          let result = await chrome.storage.local.get("upStartData")
+          let jsonData = JSON.parse(result.upStartData)
+          let dataModified = false
+
+          //language
+          const settingsLanguage = chrome.runtime.getURL('locale/upStart_'+jsonSettings.language+'.json')
+          await fetch(settingsLanguage)
+	        .then((response) => response.json())			
+	        .then(async(json) => {await chrome.storage.local.set({"upStartLanguage": JSON.stringify(json)})})    
+
+          //groups sort changed
+          if ((jsonSettings.groupsSort != oldJsonSettings.groupsSort) && (jsonSettings.groupsSort != 'manual')) {
+            console.log("sort changed")
+            dataModified = true
+            let sort = jsonSettings.groupsSort
+
+            for (g = 0; g < jsonData.groups.length; g++) {            
+              group = jsonData.groups[g]
+              if (group.groupSort == 'auto') {
+                let newOrder = []
+                switch(sort) {
+                  case 'az': case 'za':
+                    let items = []      
+                    //array of arrays with key(label) value(id)
+                    for (i = 0; i < group.items.length; i++) {            
+                      items[i] = [jsonData['items'].find(item => item.id == group.items[i]).label.toLowerCase(), group.items[i]]
+                    }        
+                    //sort array by key(label)
+                    sort == 'az' ? items.sort() : items.sort().reverse()        
+                    //get new id order
+                    for (i = 0; i < items.length; i++) {            
+                      newOrder.push(items[i][1])
+                    }        
+                    group.items = newOrder   
+                    break        
+                  case 'newest': case 'oldest':                  
+                    //sort array by key(label)
+                    sort == 'newest' ? group.items.sort().reverse() : group.items.sort() 
+                    break
+                }
               }
             }
           }
-        }
 
-        //columns changed
-        if (jsonSettings.pageColumns != oldJsonSettings.pageColumns) {
-          console.log("columns changed")
-          dataModified = true
+          //columns changed
+          if (jsonSettings.pageColumns != oldJsonSettings.pageColumns) {
+            console.log("columns changed")
+            dataModified = true
 
-          //distribute group into columns
-          for (p = 0; p<jsonData.pages.length; p++) {  
-            if (jsonData.pages[p].pageColumns == 'auto') {
-              jsonData.pages[p].columns = await distributeGroups(jsonData.pages[p])
-              jsonData.pages[p].pageAutoColumns = jsonData.pages[p].columns.length
+            //distribute group into columns
+            for (p = 0; p<jsonData.pages.length; p++) {  
+              if (jsonData.pages[p].pageColumns == 'auto') {
+                jsonData.pages[p].columns = await distributeGroups(jsonData.pages[p])
+                jsonData.pages[p].pageAutoColumns = jsonData.pages[p].columns.length
+              }
             }
           }
+
+          //context menus
+          if (jsonSettings.showContextMenu != oldJsonSettings.showContextMenu) {
+            await chrome.contextMenus.removeAll()
+            if (jsonSettings.showContextMenu == "true") { await createContextMenu() }
+          }   
+        
+          //store
+          if (dataModified) { await chrome.storage.local.set({"upStartData": JSON.stringify(jsonData)}) }
+          else {
+            let bodyContent = await drawDOM(jsonData)
+            await chrome.storage.local.set({"upStartDOM": bodyContent})
+           }
         }
 
-        //context menus
-        if (jsonSettings.showContextMenu != oldJsonSettings.showContextMenu) {
-          await chrome.contextMenus.removeAll()
-          if (jsonSettings.showContextMenu) { await createContextMenu() }
-        }   
-    
-        //store
-        if (dataModified) { await chrome.storage.local.set({"upStartData": JSON.stringify(jsonData)}) }
-        else {
-          let bodyContent = await drawDOM(jsonData)
-          await chrome.storage.local.set({"upStartDOM": bodyContent})
-         }
+        if (localStorage.getItem('upStart_dbxSync') == 'true') { localStorage.setItem('upStart_newChanges', 'true') }
+
       }
 
-      if (localStorage.getItem('upStart_dbxSync') == 'true') { localStorage.setItem('upStart_newChanges', 'true') }
-      
-    }
 
+      if ((localStorage.getItem('upStart_dbxSync') == 'true') && (syncData == true)) {      
 
-    if ((localStorage.getItem('upStart_dbxSync') == 'true') && (syncData == true)) {      
-      
-      localStorage.setItem('upStart_newChanges', 'true')      
-      if (await uploadDataToDropbox()) {
-        localStorage.setItem('upStart_newChanges', 'false')   
-        syncData == false     
-        console.log("Dropbox data synchronized")
-      } else {
-        console.log("Data could not be synchronized.") 
-      }     
-      
+        localStorage.setItem('upStart_newChanges', 'true')      
+        if (await uploadDataToDropbox()) {
+          localStorage.setItem('upStart_newChanges', 'false')   
+          syncData == false     
+          console.log("Dropbox data synchronized")
+        } else {
+          console.log("Data could not be synchronized.") 
+        }     
+
+      }
     }
   }
 })
@@ -172,45 +177,47 @@ async function createContextMenu() {
   console.log('context start')
   let result = await chrome.storage.local.get("upStartData")
   let jsonData = JSON.parse(result.upStartData)  
-  	try {
-      chrome.contextMenus.removeAll(function () {
-  
-        chrome.contextMenus.create({
-          "id": "upStartRootMenu",
-          "title": "upStart",
-          "contexts": ["page"]
-        }) 
+  	try {  
+      chrome.contextMenus.create({
+        "id": "upStartRootMenu",
+        "title": "upStart",
+        "contexts": ["page"]
+      }) 
+      
+      //populate menu
+      for (p = 0; p < jsonData['pages'].length; p++) {             
+        let groupCount = 0
+        for (let i=0; i<jsonData.pages[p].columns.length; i++) {  groupCount += jsonData.pages[p].columns[i].length }
         
-        //populate menu
-        for (p = 0; p < jsonData['pages'].length; p++) {             
-          let groupCount = 0
-          for (let i=0; i<jsonData.pages[p].columns.length; i++) {  groupCount += jsonData.pages[p].columns[i].length }
-          
-          if (groupCount > 0) {
-            let pageLabel = jsonData.pages[p].pageLabel    
-            chrome.contextMenus.create({
-              "id": 'page'+p,
-              "title": pageLabel,
-              "parentId": "upStartRootMenu",
-            }) 
+        if (groupCount > 0) {
+          let pageLabel = jsonData.pages[p].pageLabel    
+          chrome.contextMenus.create({
+            "id": 'page'+p,
+            "title": pageLabel,
+            "parentId": "upStartRootMenu",
+          }) 
     
-            //groups
-            for (c=0; c<jsonData.pages[p].columns.length; c++) {
-              let columnGroups = jsonData.pages[p].columns[c]
+          //groups
+          for (c=0; c<jsonData.pages[p].columns.length; c++) {
+            let columnGroups = jsonData.pages[p].columns[c]
     
-              for (g = 0; g < columnGroups.length; g++) {   
-                group = jsonData['groups'].find(group => group.id == columnGroups[g])  
+            for (g = 0; g < columnGroups.length; g++) {   
+              let group = jsonData['groups'].find(group => group.id == columnGroups[g])  
+
+              try {
                 chrome.contextMenus.create({
                   "id": columnGroups[g],
                   "title": group.groupLabel,
                   "parentId": 'page'+p
                 })
               }
+              catch (e) {
+              }
             }
           }
         }
-        chrome.contextMenus.onClicked.addListener(addToGroup)
-      })
+      }
+      chrome.contextMenus.onClicked.addListener(addToGroup)
     }
     catch (error) {
       console.log(error)

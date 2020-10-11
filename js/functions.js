@@ -352,7 +352,7 @@ async function importFromOldVersion(jsonOld) {
   if ((jsonOld.settings.itemLabelFontColor != '') && (jsonOld.settings.itemLabelFontColor != '000000')) { jsonImportedSettings.groupFgColor = sonOld.settings.itemLabelFontColor }
   else { jsonImportedSettings.groupFgColor  = 'theme' } 
   
-  if ((jsonOld.settings.defaultGroupColor != '') && (jsonOld.settings.defaultGroupColor != 'FFFFFF')) { jsonImportedSettings.groupBgColor = jsonOld.ettings.defaultGroupColor }
+  if ((jsonOld.settings.defaultGroupColor != '') && (jsonOld.settings.defaultGroupColor != 'FFFFFF')) { jsonImportedSettings.groupBgColor = jsonOld.settings.defaultGroupColor }
   else { jsonImportedSettings.groupBgColor  = 'theme' } 
   
   if (jsonOld.settings.defaultPageColumns == '0') { jsonImportedSettings.pageColumns = 'auto' }
@@ -404,53 +404,56 @@ function setStorageVariables(json) {
   //not in json
   localStorage.setItem('upStart_lastPage', '0')
   localStorage.setItem("upStart_dbxUploading", 'false')
+  localStorage.setItem('upStart_loading', 'false')
   if (!localStorage.getItem('upStart_dbxSync')) {
     localStorage.setItem('upStart_dbxSync', 'false')
   }
 }
 
 async function loadFromData(jsonFileData,jsonFileSettings,jsonFileCustomImages) {   
-  await chrome.storage.local.set({"upStartData": jsonFileData})
-  await chrome.storage.local.set({"upStartSettings": jsonFileSettings})
+  //reset page
+  const upStartChannel_reset = new BroadcastChannel('upStartChannel_reset')
+  upStartChannel_reset.postMessage(0)
+
+  //semaforo background true
+  localStorage.setItem("upStart_loading", 'true')
+
   await chrome.storage.local.set({"upStartCustomImages": jsonFileCustomImages})
+  await chrome.storage.local.set({"upStartSettings": jsonFileSettings})
+
+  //semaforo background false
+  localStorage.setItem("upStart_loading", 'false')
+
+  await chrome.storage.local.set({"upStartData": jsonFileData})
 }
 
 async function loadDefault() {
-  console.log("from upstart files")
   localStorage.setItem('upStart_lastPage', '0')
-
+  localStorage.setItem("upStart_loading", 'true')
   let lang = localStorage.getItem('upStartSettings_language')
-  console.log('locale/upStart_'+lang+'.json')
+  const upStartChannel_reset = new BroadcastChannel('upStartChannel_reset')
+  upStartChannel_reset.postMessage(0)  
   
-  //language
-  const settingsLanguage = chrome.runtime.getURL('locale/upStart_'+lang+'.json')
-  await fetch(settingsLanguage)
-	.then((response) => response.json())			
-  .then(async(json) => {await chrome.storage.local.set({"upStartLanguage": JSON.stringify(json)})})  
-
-  //settings   
+  const jsonDefaultCustomImages = chrome.runtime.getURL('js/upStartCustomImages.json')
+  await fetch(jsonDefaultCustomImages)
+  .then((response) => response.json())
+  .then((json) => { chrome.storage.local.set({"upStartCustomImages": JSON.stringify(json)}) })
+  
   const jsonDefaultSettings = chrome.runtime.getURL('js/upStartSettings.json')
   await fetch(jsonDefaultSettings)
   .then((response) => response.json())
   .then((json) => {
     json.language = lang
     chrome.storage.local.set({"upStartSettings": JSON.stringify(json)})
-  })
-  .catch(reason => console.log(reason.message))
+  })  
 
-  //custom images   
-  const jsonDefaultCustomImages = chrome.runtime.getURL('js/upStartCustomImages.json')
-  await fetch(jsonDefaultCustomImages)
-  .then((response) => response.json())
-  .then((json) => { chrome.storage.local.set({"upStartCustomImages": JSON.stringify(json)}) })
-  .catch(reason => console.log(reason.message))
-  
-  //data 
   const jsonDefaultData = chrome.runtime.getURL('js/upStartData_'+lang+'.json')
   await fetch(jsonDefaultData)
   .then((response) => response.json())
-  .then(async (json) => {chrome.storage.local.set({"upStartData": JSON.stringify(json)})})
-  .catch(reason => console.log(reason.message))  
+  .then(async (json) => {
+    localStorage.setItem("upStart_loading", 'false')
+    chrome.storage.local.set({"upStartData": JSON.stringify(json)})
+  })  
 }
 
 
@@ -689,8 +692,7 @@ async function drawDOM(jsonData){
     page.dataset.page = pageID
     page.dataset.label = jsonData.pages[pageID].pageLabel
 
-    if (jsonData.pages[pageID].pageBgColor != "theme") { page.style.backgroundColor = jsonData.pages[pageID].pageBgColor}
-    
+
     //settings page background
     let pageBgImage = localStorage.getItem("upStartSettings_pageBgImage")
     if (pageBgImage != "theme") {
@@ -708,6 +710,18 @@ async function drawDOM(jsonData){
 
     //set background to cover
     page.style.backgroundSize = 'cover'
+    
+    
+    //page bg color
+    if (jsonData.pages[pageID].pageBgColor) {
+      if (jsonData.pages[pageID].pageBgColor != "theme") { page.style.backgroundColor = jsonData.pages[pageID].pageBgColor}
+      else { 
+        if (localStorage.getItem('upStartSettings_pageBgColor') != 'theme') {
+          page.style.backgroundColor = localStorage.getItem('upStartSettings_pageBgColor') 
+        }
+      }
+    }
+
     
     if (jsonData.pages[pageID].pageColumns == "auto") {columnsCount = jsonData.pages[pageID].pageAutoColumns}    
     else {columnsCount = jsonData.pages[pageID].pageColumns}
@@ -750,11 +764,26 @@ async function drawDOM(jsonData){
           if (group.hideBookmarkLabels) { groupElement.dataset.hide = group.hideBookmarkLabels }
           else { groupElement.dataset.hide = "auto" }
 
+          //group fg color
           if (group.groupFgColor) {
-            if (group.groupFgColor != "theme") { groupElement.style.color = group.groupFgColor} else { groupElement.style.color = localStorage.getItem      ('upStartSettings_groupFgColor') }
-            if (group.groupBgColor != "theme") { groupElement.style.backgroundColor = group.groupBgColor} else { groupElement.style.backgroundColor = localStorage.getItem('upStartSettings_groupBgColor') }
+            if (group.groupFgColor != "theme") { groupElement.style.color = group.groupFgColor}
+            else { 
+              if (localStorage.getItem('upStartSettings_groupFgColor') != 'theme') {
+                groupElement.style.color = localStorage.getItem('upStartSettings_groupFgColor') 
+              }
+            }
           }
 
+          //group bg color
+          if (group.groupBgColor) {
+            if (group.groupBgColor != "theme") { groupElement.style.backgroundColor = group.groupBgColor}
+            else { 
+              if (localStorage.getItem('upStartSettings_groupBgColor') != 'theme') {
+                groupElement.style.backgroundColor = localStorage.getItem('upStartSettings_groupBgColor') 
+              }
+            }
+          }
+          
 
           //group header
           let groupHeader = document.createElement('DIV')
@@ -1166,24 +1195,10 @@ async function groupDragMove(sourceGroupID, sourcePage, sourceColumn, sourceChil
   jsonDataTmp.pages[sourcePage].columns[sourceColumn] = sourceColumnGroups
   jsonDataTmp.pages[targetPage].columns[targetColumn] = targetColumnGroups
 
-
-  if (sourcePage != targetPage) {
-    //distribute group into columns
-    if (jsonDataTmp.pages[sourcePage].pageColumns == "auto") {
-      jsonDataTmp.pages[sourcePage].columns = await distributeGroups(jsonDataTmp.pages[sourcePage])
-      jsonDataTmp.pages[sourcePage].pageAutoColumns = jsonDataTmp.pages[sourcePage].columns.length
-    }  
-
-    //distribute group into columns
-    if (jsonDataTmp.pages[targetPage].pageColumns == "auto") {
-      jsonDataTmp.pages[targetPage].columns = await distributeGroups(jsonDataTmp.pages[targetPage])
-      jsonDataTmp.pages[targetPage].pageAutoColumns = jsonDataTmp.pages[targetPage].columns.length
-    }  
-  }
-
-
-
-
+  //add modified pages to columnChangedPages
+  if (!columnChangedPages.includes(sourcePage)) {columnChangedPages.push(sourcePage)}
+  if (!columnChangedPages.includes(targetPage)) {columnChangedPages.push(targetPage)}
+ 
   if (!saveMsg) {
     saveMsg = true
     saveLayoutMessage()
@@ -1484,6 +1499,13 @@ async function addToGroup(info, tab) {
           groupItems.push(newItemObj.id)
           group.items = groupItems
   
+          //sort
+          if ((group.groupSort != 'manual') && (group.groupSort != 'auto')){
+            group.items = sortGroup(group.items, group.groupSort, jsonData)
+          } else if ((group.groupSort == 'auto') && (localStorage.getItem('upStartSettings_groupsSort') != 'manual')) {
+            group.items = sortGroup(group.items, localStorage.getItem('upStartSettings_groupsSort'), jsonData)
+          }  
+
           //store
           chrome.storage.local.set({'upStartData': JSON.stringify(jsonData)}, function() { 
             let msg = jsonLanguage.data.sysMessage_itemCreatedMsg.replace('{itemLabel}', '"'+newItemObj.label+'"')
@@ -1805,6 +1827,7 @@ function validJson(jsonString) {
 
 /* message functions */
 function saveLayoutMessage () {
+  SortableTopNav.options.disabled = true
   iziToast.show({
     icon: 'fa fa-question-circle iziToastFontOpacity',    
     timeout: false,
@@ -1823,11 +1846,42 @@ function saveLayoutMessage () {
     buttons: [
       ['<button style="background-color:#a70e0e;color:white;font-size:14px;">'+jsonLanguage.data.dialog_Cancel+'</button>', function (instance, toast) {
         saveMsg = false
+        columnChangedPages = []
         instance.hide({}, toast)
         location.reload()
       }],      
       ['<button style="background-color:#088f13;color:white;font-size:14px;"><b>'+jsonLanguage.data.dialog_Save+'</b></button>', async function (instance, toast) {  
         saveMsg = false
+
+        //process changed page
+        for (i=0;i<columnChangedPages.length;i++) {
+          let pageID = columnChangedPages[i]
+
+          //distributeGroups only for auto 
+          if (jsonDataTmp.pages[pageID].pageColumns == "auto") {
+            let result = await chrome.storage.local.get("upStartData")
+            let jsonData = JSON.parse(result.upStartData)
+
+            let originalGroupCount = 0       
+            let tmpGroupCount = 0
+
+            for (c=0; c<jsonData.pages[pageID].columns.length; c++) {
+              originalGroupCount += jsonData.pages[pageID].columns[c].length
+            }
+
+            for (c=0; c<jsonDataTmp.pages[pageID].columns.length; c++) {
+              tmpGroupCount += jsonDataTmp.pages[pageID].columns[c].length
+            }
+
+             ////distributeGroups only for diff group number
+            if (originalGroupCount != tmpGroupCount) {            
+                jsonDataTmp.pages[pageID].columns = await distributeGroups(jsonDataTmp.pages[pageID])
+                jsonDataTmp.pages[pageID].pageAutoColumns = jsonDataTmp.pages[pageID].columns.length            
+            }
+          }
+
+        }
+
         await chrome.storage.local.set({"upStartData": JSON.stringify(jsonDataTmp)})
         //sessionStorage.setItem('upStart_saveLayoutCurrentPage', 'true')
 
@@ -1840,7 +1894,7 @@ function saveLayoutMessage () {
         for (i=0;i<bookmarks.length;i++) {	  		
           bookmarks[i].classList.remove('bookmark-drag')
         }
-        successMessage(jsonLanguage.data.message_layoutSaved)
+        sessionStorage.setItem('upStart_lastSuccessMsg', jsonLanguage.data.message_layoutSaved)  
         instance.hide({}, toast)  
         location.reload()      
       },true]

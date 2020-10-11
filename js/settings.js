@@ -1072,6 +1072,7 @@ async function assembleUploads() {
 											await loadFromData(data,settings,customImages)	
 											instance.hide({ }, toast)
 											successMessage(jsonLanguage.settings.message_dataImported)
+											location.reload()
 										}]
 									]
 								})
@@ -1092,8 +1093,7 @@ async function assembleUploads() {
 						reader.onload = async function() {
 							if (validJson(reader.result)) { 
 								let jsonResult = JSON.parse(reader.result) 
-								if ((jsonResult.settings.version != "2.0") || (!jsonResult.settings.version)) {
-									
+								if (jsonResult.settings.version == "1.6") {									
 									iziToast.show({
 										theme: iziTheme,
 										timeout: false,
@@ -1118,14 +1118,15 @@ async function assembleUploads() {
 										displayMode: 2,
 										layout: 9,
 										buttons: [
-											['<button style="background-color: #38A12A;">'+jsonLanguage.settings.dialog_Cancel+'</button>', function (instance, toast) {
+											['<button style="background-color: #a70e0e;">'+jsonLanguage.settings.dialog_Cancel+'</button>', function (instance, toast) {
 												instance.hide({ }, toast)
 												document.getElementById('inputFile').value = ""
 											},true],
-											['<button style="background-color: #a70e0e;"><b>'+jsonLanguage.settings.dialog_Ok+'</b></button>', async function (instance, toast) {
+											['<button style="background-color: #38A12A;"><b>'+jsonLanguage.settings.dialog_Ok+'</b></button>', async function (instance, toast) {
 												await importFromOldVersion(jsonResult)
 												instance.hide({ }, toast)
 												successMessage(jsonLanguage.settings.message_dataImported)
+												location.reload()
 											}]											
 										]
 									})							
@@ -1154,15 +1155,16 @@ async function assembleUploads() {
 										displayMode: 2,
 										layout: 9,
 										buttons: [
-											['<button style="background-color: #38A12A;">'+jsonLanguage.settings.dialog_Cancel+'</button>', function (instance, toast) {
+											['<button style="background-color: #a70e0e;">'+jsonLanguage.settings.dialog_Cancel+'</button>', function (instance, toast) {
 												instance.hide({ }, toast)
 												document.getElementById('inputFile').value = ""
 											},true],
-											['<button style="background-color: #a70e0e;"><b>'+jsonLanguage.settings.dialog_Ok+'</b></button>', async function (instance, toast) {
+											['<button style="background-color: #38A12A;"><b>'+jsonLanguage.settings.dialog_Ok+'</b></button>', async function (instance, toast) {
 												console.log ("dbx version")
 												await loadFromData(JSON.stringify(jsonResult.data),JSON.stringify(jsonResult.settings),JSON.stringify(jsonResult.customImages))
 												instance.hide({ }, toast)
 												successMessage(jsonLanguage.settings.message_dataImported)
+												location.reload()
 											}]											
 										]
 									})							
@@ -1391,9 +1393,9 @@ async function assembleUploads() {
 													if (iconFetch) {
 														let favicon = await getFavIcon(newItemObj.url)
 														if (favicon) { newItemObj.icon = favicon }
-														else { newItemObj.icon = "icon/bookmark.svg" }
+														else { newItemObj.icon = "icon/default.svg" }
 													} else {
-														newItemObj.icon = "icon/bookmark.svg"
+														newItemObj.icon = "icon/default.svg"
 													}										
 										
 													newItemObj.id = baseID.toString()
@@ -1481,12 +1483,8 @@ async function assembleUploads() {
 									},true],
 									['<button style="background-color: #38A12A;"><b>'+jsonLanguage.settings.dialog_Continue+'</b></button>', async 		function (instance, toast) {
 										console.log("clear")
-										await loadDefault()
 										await clearDropbox()
-
-										const upStartChannel_reset = new BroadcastChannel('upStartChannel_reset')
-										upStartChannel_reset.postMessage(0)
-
+										await loadDefault()
 										instance.hide({}, toast)
 									}]									
 								]

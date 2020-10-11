@@ -155,7 +155,7 @@
   --collapse-group-hover-fg-color: white;
   --collapse-group-hover-color: #727272;  
   --sweetalert-bg: #192935;
-  --sweetalert-box-shadow: 0 10px 20px rgba(255,255,255,0.19), 0 6px 6px rgba(255,255,255,0.23);
+  --sweetalert-box-shadow: 0 4px 6px rgba(255,255,255,0.19), 0 5px 5px rgba(255,255,255,0.23);
   --sweetalert-border: #DEE2E6;
   --sweetalert-border-hover: #AFD5E7;
   --sweetalert-select-arrow: url("../img/drop-arrow-white.svg");
@@ -212,7 +212,7 @@
   --collapse-group-hover-fg-color: white;
   --collapse-group-hover-color: #727272;  
   --sweetalert-bg: #192935;
-  --sweetalert-box-shadow: 0 10px 20px rgba(255,255,255,0.19), 0 6px 6px rgba(255,255,255,0.23);
+  --sweetalert-box-shadow: 0 4px 6px rgba(255,255,255,0.19), 0 5px 5px rgba(255,255,255,0.23);
   --sweetalert-border: #DEE2E6;
   --sweetalert-border-hover: #AFD5E7;
   --sweetalert-select-arrow: url("../img/drop-arrow-white.svg");
@@ -268,7 +268,7 @@
   --collapse-group-hover-fg-color: white;
   --collapse-group-hover-color: #727272;  
   --sweetalert-bg: #192935;
-  --sweetalert-box-shadow: 0 10px 20px rgba(255,255,255,0.19), 0 6px 6px rgba(255,255,255,0.23);
+  --sweetalert-box-shadow: 0 4px 6px rgba(255,255,255,0.19), 0 5px 5px rgba(255,255,255,0.23);
   --sweetalert-border: #DEE2E6;
   --sweetalert-border-hover: #AFD5E7;
   --sweetalert-select-arrow: url("../img/drop-arrow-white.svg");
@@ -323,7 +323,7 @@
   --collapse-group-hover-fg-color: white;
   --collapse-group-hover-color: #3b3b4d;  
   --sweetalert-bg: #192935;
-  --sweetalert-box-shadow: 0 10px 20px rgba(255,255,255,0.19), 0 6px 6px rgba(255,255,255,0.23);
+  --sweetalert-box-shadow: 0 4px 6px rgba(255,255,255,0.19), 0 5px 5px rgba(255,255,255,0.23);
   --sweetalert-border: #DEE2E6;
   --sweetalert-border-hover: #AFD5E7;
   --sweetalert-select-arrow: url("../img/drop-arrow-white.svg");
@@ -379,7 +379,7 @@
   --collapse-group-hover-fg-color: white;
   --collapse-group-hover-color: #727272;  
   --sweetalert-bg: #192935;
-  --sweetalert-box-shadow: 0 10px 20px rgba(255,255,255,0.19), 0 6px 6px rgba(255,255,255,0.23);
+  --sweetalert-box-shadow: 0 4px 6px rgba(255,255,255,0.19), 0 5px 5px rgba(255,255,255,0.23);
   --sweetalert-border: #DEE2E6;
   --sweetalert-border-hover: #AFD5E7;
   --sweetalert-select-arrow: url("../img/drop-arrow-white.svg");
