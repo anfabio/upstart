@@ -2,7 +2,8 @@
 
 upStart is a replacement of new tab page with quick access to your bookmarked pages.
 Keep your bookmarks organized into groups and pages.
-Look & Fell highly customizable.
+
+• Look & Fell highly customizable.
 
 • Easily add bookmarks from any page or save all open tabs
 

@@ -15,7 +15,7 @@
   "128": "img/icon128.png"
  },
   "content_security_policy": "script-src 'self'; object-src 'self'",
-  "web_accessible_resources": ["js/*.json"],
+  "web_accessible_resources": ["js/*.json","newtab.html"],
   "homepage_url": "https://github.com/anfabio/upstart",
   "permissions": [ "file:///*/", "tabs", "management", "alarms", "storage", "unlimitedStorage", "contextMenus", "<all_urls>", "notifications", "bookmarks" ],
   "chrome_url_overrides": {
@@ -27,6 +27,5 @@
   "options_ui": {
     "page": "settings.html",
     "open_in_tab": true
-  },
-  "web_accessible_resources": [ "newtab.html" ]
+  }
 }
