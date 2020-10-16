@@ -11,6 +11,7 @@
   "openLinksNewTab": "false",    
   "showContextMenu": "true",
   "iconsBase64": "true",
+  "dragLock": "false",
   "itemIconSize": "64",
   "itemLabelFontSize": "14",
   "itemLabelShowLines": "2",

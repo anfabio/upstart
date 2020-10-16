@@ -334,6 +334,22 @@ body {
   transform: scale(1.1);
 }
 
+.lock-icon {
+  display: grid;
+  place-content: center;
+  width: 27px;
+  height: 27px;
+  transition: transform .1s ease-in-out;  
+}
+
+.lock-icon:hover {
+  transform: scale(1.1);
+}
+
+.lock-icon-active {
+  color: red;
+}
+
 
 .search {
   display: none;

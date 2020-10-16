@@ -427,28 +427,14 @@ async function drawPopupDOM () {
 			})
 	}
 	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	async function loadFromDataPopup(jsonFileData,jsonFileSettings,jsonFileCustomImages) {   
+		const upStartChannel_reset = new BroadcastChannel('upStartChannel_reset')
+		upStartChannel_reset.postMessage(0)
+	
+		await chrome.storage.local.set({"upStartCustomImages": jsonFileCustomImages})
 		await chrome.storage.local.set({"upStartData": jsonFileData})
 		await chrome.storage.local.set({"upStartSettings": jsonFileSettings})
-		await chrome.storage.local.set({"upStartCustomImages": jsonFileCustomImages})
 	}
-
-
 
 }
 

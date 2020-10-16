@@ -107,7 +107,11 @@ async function initializeSettings() {
 			document.getElementById('base64-icons-check').checked = true
 			document.getElementById('base64-icons').classList.add('on')
 		}
-
+		if (bool(jsonSettings.dragLock)) {
+			document.getElementById('drag-lock-check').checked = true
+			document.getElementById('drag-lock').classList.add('on')
+		}
+		
 		//bookmarks
 		let iconSizeValues = ''
   	for (let [key, value] of Object.entries(jsonLanguage.settings.bookmarks_iconSize)) {iconSizeValues += '<option value="'+key+'">'+value+'</option>'}
@@ -928,6 +932,8 @@ async function assembleUploads() {
 						jsonSettings.openLinksNewTab = document.getElementById('new-tab-check').checked
 						jsonSettings.showContextMenu = document.getElementById('context-menu-check').checked
 						jsonSettings.iconsBase64 = document.getElementById('base64-icons-check').checked
+						jsonSettings.dragLock = document.getElementById('drag-lock-check').checked			
+
 						//bookmark
 						jsonSettings.itemIconSize = document.getElementById('icon-size').value
 						jsonSettings.itemLabelFontSize = document.getElementById('font-size').value

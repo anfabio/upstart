@@ -91,6 +91,7 @@
   "data": {
     "main_switchIconTitle": "Light/Dark Mode",
     "main_searchIconTitle": "Search",
+    "main_lockIconTitle": "Enable/Disable Drag and Drop",
     "main_search": "Search",
     "main_plusIconTitle": "Create",
     "main_settingsIconTitle": "Settings",

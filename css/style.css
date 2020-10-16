@@ -331,7 +331,7 @@ body {
 
 .top-nav-icons {
   display: grid; 
-  grid-template-columns: 30px 30px 30px 30px;
+  grid-template-columns: 30px 30px 30px 30px 30px;
   height: 30px;
   place-items: center;
   margin-right: 5px;
@@ -368,6 +368,23 @@ body {
 
 .switch-icon:hover {
   transform: scale(1.1);
+}
+
+
+.lock-icon {
+  display: grid;
+  place-content: center;
+  width: 27px;
+  height: 27px;
+  transition: transform .1s ease-in-out;  
+}
+
+.lock-icon:hover {
+  transform: scale(1.1);
+}
+
+.lock-icon-active {
+  color: red;
 }
 
 

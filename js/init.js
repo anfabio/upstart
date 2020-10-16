@@ -4,8 +4,12 @@ var jsonDataTmp = false
 var saveMsg = false
 var iziTheme = 'light'
 var iziBgColor = '#fff'
-var SortableTopNav
 var columnChangedPages = []
+var SortableTopNav
+var SortableLocked = false
+
+let SortableColumns = []
+let SortableGroups = []
 let bookmarksDrag
 let changePageDrag
 let jsonLanguage
@@ -131,8 +135,6 @@ async function initialize(currentPage) {
     
     
     console.log("Initial Page: "+currentPage)
-    //options
-    setOptions()
 
     //Sortable NavLinks
     let topNavPages = document.getElementById('top-nav-list')
@@ -155,7 +157,7 @@ async function initialize(currentPage) {
     //Sortable Columns
     let Columns = document.getElementsByClassName("column")
       for (i=0;i<Columns.length;i++) {
-        new Sortable(Columns[i], { 
+        let SortableColumn = new Sortable(Columns[i], { 
         group: 'columns',
         revertOnSpill: true,
         //delay: 50,
@@ -179,12 +181,13 @@ async function initialize(currentPage) {
           sessionStorage.setItem('upStart_pageChange', 'false')            
         }
       })
+      SortableColumns.push(SortableColumn) 
     }
 
     //Sortable Bookmarks
     let groupContent = document.getElementsByClassName("group-content")
       for (i=0;i<groupContent.length;i++) {
-        new Sortable(groupContent[i], { 
+        let SortableGroup = new Sortable(groupContent[i], { 
         group: 'bookmarks',
         revertOnSpill: true,
         //delay: 10,
@@ -206,7 +209,12 @@ async function initialize(currentPage) {
           sessionStorage.setItem('upStart_pageChange', 'false')
         }
       })
+      SortableGroups.push(SortableGroup)
     }
+
+
+    //options
+    setOptions()
 
     //top nav event listener overflow check
     let resizeTimer = null
@@ -285,6 +293,43 @@ async function initialize(currentPage) {
       }
 
 
+      //lock drag and drop
+      if(event.target.closest('#lock-icon')) {
+        e.stopPropagation()     
+        let lockIcon = document.getElementById('lock-icon')   
+
+        if (SortableLocked == false) {
+          lockIcon.classList.add('lock-icon-active')
+          lockIcon.innerHTML = "<i class='fas fa-lock fa-2x'></i>"
+
+          if(!saveMsg) {SortableTopNav.options.disabled = true}
+
+          for (i=0;i<SortableColumns.length;i++) {
+            SortableColumns[i].options.disabled = true
+          }
+
+          for (i=0;i<SortableGroups.length;i++) {
+            SortableGroups[i].options.disabled = true
+          }
+
+          SortableLocked = true
+        } else {
+          lockIcon.classList.remove('lock-icon-active')
+          lockIcon.innerHTML = "<i class='fas fa-lock-open fa-2x'></i>"
+
+          if(!saveMsg) {SortableTopNav.options.disabled = false}
+
+          for (i=0;i<SortableColumns.length;i++) {
+            SortableColumns[i].options.disabled = false
+          }
+
+          for (i=0;i<SortableGroups.length;i++) {
+            SortableGroups[i].options.disabled = false
+          }
+
+          SortableLocked = false
+        }
+      }
 
       //search options 
       if(event.target.closest('#search-icon')) {
@@ -459,6 +504,25 @@ function setOptions() {
       bookmarkLinks[i].target = "_blank"
     }
   }
+
+
+  //drag lock option
+  if (localStorage.getItem("upStartSettings_dragLock") == "true") {
+    
+    let lockIcon = document.getElementById('lock-icon')   
+    lockIcon.classList.add('lock-icon-active')
+    lockIcon.innerHTML = "<i class='fas fa-lock fa-2x'></i>"
+  
+    SortableTopNav.options.disabled = true    
+    for (i=0;i<SortableColumns.length;i++) {
+      SortableColumns[i].options.disabled = true
+    }  
+    for (i=0;i<SortableGroups.length;i++) {
+      SortableGroups[i].options.disabled = true
+    }
+    SortableLocked = true
+  }
+
 
 
   //context menu

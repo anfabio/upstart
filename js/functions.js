@@ -236,7 +236,6 @@ async function firstTime() {
   }  
 }
 
-
 async function importFromOldVersion(jsonOld) {
   let defaultGroupSort = localStorage.getItem('upStartSettings_groupsSort')
   if (!defaultGroupSort) { defaultGroupSort = jsonOld.settings.defaultItensSort }
@@ -259,10 +258,9 @@ async function importFromOldVersion(jsonOld) {
     
     newPageObj.pageAutoColumns = "1"
     
-    if (jsonOld.pages[p].pageBackground == '') { newPageObj.pageBgImage = "theme" }
-    else if (!jsonOld.pages[p].pageBackground.toLowerCase().match(/^(http:\/\/|https:\/\/|file:\/\/\/|data:image\/).*/) ) {
-      newPageObj.pageBgImage = 'bg/'+jsonOld.pages[p].pageBackground
-    } else { newPageObj.pageBgImage = jsonOld.pages[p].pageBackground }      
+    if (jsonOld.pages[p].pageBackground.toLowerCase().match(/^(http:\/\/|https:\/\/|file:\/\/\/|data:image\/).*/) ) {
+      newPageObj.pageBgImage = jsonOld.pages[p].pageBackground
+    } else { newPageObj.pageBgImage = "theme" }
     
     if (!jsonOld.pages[p].pageColor) { newPageObj.pageBgColor = "theme" }
     else if (jsonOld.pages[p].pageColor != '') { newPageObj.pageBgColor = jsonOld.pages[p].pageColor }      
@@ -362,6 +360,7 @@ async function importFromOldVersion(jsonOld) {
   jsonImportedSettings.openLinksNewTab = jsonOld.settings.openLinksNewTab
   jsonImportedSettings.showContextMenu = jsonOld.settings.showBrowserContextMenu
   jsonImportedSettings.iconsBase64 = jsonOld.settings.iconsBase64
+  jsonImportedSettings.dragLock = "false"
   jsonImportedSettings.itemIconSize = "64"
   jsonImportedSettings.itemLabelFontSize = "14"
   jsonImportedSettings.itemLabelShowLines = "1"
@@ -373,10 +372,10 @@ async function importFromOldVersion(jsonOld) {
   else { jsonImportedSettings.theme = 'light' }  
   
   jsonImportedSettings.pageIcon = "theme"
-  if (jsonOld.settings.defaultPageBackground == '') { jsonImportedSettings.pageBgImage = "theme" }
-  else if (!jsonOld.settings.defaultPageBackground.toLowerCase().match(/^(http:\/\/|https:\/\/|file:\/\/\/|data:image\/).*/) ) {
-    jsonImportedSettings.pageBgImage = 'bg/'+jsonOld.settings.defaultPageBackground
-  } else { jsonImportedSettings.pageBgImage = jsonOld.settings.defaultPageBackground }      
+      
+  if (jsonOld.settings.defaultPageBackground.toLowerCase().match(/^(http:\/\/|https:\/\/|file:\/\/\/|data:image\/).*/) ) {
+    jsonImportedSettings.pageBgImage = jsonOld.settings.defaultPageBackground
+  } else { jsonImportedSettings.pageBgImage = "theme" }
   
   if ((jsonOld.settings.defaultBackgroundColor == 'F6F6F9') || (jsonOld.settings.defaultBackgroundColor == '2D2D5F')) { jsonImportedSettings.pageBgColor  = 'theme' }
   else { jsonImportedSettings.pageBgColor = jsonOld.settings.defaultBackgroundColor }  
@@ -391,9 +390,15 @@ async function importFromOldVersion(jsonOld) {
   jsonImportedSettings.autoBkpMax = "5"
   jsonImportedSettings.manualBkpMax = "5"
     
-  //custom images   
-  let jsonCustomImages = '{"icons":[],"bgs":[]}'
-  await loadFromData(JSON.stringify(jsonImportedData),JSON.stringify(jsonImportedSettings),jsonCustomImages)
+  //custom images
+  const jsonDefaultCustomImages = chrome.runtime.getURL('js/upStartCustomImages.json')
+  await fetch(jsonDefaultCustomImages)
+  .then((response) => response.json())
+  .then((json) => { chrome.storage.local.set({"upStartCustomImages": JSON.stringify(json)}) })
+
+  await chrome.storage.local.set({"upStartSettings": JSON.stringify(jsonImportedSettings)})
+
+  await chrome.storage.local.set({"upStartData": JSON.stringify(jsonImportedData)})
 }
 
 
@@ -415,15 +420,8 @@ async function loadFromData(jsonFileData,jsonFileSettings,jsonFileCustomImages) 
   const upStartChannel_reset = new BroadcastChannel('upStartChannel_reset')
   upStartChannel_reset.postMessage(0)
 
-  //semaforo background true
-  localStorage.setItem("upStart_loading", 'true')
-
   await chrome.storage.local.set({"upStartCustomImages": jsonFileCustomImages})
   await chrome.storage.local.set({"upStartSettings": jsonFileSettings})
-
-  //semaforo background false
-  localStorage.setItem("upStart_loading", 'false')
-
   await chrome.storage.local.set({"upStartData": jsonFileData})
 }
 
@@ -589,6 +587,13 @@ async function drawDOM(jsonData){
   switchIcon.title = jsonLanguage.data.main_switchIconTitle
   switchIcon.src = "../img/sun.svg"
 
+  //lock icon
+  let lockIcon = document.createElement('DIV')  
+  lockIcon.id = "lock-icon"
+  lockIcon.className = "lock-icon"
+  lockIcon.title = jsonLanguage.data.main_lockIconTitle
+  lockIcon.innerHTML = "<i class='fas fa-lock-open fa-2x'></i>"
+
   //plusIcon search
   let searchIcon = document.createElement('DIV')  
   searchIcon.id = "search-icon"
@@ -643,6 +648,7 @@ async function drawDOM(jsonData){
   topNavIcons.append(switchIcon) 
   topNavIcons.append(searchIcon)    
   topNavIcons.append(createIcon)  
+  topNavIcons.append(lockIcon)  
   topNavIcons.append(optionsIcon)
   
 
@@ -1760,8 +1766,7 @@ function getBase64Image(imgUrl, width, height) {
           let canvas = document.createElement("canvas")
           
           //max 1920x1080 
-          /*
-          let ratio = 0    
+          let ratio = 1    
           if (img.width > 1920) { 
             ratio = img.width/1920
             img.width = 1920
@@ -1770,8 +1775,8 @@ function getBase64Image(imgUrl, width, height) {
             ratio = img.height/1080
             img.height = 1080
             img.width = img.width/ratio
-          }
-          */
+          } 
+          
           
           canvas.width = img.width
           canvas.height = img.height
